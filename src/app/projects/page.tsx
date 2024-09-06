@@ -21,7 +21,7 @@ export default async function Page() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-background">
             {uniqueProjects.map((project) => (
-                <Link href={`/visualizer/${project}`} key={project} className="block">
+                <Link href={`/projects/${project}`} key={project} className="block">
                     <Card className="hover:bg-accent transition-colors">
                         <CardHeader>
                             <CardTitle className="text-primary">{project}</CardTitle>
