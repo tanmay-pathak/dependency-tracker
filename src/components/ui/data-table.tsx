@@ -45,13 +45,12 @@ export function DataTable<TData, TValue>({
   }
 
   return (
-    <div>
-      <div className="mb-4 flex gap-4">
+    <div className="flex flex-col h-full">
+      <div className="flex gap-4 sticky top-0 bg-background z-10 p-2 justify-between">
         <Input
           placeholder="Search by key..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
         />
         <Select
           onValueChange={(value) =>
@@ -69,41 +68,43 @@ export function DataTable<TData, TValue>({
           </SelectContent>
         </Select>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {columns.map((column) => (
-              <TableHead key={column.id}>
-                {column.header as React.ReactNode}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredData.map((row: any, rowIndex) => (
-            <TableRow key={rowIndex}>
+      <div className="overflow-auto flex-grow">
+        <Table>
+          <TableHeader>
+            <TableRow>
               {columns.map((column) => (
-                <TableCell key={column.id}>
-                  {(column as AccessorKeyColumnDef<TData, TValue>)
-                    .accessorKey === 'created_at' ||
-                  (column as AccessorKeyColumnDef<TData, TValue>)
-                    .accessorKey === 'modified_at'
-                    ? formatDate(
-                        row[
-                          (column as AccessorKeyColumnDef<TData, TValue>)
-                            .accessorKey as keyof TData
-                        ] as string,
-                      )
-                    : (row[
-                        (column as AccessorKeyColumnDef<TData, TValue>)
-                          .accessorKey as keyof TData
-                      ] as React.ReactNode)}
-                </TableCell>
+                <TableHead key={column.id}>
+                  {column.header as React.ReactNode}
+                </TableHead>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredData.map((row: any, rowIndex) => (
+              <TableRow key={rowIndex}>
+                {columns.map((column) => (
+                  <TableCell key={column.id}>
+                    {(column as AccessorKeyColumnDef<TData, TValue>)
+                      .accessorKey === 'created_at' ||
+                      (column as AccessorKeyColumnDef<TData, TValue>)
+                      .accessorKey === 'modified_at'
+                      ? formatDate(
+                          row[
+                            (column as AccessorKeyColumnDef<TData, TValue>)
+                              .accessorKey as keyof TData
+                          ] as string,
+                        )
+                      : (row[
+                          (column as AccessorKeyColumnDef<TData, TValue>)
+                            .accessorKey as keyof TData
+                        ] as React.ReactNode)}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   )
 }
