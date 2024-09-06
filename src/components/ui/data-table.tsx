@@ -11,7 +11,13 @@ import {
 } from '@/components/ui/table'
 import { ColumnDef, AccessorKeyColumnDef } from '@tanstack/react-table'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -23,11 +29,15 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(null)
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(
+    null,
+  )
 
-  const filteredData = data.filter((item: any) =>
-    item.key.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (selectedEnvironment === null || item.environment === selectedEnvironment)
+  const filteredData = data.filter(
+    (item: any) =>
+      item.key.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedEnvironment === null ||
+        item.environment === selectedEnvironment),
   )
 
   const formatDate = (dateString: string) => {
@@ -36,14 +46,18 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex gap-4 mb-4">
+      <div className="mb-4 flex gap-4">
         <Input
           placeholder="Search by key..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="max-w-sm"
         />
-        <Select onValueChange={(value) => setSelectedEnvironment(value === 'all' ? null : value)}>
+        <Select
+          onValueChange={(value) =>
+            setSelectedEnvironment(value === 'all' ? null : value)
+          }
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select environment" />
           </SelectTrigger>
@@ -59,7 +73,9 @@ export function DataTable<TData, TValue>({
         <TableHeader>
           <TableRow>
             {columns.map((column) => (
-              <TableHead key={column.id}>{column.header as React.ReactNode}</TableHead>
+              <TableHead key={column.id}>
+                {column.header as React.ReactNode}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
@@ -68,10 +84,20 @@ export function DataTable<TData, TValue>({
             <TableRow key={rowIndex}>
               {columns.map((column) => (
                 <TableCell key={column.id}>
-                  {(column as AccessorKeyColumnDef<TData, TValue>).accessorKey === 'created_at' || 
-                   (column as AccessorKeyColumnDef<TData, TValue>).accessorKey === 'modified_at'
-                    ? formatDate(row[(column as AccessorKeyColumnDef<TData, TValue>).accessorKey as keyof TData] as string)
-                    : row[(column as AccessorKeyColumnDef<TData, TValue>).accessorKey as keyof TData] as React.ReactNode}
+                  {(column as AccessorKeyColumnDef<TData, TValue>)
+                    .accessorKey === 'created_at' ||
+                  (column as AccessorKeyColumnDef<TData, TValue>)
+                    .accessorKey === 'modified_at'
+                    ? formatDate(
+                        row[
+                          (column as AccessorKeyColumnDef<TData, TValue>)
+                            .accessorKey as keyof TData
+                        ] as string,
+                      )
+                    : (row[
+                        (column as AccessorKeyColumnDef<TData, TValue>)
+                          .accessorKey as keyof TData
+                      ] as React.ReactNode)}
                 </TableCell>
               ))}
             </TableRow>

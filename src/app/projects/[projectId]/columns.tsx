@@ -1,4 +1,4 @@
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from '@tanstack/react-table'
 
 export type Dependency = {
   id: number
@@ -12,23 +12,23 @@ export type Dependency = {
 
 export const columns: ColumnDef<Dependency>[] = [
   {
-    accessorKey: "environment",
-    header: "Environment",
+    accessorKey: 'environment',
+    header: 'Environment',
   },
   {
-    accessorKey: "key",
-    header: "Key",
+    accessorKey: 'key',
+    header: 'Key',
   },
   {
-    accessorKey: "value",
-    header: "Value",
+    accessorKey: 'value',
+    header: 'Value',
   },
   {
-    accessorKey: "created_at",
-    header: "Created At",
+    accessorKey: 'created_at',
+    header: 'Created At',
   },
   {
-    accessorKey: "modified_at",
-    header: "Modified At",
+    accessorKey: 'modified_at',
+    header: 'Modified At',
   },
 ]
