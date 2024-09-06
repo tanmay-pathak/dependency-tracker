@@ -43,7 +43,6 @@
 - 🪝[TanStackQuery](https://tanstack.com/query/v5)v5 - The best way to fetch data on the client
 - 📏 ESLint — To find and fix problems in your code
 - 💖 Prettier — Code Formatter for consistent style
-- 🐶 Husky — For running scripts before committing
 - 🚫 lint-staged — Run ESLint and Prettier against staged Git files
 - 👷 Github Actions — Run Type Checks, Tests, and Linters on Pull Requests
 - 🗂 Path Mapping — Import components or images using the `@` prefix
