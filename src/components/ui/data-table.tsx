@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table'
 import { ColumnDef, AccessorKeyColumnDef } from '@tanstack/react-table'
 import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -22,9 +23,11 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(null)
 
   const filteredData = data.filter((item: any) =>
-    item.key.toLowerCase().includes(searchTerm.toLowerCase())
+    item.key.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (selectedEnvironment === null || item.environment === selectedEnvironment)
   )
 
   const formatDate = (dateString: string) => {
@@ -33,12 +36,25 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <Input
-        placeholder="Search by key..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="max-w-sm mb-4"
-      />
+      <div className="flex gap-4 mb-4">
+        <Input
+          placeholder="Search by key..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-sm"
+        />
+        <Select onValueChange={(value) => setSelectedEnvironment(value === 'all' ? null : value)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select environment" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Environments</SelectItem>
+            <SelectItem value="DEV">DEV</SelectItem>
+            <SelectItem value="BETA">BETA</SelectItem>
+            <SelectItem value="PROD">PROD</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
