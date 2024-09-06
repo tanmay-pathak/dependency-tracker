@@ -1,16 +1,14 @@
-import Header from '@/components/Header'  // Changed from import { Header } to import Header
+import Header from '@/components/Header' // Changed from import { Header } to import Header
 
 export default function VisualizerLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode
 }) {
-    return (
-        <div className="min-h-screen flex flex-col w-full">
-            <Header />
-            <main className="flex-grow">
-                {children}
-            </main>
-        </div>
-    )
+  return (
+    <div className="flex min-h-screen w-full flex-col">
+      <Header />
+      <main className="flex-grow">{children}</main>
+    </div>
+  )
 }
