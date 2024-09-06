@@ -48,7 +48,7 @@ export default function Code({ code }: { code: string }) {
     <pre className="relative my-8 rounded-md bg-foreground/5 p-8">
       <button
         onClick={copy}
-        className="absolute right-4 top-4  rounded-md bg-foreground/5 p-2 hover:bg-foreground/10"
+        className="absolute right-4 top-4 rounded-md bg-foreground/5 p-2 hover:bg-foreground/10"
       >
         {icon}
       </button>
