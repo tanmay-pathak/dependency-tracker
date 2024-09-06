@@ -45,8 +45,8 @@ export function DataTable<TData, TValue>({
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex gap-4 sticky top-0 bg-background z-10 p-2 justify-between">
+    <div className="flex h-full flex-col">
+      <div className="sticky top-0 z-10 flex justify-between gap-4 bg-background p-2">
         <Input
           placeholder="Search by key..."
           value={searchTerm}
@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
           </SelectContent>
         </Select>
       </div>
-      <div className="overflow-auto flex-grow">
+      <div className="flex-grow overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -86,7 +86,7 @@ export function DataTable<TData, TValue>({
                   <TableCell key={column.id}>
                     {(column as AccessorKeyColumnDef<TData, TValue>)
                       .accessorKey === 'created_at' ||
-                      (column as AccessorKeyColumnDef<TData, TValue>)
+                    (column as AccessorKeyColumnDef<TData, TValue>)
                       .accessorKey === 'modified_at'
                       ? formatDate(
                           row[
