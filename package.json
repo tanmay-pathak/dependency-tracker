@@ -24,7 +24,7 @@
     "prepare": "husky install",
     "test": "jest",
     "test:ci": "jest --ci",
-    "analyze": "ANALYZE=true pnpm build"
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^14.0.4",
