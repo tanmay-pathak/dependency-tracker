@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Badge } from '@/components/ui/badge' // Add this import
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -42,6 +43,31 @@ export function DataTable<TData, TValue>({
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString()
+  }
+
+  const getEnvironmentBadge = (environment: string) => {
+    switch (environment) {
+      case 'DEV':
+        return (
+          <Badge className="bg-blue-500 text-white hover:bg-blue-600">
+            DEV
+          </Badge>
+        )
+      case 'BETA':
+        return (
+          <Badge className="bg-orange-500 text-white hover:bg-orange-600">
+            BETA
+          </Badge>
+        )
+      case 'PROD':
+        return (
+          <Badge className="bg-green-500 text-white hover:bg-green-600">
+            PROD
+          </Badge>
+        )
+      default:
+        return <Badge variant="outline">{environment}</Badge>
+    }
   }
 
   return (
@@ -85,19 +111,25 @@ export function DataTable<TData, TValue>({
                 {columns.map((column) => (
                   <TableCell key={column.id}>
                     {(column as AccessorKeyColumnDef<TData, TValue>)
-                      .accessorKey === 'created_at' ||
-                    (column as AccessorKeyColumnDef<TData, TValue>)
-                      .accessorKey === 'modified_at'
-                      ? formatDate(
-                          row[
+                      .accessorKey === 'environment'
+                      ? getEnvironmentBadge(
+                          // @ts-ignore
+                          row[column.accessorKey as keyof TData] as string,
+                        )
+                      : (column as AccessorKeyColumnDef<TData, TValue>)
+                            .accessorKey === 'created_at' ||
+                          (column as AccessorKeyColumnDef<TData, TValue>)
+                            .accessorKey === 'modified_at'
+                        ? formatDate(
+                            row[
+                              (column as AccessorKeyColumnDef<TData, TValue>)
+                                .accessorKey as keyof TData
+                            ] as string,
+                          )
+                        : (row[
                             (column as AccessorKeyColumnDef<TData, TValue>)
                               .accessorKey as keyof TData
-                          ] as string,
-                        )
-                      : (row[
-                          (column as AccessorKeyColumnDef<TData, TValue>)
-                            .accessorKey as keyof TData
-                        ] as React.ReactNode)}
+                          ] as React.ReactNode)}
                   </TableCell>
                 ))}
               </TableRow>
