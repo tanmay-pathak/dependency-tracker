@@ -24,32 +24,34 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   techInfo?: any
+  searchField?: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   techInfo,
+  searchField = 'key',
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(
-    null,
-  )
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
 
-  const filteredData = data.filter(
-    (item: any) =>
-      item.key.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedEnvironment === null ||
-        item.environment === selectedEnvironment),
-  )
+  const filteredData = useMemo(() => {
+    return data.filter(
+      (item: any) =>
+        item[searchField].toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedEnvironment === 'all' ||
+          item.environment === selectedEnvironment),
+    )
+  }, [data, searchTerm, selectedEnvironment, searchField])
 
-  const enhancedData = React.useMemo(() => {
-    if (!techInfo) return data
-    return data.map((item: any) => ({
+  const enhancedData = useMemo(() => {
+    if (!techInfo) return filteredData
+    return filteredData.map((item: any) => ({
       ...item,
       latestVersion: techInfo[0]?.latest,
     }))
-  }, [data, techInfo])
+  }, [filteredData, techInfo])
 
   const formatDate = (dateString: string): string => {
     const now = new Date()
@@ -124,17 +126,17 @@ export function DataTable<TData, TValue>({
       )}
       <div className="sticky top-0 z-10 flex justify-between gap-4 bg-background p-2">
         <Input
-          placeholder="Search by key..."
+          placeholder={`Search by ${searchField}...`}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          autoFocus={true}
         />
         <Select
-          onValueChange={(value) =>
-            setSelectedEnvironment(value === 'all' ? null : value)
-          }
+          value={selectedEnvironment}
+          onValueChange={(value) => setSelectedEnvironment(value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select environment" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Environments</SelectItem>
@@ -156,7 +158,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {enhancedData.length == 0 && (
+            {enhancedData.length === 0 && (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
                   No results found

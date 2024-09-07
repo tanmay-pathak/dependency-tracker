@@ -25,7 +25,11 @@ export default async function Page({
   return (
     <div className="container mx-auto p-2">
       <div className="max-h-[500px] overflow-auto">
-        <DataTable columns={columns} data={dependencies || []} />
+        <DataTable
+          columns={columns}
+          data={dependencies || []}
+          searchField="key"
+        />
       </div>
       <div className="my-2 flex justify-center">
         <Link href={`/projects/${projectId}/dependencies`}>
