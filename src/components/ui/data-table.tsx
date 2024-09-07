@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -96,6 +97,20 @@ export function DataTable<TData, TValue>({
     }
   }
 
+  const versionData = useMemo(() => {
+    const versionCounts: { [key: string]: { [env: string]: number } } = {}
+    enhancedData.forEach((item: any) => {
+      if (!versionCounts[item.value]) {
+        versionCounts[item.value] = { DEV: 0, BETA: 0, PROD: 0 }
+      }
+      versionCounts[item.value][item.environment]++
+    })
+    return Object.entries(versionCounts).map(([version, counts]) => ({
+      version,
+      ...counts,
+    }))
+  }, [enhancedData])
+
   return (
     <div className="flex h-full flex-col">
       {techInfo && (
@@ -145,6 +160,17 @@ export function DataTable<TData, TValue>({
             <SelectItem value="PROD">PROD</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+      <div className="mb-4 h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={versionData}>
+            <XAxis dataKey="version" />
+            <YAxis />
+            <Bar dataKey="DEV" fill="#3b82f6" stackId="stack" />
+            <Bar dataKey="BETA" fill="#f97316" stackId="stack" />
+            <Bar dataKey="PROD" fill="#22c55e" stackId="stack" />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
       <div className="flex-grow overflow-auto">
         <Table>
