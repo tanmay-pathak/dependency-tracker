@@ -96,6 +96,32 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex h-full flex-col">
+      {techInfo && (
+        <Table className="mb-4">
+          <TableBody>
+            <TableRow className="flex justify-center">
+              <TableCell>
+                <span className="font-semibold text-blue-600 dark:text-blue-400">
+                  Latest Version:
+                </span>
+                <span className="ml-2 text-gray-800 dark:text-gray-200">
+                  {techInfo[0]?.latest}
+                </span>
+              </TableCell>
+              {techInfo[0]?.releaseDate && (
+                <TableCell>
+                  <span className="font-semibold text-green-600 dark:text-green-400">
+                    Release Date:
+                  </span>
+                  <span className="ml-2 text-gray-800 dark:text-gray-200">
+                    {techInfo[0].releaseDate}
+                  </span>
+                </TableCell>
+              )}
+            </TableRow>
+          </TableBody>
+        </Table>
+      )}
       <div className="sticky top-0 z-10 flex justify-between gap-4 bg-background p-2">
         <Input
           placeholder="Search by key..."
