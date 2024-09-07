@@ -156,6 +156,13 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableHeader>
           <TableBody>
+            {enhancedData.length == 0 && (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  No results found
+                </TableCell>
+              </TableRow>
+            )}
             {enhancedData.map((row: any, rowIndex) => (
               <TableRow key={rowIndex}>
                 {columns.map((column) => (
