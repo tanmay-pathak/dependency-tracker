@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
   Table,
   TableBody,
@@ -18,16 +18,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge' // Add this import
+import { Badge } from '@/components/ui/badge'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  techInfo?: any
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  techInfo,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(
@@ -40,6 +42,14 @@ export function DataTable<TData, TValue>({
       (selectedEnvironment === null ||
         item.environment === selectedEnvironment),
   )
+
+  const enhancedData = React.useMemo(() => {
+    if (!techInfo) return data
+    return data.map((item: any) => ({
+      ...item,
+      latestVersion: techInfo[0]?.latest,
+    }))
+  }, [data, techInfo])
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString()
@@ -106,30 +116,43 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredData.map((row: any, rowIndex) => (
+            {enhancedData.map((row: any, rowIndex) => (
               <TableRow key={rowIndex}>
                 {columns.map((column) => (
                   <TableCell key={column.id}>
                     {(column as AccessorKeyColumnDef<TData, TValue>)
-                      .accessorKey === 'environment'
-                      ? getEnvironmentBadge(
-                          // @ts-ignore
-                          row[column.accessorKey as keyof TData] as string,
-                        )
-                      : (column as AccessorKeyColumnDef<TData, TValue>)
-                            .accessorKey === 'created_at' ||
+                      .accessorKey === 'environment' ? (
+                      getEnvironmentBadge(
+                        // @ts-ignore
+                        row[column.accessorKey as keyof TData] as string,
+                      )
+                    ) : (column as AccessorKeyColumnDef<TData, TValue>)
+                        .accessorKey === 'value' ? (
+                      <div className="flex items-center gap-2">
+                        <span>{row.value}</span>
+                        {row.latestVersion &&
+                          row.value !== row.latestVersion && (
+                            <Badge variant="outline" className="ml-2">
+                              Latest: {row.latestVersion}
+                            </Badge>
+                          )}
+                      </div>
+                    ) : (column as AccessorKeyColumnDef<TData, TValue>)
+                        .accessorKey === 'created_at' ||
+                      (column as AccessorKeyColumnDef<TData, TValue>)
+                        .accessorKey === 'modified_at' ? (
+                      formatDate(
+                        row[
                           (column as AccessorKeyColumnDef<TData, TValue>)
-                            .accessorKey === 'modified_at'
-                        ? formatDate(
-                            row[
-                              (column as AccessorKeyColumnDef<TData, TValue>)
-                                .accessorKey as keyof TData
-                            ] as string,
-                          )
-                        : (row[
-                            (column as AccessorKeyColumnDef<TData, TValue>)
-                              .accessorKey as keyof TData
-                          ] as React.ReactNode)}
+                            .accessorKey as keyof TData
+                        ] as string,
+                      )
+                    ) : (
+                      (row[
+                        (column as AccessorKeyColumnDef<TData, TValue>)
+                          .accessorKey as keyof TData
+                      ] as React.ReactNode)
+                    )}
                   </TableCell>
                 ))}
               </TableRow>

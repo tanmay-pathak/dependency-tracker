@@ -12,9 +12,9 @@ const technologies = [
   { name: 'Drupal', search: 'drupal_version', tech: 'drupal' },
   { name: 'Drush', search: 'drush_version', tech: 'drush' },
   { name: 'Composer', search: 'composer_version', tech: 'composer' },
-  { name: 'DB', search: 'db_version', tech: 'mysql' },
-  { name: 'DB Hostname', search: 'db_hostname', tech: 'mysql' },
-  { name: 'Platform', search: 'platform', tech: 'platform' },
+  { name: 'DB', search: 'db_version' },
+  { name: 'DB Hostname', search: 'db_hostname' },
+  { name: 'Platform', search: 'platform' },
 ]
 
 export default function VersionsPage() {

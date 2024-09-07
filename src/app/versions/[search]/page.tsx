@@ -33,17 +33,11 @@ export default async function FullDependenciesPage({
 
   return (
     <div className="container prose prose-lg mx-auto p-6 dark:prose-invert">
-      {techInfo && (
-        <div className="group mb-6">
-          <h2 className="cursor-pointer">
-            {searchParams.technology} Information
-          </h2>
-          <pre className="hidden group-hover:block">
-            {JSON.stringify(techInfo, null, 2)}
-          </pre>
-        </div>
-      )}
-      <DataTable columns={columns} data={dependencies || []} />
+      <DataTable
+        columns={columns}
+        data={dependencies || []}
+        techInfo={techInfo}
+      />
     </div>
   )
 }
