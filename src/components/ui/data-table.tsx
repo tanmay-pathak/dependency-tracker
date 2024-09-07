@@ -52,18 +52,22 @@ export function DataTable<TData, TValue>({
   }, [data, techInfo])
 
   const formatDate = (dateString: string): string => {
-    const now = new Date();
-    const date = new Date(dateString);
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    const now = new Date()
+    const date = new Date(dateString)
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
 
-    if (diffInSeconds < 60) return 'just now';
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
-    if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
-    
-    return `${Math.floor(diffInSeconds / 31536000)} years ago`;
-  };
+    if (diffInSeconds < 60) return 'just now'
+    if (diffInSeconds < 3600)
+      return `${Math.floor(diffInSeconds / 60)} minutes ago`
+    if (diffInSeconds < 86400)
+      return `${Math.floor(diffInSeconds / 3600)} hours ago`
+    if (diffInSeconds < 2592000)
+      return `${Math.floor(diffInSeconds / 86400)} days ago`
+    if (diffInSeconds < 31536000)
+      return `${Math.floor(diffInSeconds / 2592000)} months ago`
+
+    return `${Math.floor(diffInSeconds / 31536000)} years ago`
+  }
 
   const getEnvironmentBadge = (environment: string) => {
     switch (environment) {
@@ -92,6 +96,32 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex h-full flex-col">
+      {techInfo && (
+        <Table className="mb-4">
+          <TableBody>
+            <TableRow className="flex justify-center">
+              <TableCell>
+                <span className="font-semibold text-blue-600 dark:text-blue-400">
+                  Latest Version:
+                </span>
+                <span className="ml-2 text-gray-800 dark:text-gray-200">
+                  {techInfo[0]?.latest}
+                </span>
+              </TableCell>
+              {techInfo[0]?.releaseDate && (
+                <TableCell>
+                  <span className="font-semibold text-green-600 dark:text-green-400">
+                    Release Date:
+                  </span>
+                  <span className="ml-2 text-gray-800 dark:text-gray-200">
+                    {techInfo[0].releaseDate}
+                  </span>
+                </TableCell>
+              )}
+            </TableRow>
+          </TableBody>
+        </Table>
+      )}
       <div className="sticky top-0 z-10 flex justify-between gap-4 bg-background p-2">
         <Input
           placeholder="Search by key..."
@@ -138,7 +168,7 @@ export function DataTable<TData, TValue>({
                       )
                     ) : (column as AccessorKeyColumnDef<TData, TValue>)
                         .accessorKey === 'value' ? (
-                      <div className="flex items-center justify-between w-full">
+                      <div className="flex w-full items-center justify-between">
                         <span>{row.value}</span>
                         {row.latestVersion && (
                           <Badge
