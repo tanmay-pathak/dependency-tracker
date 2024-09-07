@@ -8,9 +8,7 @@ export default async function Index() {
       <Header />
       <main className="prose prose-lg text-center dark:prose-invert">
         <h1>Welcome to dependency tracker</h1>
-        <h4>
-          Track your dependencies across all of your projects
-        </h4>
+        <h4>Track your dependencies across all of your projects</h4>
         <div className="mx-auto flex w-fit flex-col gap-4">
           <Link href="/projects">
             <Button>View Projects</Button>
