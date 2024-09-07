@@ -138,7 +138,7 @@ export function DataTable<TData, TValue>({
                       )
                     ) : (column as AccessorKeyColumnDef<TData, TValue>)
                         .accessorKey === 'value' ? (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-between w-full">
                         <span>{row.value}</span>
                         {row.latestVersion && (
                           <Badge
@@ -147,7 +147,6 @@ export function DataTable<TData, TValue>({
                                 ? 'default'
                                 : 'destructive'
                             }
-                            className="ml-2"
                           >
                             {row.value === row.latestVersion
                               ? 'Up to date'
