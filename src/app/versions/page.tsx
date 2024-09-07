@@ -8,13 +8,13 @@ import {
 } from '@/components/ui/card'
 
 const technologies = [
-  { name: 'PHP', slug: 'php_version' },
-  { name: 'Drupal', slug: 'drupal_version' },
-  { name: 'Drush', slug: 'drush_version' },
-  { name: 'Composer', slug: 'composer_version' },
-  { name: 'DB', slug: 'db_version' },
-  { name: 'DB Hostname', slug: 'db_hostname' },
-  { name: 'Platform', slug: 'platform' },
+  { name: 'PHP', search: 'php_version', tech: 'php' },
+  { name: 'Drupal', search: 'drupal_version', tech: 'drupal' },
+  { name: 'Drush', search: 'drush_version', tech: 'drush' },
+  { name: 'Composer', search: 'composer_version', tech: 'composer' },
+  { name: 'DB', search: 'db_version', tech: 'mysql' },
+  { name: 'DB Hostname', search: 'db_hostname', tech: 'mysql' },
+  { name: 'Platform', search: 'platform', tech: 'platform' },
 ]
 
 export default function VersionsPage() {
@@ -22,7 +22,10 @@ export default function VersionsPage() {
     <div className="container mx-auto py-8">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {technologies.map((tech) => (
-          <Link href={`/versions/${tech.slug}`} key={tech.slug}>
+          <Link
+            href={`/versions/${tech.search}?technology=${tech.tech}`}
+            key={tech.search}
+          >
             <Card className="cursor-pointer">
               <CardHeader>
                 <CardTitle>{tech.name}</CardTitle>
