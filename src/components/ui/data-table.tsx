@@ -51,9 +51,19 @@ export function DataTable<TData, TValue>({
     }))
   }, [data, techInfo])
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString()
-  }
+  const formatDate = (dateString: string): string => {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return 'just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+    if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+    
+    return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+  };
 
   const getEnvironmentBadge = (environment: string) => {
     switch (environment) {
@@ -128,14 +138,21 @@ export function DataTable<TData, TValue>({
                       )
                     ) : (column as AccessorKeyColumnDef<TData, TValue>)
                         .accessorKey === 'value' ? (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-between w-full">
                         <span>{row.value}</span>
-                        {row.latestVersion &&
-                          row.value !== row.latestVersion && (
-                            <Badge variant="outline" className="ml-2">
-                              Latest: {row.latestVersion}
-                            </Badge>
-                          )}
+                        {row.latestVersion && (
+                          <Badge
+                            variant={
+                              row.value === row.latestVersion
+                                ? 'default'
+                                : 'destructive'
+                            }
+                          >
+                            {row.value === row.latestVersion
+                              ? 'Up to date'
+                              : `Latest: ${row.latestVersion}`}
+                          </Badge>
+                        )}
                       </div>
                     ) : (column as AccessorKeyColumnDef<TData, TValue>)
                         .accessorKey === 'created_at' ||

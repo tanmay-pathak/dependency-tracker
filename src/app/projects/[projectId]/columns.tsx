@@ -17,14 +17,14 @@ export const columns: ColumnDef<Dependency>[] = [
   },
   {
     accessorKey: 'key',
-    header: 'Key',
+    header: 'Tool',
   },
   {
     accessorKey: 'value',
-    header: 'Value',
+    header: 'Version',
   },
   {
     accessorKey: 'modified_at',
-    header: 'Modified At',
+    header: 'Updated',
   },
 ]
