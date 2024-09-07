@@ -26,6 +26,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
   techInfo?: any
   searchField?: string
+  showChart?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -33,6 +34,7 @@ export function DataTable<TData, TValue>({
   data,
   techInfo,
   searchField = 'key',
+  showChart = false,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
@@ -161,17 +163,19 @@ export function DataTable<TData, TValue>({
           </SelectContent>
         </Select>
       </div>
-      <div className="mb-4 h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={versionData}>
-            <XAxis dataKey="version" />
-            <YAxis />
-            <Bar dataKey="DEV" fill="#3b82f6" stackId="stack" />
-            <Bar dataKey="BETA" fill="#f97316" stackId="stack" />
-            <Bar dataKey="PROD" fill="#22c55e" stackId="stack" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      {showChart && (
+        <div className="mb-4 h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={versionData}>
+              <XAxis dataKey="version" />
+              <YAxis />
+              <Bar dataKey="DEV" fill="#3b82f6" stackId="stack" />
+              <Bar dataKey="BETA" fill="#f97316" stackId="stack" />
+              <Bar dataKey="PROD" fill="#22c55e" stackId="stack" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
       <div className="flex-grow overflow-auto">
         <Table>
           <TableHeader>
