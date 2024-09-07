@@ -8,7 +8,7 @@ import {
   CardDescription,
 } from '@/components/ui/card'
 
-export default async function Page() {
+export default async function Projects() {
   const cookieStore = cookies()
   const supabase = createServerClient(cookieStore)
 

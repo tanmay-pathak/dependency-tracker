@@ -6,7 +6,6 @@ export type Dependency = {
   environment: string
   key: string
   value: string
-  created_at: string
   modified_at: string
 }
 
@@ -14,6 +13,10 @@ export const columns: ColumnDef<Dependency>[] = [
   {
     accessorKey: 'environment',
     header: 'Environment',
+  },
+  {
+    accessorKey: 'project',
+    header: 'Project',
   },
   {
     accessorKey: 'key',
