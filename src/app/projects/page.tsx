@@ -29,7 +29,7 @@ export default async function Projects() {
     <div className="grid grid-cols-1 gap-4 bg-background p-4 md:grid-cols-2 lg:grid-cols-3">
       {uniqueProjects.map((project) => (
         <Link href={`/projects/${project}`} key={project} className="block">
-          <Card className="transition-colors hover:bg-accent">
+          <Card className="cursor-pointer">
             <CardHeader>
               <CardTitle className="text-primary">{project}</CardTitle>
               <CardDescription>Click to view dependencies</CardDescription>

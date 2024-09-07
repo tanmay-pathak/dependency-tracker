@@ -23,7 +23,7 @@ export default function VersionsPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {technologies.map((tech) => (
           <Link href={`/versions/${tech.slug}`} key={tech.slug}>
-            <Card className="cursor-pointer transition-shadow hover:shadow-lg">
+            <Card className="cursor-pointer">
               <CardHeader>
                 <CardTitle>{tech.name}</CardTitle>
                 <CardDescription>Click to view versions</CardDescription>
