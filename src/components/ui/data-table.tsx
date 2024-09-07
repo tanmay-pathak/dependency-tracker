@@ -130,12 +130,20 @@ export function DataTable<TData, TValue>({
                         .accessorKey === 'value' ? (
                       <div className="flex items-center gap-2">
                         <span>{row.value}</span>
-                        {row.latestVersion &&
-                          row.value !== row.latestVersion && (
-                            <Badge variant="outline" className="ml-2">
-                              Latest: {row.latestVersion}
-                            </Badge>
-                          )}
+                        {row.latestVersion && (
+                          <Badge
+                            variant={
+                              row.value === row.latestVersion
+                                ? 'default'
+                                : 'destructive'
+                            }
+                            className="ml-2"
+                          >
+                            {row.value === row.latestVersion
+                              ? 'Up to date'
+                              : `Latest: ${row.latestVersion}`}
+                          </Badge>
+                        )}
                       </div>
                     ) : (column as AccessorKeyColumnDef<TData, TValue>)
                         .accessorKey === 'created_at' ||
