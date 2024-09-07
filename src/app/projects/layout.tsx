@@ -1,6 +1,6 @@
 import Header from '@/components/Header' // Changed from import { Header } to import Header
 
-export default function VisualizerLayout({
+export default function ProjectsLayout({
   children,
 }: {
   children: React.ReactNode
