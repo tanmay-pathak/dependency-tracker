@@ -36,20 +36,22 @@ export function DataTable<TData, TValue>({
     null,
   )
 
-  const filteredData = data.filter(
-    (item: any) =>
-      item.key.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedEnvironment === null ||
-        item.environment === selectedEnvironment),
-  )
+  const filteredData = useMemo(() => {
+    return data.filter(
+      (item: any) =>
+        item.key.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedEnvironment === null ||
+          item.environment === selectedEnvironment),
+    )
+  }, [data, searchTerm, selectedEnvironment])
 
-  const enhancedData = React.useMemo(() => {
-    if (!techInfo) return data
-    return data.map((item: any) => ({
+  const enhancedData = useMemo(() => {
+    if (!techInfo) return filteredData
+    return filteredData.map((item: any) => ({
       ...item,
       latestVersion: techInfo[0]?.latest,
     }))
-  }, [data, techInfo])
+  }, [filteredData, techInfo])
 
   const formatDate = (dateString: string): string => {
     const now = new Date()
@@ -156,7 +158,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {enhancedData.length == 0 && (
+            {enhancedData.length === 0 && (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
                   No results found
