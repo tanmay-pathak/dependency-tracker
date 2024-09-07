@@ -6,7 +6,10 @@ import { usePathname } from 'next/navigation'
 export default function Header() {
   const pathname = usePathname()
 
-  const navItems = [{ href: '/projects', label: 'Projects' }]
+  const navItems = [
+    { href: '/projects', label: 'Projects' },
+    { href: '/versions', label: 'Versions' },
+  ]
 
   return (
     <header className="w-full border-b border-border bg-background">
