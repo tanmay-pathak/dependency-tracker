@@ -1,4 +1,5 @@
 import Header from '@/components/Header'
+import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 export default async function Index() {
@@ -8,17 +9,11 @@ export default async function Index() {
       <main className="prose prose-lg text-center dark:prose-invert">
         <h1>Welcome to zu dependency tracker</h1>
         <div className="mx-auto flex w-fit flex-col gap-4">
-          <Link
-            href="/projects"
-            className="inline-block rounded bg-blue-500 px-4 py-2 font-bold text-white no-underline hover:bg-blue-600"
-          >
-            View Projects
+          <Link href="/projects">
+            <Button>View Projects</Button>
           </Link>
-          <Link
-            href="/versions"
-            className="inline-block rounded bg-blue-500 px-4 py-2 font-bold text-white no-underline hover:bg-blue-600"
-          >
-            View Versions
+          <Link href="/versions">
+            <Button>View Versions</Button>
           </Link>
         </div>
       </main>
