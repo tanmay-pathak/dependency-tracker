@@ -24,7 +24,7 @@ export default async function Page({
 
   return (
     <div className="container mx-auto p-2">
-      <div className="h-[500px]">
+      <div className="max-h-[500px]">
         <DataTable columns={columns} data={dependencies || []} />
       </div>
       <div className="my-2 flex justify-center">
