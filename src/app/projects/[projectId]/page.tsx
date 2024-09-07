@@ -25,7 +25,7 @@ export default async function Page({
 
   return (
     <div className="container mx-auto p-2">
-      <Card>
+      <Card hover={false}>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Project Dependencies</CardTitle>
           <Link href={`/projects/${projectId}/dependencies`}>
