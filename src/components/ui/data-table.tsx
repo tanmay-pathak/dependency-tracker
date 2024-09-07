@@ -34,15 +34,13 @@ export function DataTable<TData, TValue>({
   searchField = 'key',
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(
-    null,
-  )
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
 
   const filteredData = useMemo(() => {
     return data.filter(
       (item: any) =>
         item[searchField].toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (selectedEnvironment === null ||
+        (selectedEnvironment === 'all' ||
           item.environment === selectedEnvironment),
     )
   }, [data, searchTerm, selectedEnvironment, searchField])
@@ -131,14 +129,14 @@ export function DataTable<TData, TValue>({
           placeholder={`Search by ${searchField}...`}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          autoFocus={true}
         />
         <Select
-          onValueChange={(value) =>
-            setSelectedEnvironment(value === 'all' ? null : value)
-          }
+          value={selectedEnvironment}
+          onValueChange={(value) => setSelectedEnvironment(value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select environment" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Environments</SelectItem>
