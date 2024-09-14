@@ -21,6 +21,30 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import { Switch } from './switch'
+import { EndOfLifeCell } from '@/components/EndOfLifeCell'
+
+function extractCycle(version: string): string {
+  const parts = version.split('.')
+  return parts.slice(0, 2).join('.')
+}
+
+const formatDate = (dateString: string): string => {
+  const now = new Date()
+  const date = new Date(dateString)
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+  if (diffInSeconds < 60) return 'just now'
+  if (diffInSeconds < 3600)
+    return `${Math.floor(diffInSeconds / 60)} minutes ago`
+  if (diffInSeconds < 86400)
+    return `${Math.floor(diffInSeconds / 3600)} hours ago`
+  if (diffInSeconds < 2592000)
+    return `${Math.floor(diffInSeconds / 86400)} days ago`
+  if (diffInSeconds < 31536000)
+    return `${Math.floor(diffInSeconds / 2592000)} months ago`
+
+  return `${Math.floor(diffInSeconds / 31536000)} years ago`
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -58,24 +82,6 @@ export function DataTable<TData, TValue>({
       latestVersion: techInfo[0]?.latest,
     }))
   }, [filteredData, techInfo])
-
-  const formatDate = (dateString: string): string => {
-    const now = new Date()
-    const date = new Date(dateString)
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-
-    if (diffInSeconds < 60) return 'just now'
-    if (diffInSeconds < 3600)
-      return `${Math.floor(diffInSeconds / 60)} minutes ago`
-    if (diffInSeconds < 86400)
-      return `${Math.floor(diffInSeconds / 3600)} hours ago`
-    if (diffInSeconds < 2592000)
-      return `${Math.floor(diffInSeconds / 86400)} days ago`
-    if (diffInSeconds < 31536000)
-      return `${Math.floor(diffInSeconds / 2592000)} months ago`
-
-    return `${Math.floor(diffInSeconds / 31536000)} years ago`
-  }
 
   const getEnvironmentBadge = (environment: string) => {
     switch (environment) {
@@ -115,6 +121,25 @@ export function DataTable<TData, TValue>({
       ...counts,
     }))
   }, [enhancedData])
+
+  const enhancedColumns = useMemo(() => {
+    return [
+      ...columns,
+      {
+        id: 'eol',
+        header: 'End of Life',
+        accessorKey: 'eol',
+        cell: ({ row }: { row: any }) => {
+          const searchKey = row.key.toLowerCase()
+          const version = row.value
+          const cycle = version ? extractCycle(version) : null
+          return searchKey && cycle ? (
+            <EndOfLifeCell searchKey={searchKey} version={cycle} />
+          ) : null
+        },
+      },
+    ]
+  }, [columns])
 
   return (
     <div className="flex h-full flex-col">
@@ -189,7 +214,7 @@ export function DataTable<TData, TValue>({
         <Table>
           <TableHeader>
             <TableRow>
-              {columns.map((column) => (
+              {enhancedColumns.map((column) => (
                 <TableHead key={column.id}>
                   {column.header as React.ReactNode}
                 </TableHead>
@@ -199,17 +224,24 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {enhancedData.length === 0 && (
               <TableRow>
-                <TableCell colSpan={columns.length} className="text-center">
+                <TableCell
+                  colSpan={enhancedColumns.length}
+                  className="text-center"
+                >
                   No results found
                 </TableCell>
               </TableRow>
             )}
             {enhancedData.map((row: any, rowIndex) => (
               <TableRow key={rowIndex}>
-                {columns.map((column) => (
+                {enhancedColumns.map((column) => (
                   <TableCell key={column.id}>
-                    {(column as AccessorKeyColumnDef<TData, TValue>)
-                      .accessorKey === 'environment' ? (
+                    {column.id === 'eol' ? (
+                      column.cell && typeof column.cell === 'function' ? (
+                        column.cell({ row })
+                      ) : null
+                    ) : (column as AccessorKeyColumnDef<TData, TValue>)
+                        .accessorKey === 'environment' ? (
                       getEnvironmentBadge(
                         // @ts-ignore
                         row[column.accessorKey as keyof TData] as string,
