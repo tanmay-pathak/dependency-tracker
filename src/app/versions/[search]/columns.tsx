@@ -15,7 +15,7 @@ export const columns: ColumnDef<Dependency>[] = [
     header: 'Environment',
   },
   {
-    accessorKey: 'project',
+    accessorKey: 'id',
     header: 'Project',
   },
   {
