@@ -13,7 +13,7 @@ export default async function Projects() {
   const supabase = createServerClient(cookieStore)
 
   const { data: dependencies, error } = await supabase
-    .from('dependency')
+    .from('versions')
     .select('project', { count: 'exact' })
 
   if (error) {

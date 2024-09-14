@@ -23,7 +23,7 @@ export default async function FullDependenciesPage({
   const supabase = createServerClient(cookieStore)
 
   const [{ data: dependencies, error }, techInfo] = await Promise.all([
-    supabase.from('dependency').select('*').ilike('key', `%${search}%`),
+    supabase.from('versions').select('*').ilike('key', `%${search}%`),
     searchParams.technology ? fetchTechInfo(searchParams.technology) : null,
   ])
 

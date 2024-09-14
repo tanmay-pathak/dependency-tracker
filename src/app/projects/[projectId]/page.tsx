@@ -14,7 +14,7 @@ export default async function Page({
   const supabase = createServerClient(cookieStore)
 
   const { data: dependencies, error } = await supabase
-    .from('dependency')
+    .from('versions')
     .select('*')
     .eq('project', projectId)
 
