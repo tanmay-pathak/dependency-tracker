@@ -15,6 +15,8 @@ const technologies = [
   { name: 'DB', search: 'db_version' },
   { name: 'DB Hostname', search: 'db_hostname' },
   { name: 'Platform', search: 'platform' },
+  { name: 'NGINX', search: 'nginx_version', tech: 'nginx' },
+  { name: 'Wordpress', search: 'wordpress_version', tech: 'wordpress' },
 ]
 
 export default function VersionsPage() {
