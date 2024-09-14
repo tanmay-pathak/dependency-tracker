@@ -22,7 +22,7 @@ export default async function Projects() {
 
   // Remove duplicates
   const uniqueProjects = Array.from(
-    new Set(dependencies?.map((dep) => dep.project)),
+    new Set(dependencies?.map((dep) => dep.id)),
   )
 
   return (
