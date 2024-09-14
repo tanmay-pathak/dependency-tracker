@@ -12,9 +12,9 @@ export default async function FullDependenciesPage({
   const supabase = createServerClient(cookieStore)
 
   const { data: dependencies, error } = await supabase
-    .from('dependency')
+    .from('versions')
     .select('*')
-    .eq('project', projectId)
+    .eq('id', projectId)
 
   if (error) {
     return <div>Error: {error.message}</div>
