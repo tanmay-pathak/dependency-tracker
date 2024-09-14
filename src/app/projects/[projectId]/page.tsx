@@ -16,7 +16,7 @@ export default async function Page({
   const { data: dependencies, error } = await supabase
     .from('versions')
     .select('*')
-    .eq('project', projectId)
+    .eq('id', projectId)
 
   if (error) {
     return <div>Error: {error.message}</div>

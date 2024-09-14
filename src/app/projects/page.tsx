@@ -14,7 +14,7 @@ export default async function Projects() {
 
   const { data: dependencies, error } = await supabase
     .from('versions')
-    .select('project', { count: 'exact' })
+    .select('id', { count: 'exact' })
 
   if (error) {
     return <div className="text-red-500">Error: {error.message}</div>
