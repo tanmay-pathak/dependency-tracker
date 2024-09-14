@@ -37,7 +37,7 @@ export default async function FullDependenciesPage({
         columns={columns}
         data={dependencies || []}
         techInfo={techInfo}
-        searchField="project"
+        searchField="id"
         showChart={true}
       />
     </div>
