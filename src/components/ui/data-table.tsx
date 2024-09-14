@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import { Switch } from './switch'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -37,6 +38,7 @@ export function DataTable<TData, TValue>({
   showChart = false,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [showLando, setShowLando] = useState(true)
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
 
   const filteredData = useMemo(() => {
@@ -45,9 +47,9 @@ export function DataTable<TData, TValue>({
         item[searchField].toLowerCase().includes(searchTerm.toLowerCase()) &&
         (selectedEnvironment === 'all' ||
           item.environment === selectedEnvironment ||
-          item.environment === 'LANDO'),
+          (showLando && item.environment === 'LANDO')),
     )
-  }, [data, searchTerm, selectedEnvironment, searchField])
+  }, [data, searchTerm, selectedEnvironment, searchField, showLando])
 
   const enhancedData = useMemo(() => {
     if (!techInfo) return filteredData
@@ -149,6 +151,12 @@ export function DataTable<TData, TValue>({
           onChange={(e) => setSearchTerm(e.target.value)}
           autoFocus={true}
         />
+        {selectedEnvironment !== 'all' && (
+          <div className="flex h-9 min-w-fit items-center gap-2 rounded-md border px-3 py-2 text-sm">
+            Show Lando
+            <Switch checked={showLando} onCheckedChange={setShowLando} />
+          </div>
+        )}
         <Select
           value={selectedEnvironment}
           onValueChange={(value) => setSelectedEnvironment(value)}
