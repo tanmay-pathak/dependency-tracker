@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { ColumnDef, AccessorKeyColumnDef } from '@tanstack/react-table'
+import { ColumnDef } from '@tanstack/react-table'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -23,6 +23,7 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import { Switch } from './switch'
 import { EndOfLifeCell } from '@/components/EndOfLifeCell'
 import { extractCycle, formatDate } from '@/utils/utility-functions'
+import { LatestVersionCell } from '@/components/LatestVersionCell'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -39,7 +40,6 @@ export function DataTable<TData, TValue>({
   searchField = 'key',
   showChart = false,
 }: DataTableProps<TData, TValue>) {
-
   const [searchTerm, setSearchTerm] = useState('')
   const [showLando, setShowLando] = useState(true)
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
@@ -80,9 +80,18 @@ export function DataTable<TData, TValue>({
     return [
       ...columns,
       {
+        id: 'latestVersion',
+        header: 'Latest Version',
+        cell: ({ row }: { row: any }) => (
+          <LatestVersionCell
+            currentVersion={row.value}
+            latestVersion={row.latestVersion}
+          />
+        ),
+      },
+      {
         id: 'eol',
         header: 'End of Life',
-        accessorKey: 'eol',
         cell: ({ row }: { row: any }) => {
           const searchKey = row.key.toLowerCase()
           const version = row.value
@@ -176,7 +185,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {enhancedData.length === 0 && (
+            {enhancedData.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={enhancedColumns.length}
@@ -185,59 +194,17 @@ export function DataTable<TData, TValue>({
                   No results found
                 </TableCell>
               </TableRow>
+            ) : (
+              enhancedData.map((row: any, rowIndex) => (
+                <TableRow key={rowIndex}>
+                  {enhancedColumns.map((column) => (
+                    <TableCell key={column.id}>
+                      {renderCellContent(column, row)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             )}
-            {enhancedData.map((row: any, rowIndex) => (
-              <TableRow key={rowIndex}>
-                {enhancedColumns.map((column) => (
-                  <TableCell key={column.id}>
-                    {column.id === 'eol' ? (
-                      column.cell && typeof column.cell === 'function' ? (
-                        column.cell({ row })
-                      ) : null
-                    ) : (column as AccessorKeyColumnDef<TData, TValue>)
-                        .accessorKey === 'environment' ? (
-                      getEnvironmentBadge(
-                        // @ts-ignore
-                        row[column.accessorKey as keyof TData] as string,
-                      )
-                    ) : (column as AccessorKeyColumnDef<TData, TValue>)
-                        .accessorKey === 'value' ? (
-                      <div className="flex w-full items-center justify-between">
-                        <span>{row.value}</span>
-                        {row.latestVersion && (
-                          <Badge
-                            variant={
-                              row.value === row.latestVersion
-                                ? 'default'
-                                : 'destructive'
-                            }
-                          >
-                            {row.value === row.latestVersion
-                              ? 'Up to date'
-                              : `Latest: ${row.latestVersion}`}
-                          </Badge>
-                        )}
-                      </div>
-                    ) : (column as AccessorKeyColumnDef<TData, TValue>)
-                        .accessorKey === 'created_at' ||
-                      (column as AccessorKeyColumnDef<TData, TValue>)
-                        .accessorKey === 'modified_at' ? (
-                      formatDate(
-                        row[
-                          (column as AccessorKeyColumnDef<TData, TValue>)
-                            .accessorKey as keyof TData
-                        ] as string,
-                      )
-                    ) : (
-                      (row[
-                        (column as AccessorKeyColumnDef<TData, TValue>)
-                          .accessorKey as keyof TData
-                      ] as React.ReactNode)
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
           </TableBody>
         </Table>
       </div>
@@ -245,13 +212,30 @@ export function DataTable<TData, TValue>({
   )
 }
 
+function renderCellContent(column: any, row: any) {
+  if (column.cell && typeof column.cell === 'function') {
+    return column.cell({ row })
+  }
+
+  if (column.accessorKey === 'environment') {
+    return getEnvironmentBadge(row[column.accessorKey])
+  }
+
+  if (
+    column.accessorKey === 'created_at' ||
+    column.accessorKey === 'modified_at'
+  ) {
+    return formatDate(row[column.accessorKey])
+  }
+
+  return row[column.accessorKey]
+}
+
 const getEnvironmentBadge = (environment: string) => {
   switch (environment) {
     case 'DEV':
       return (
-        <Badge className="bg-blue-500 text-white hover:bg-blue-600">
-          DEV
-        </Badge>
+        <Badge className="bg-blue-500 text-white hover:bg-blue-600">DEV</Badge>
       )
     case 'BETA':
       return (
