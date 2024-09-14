@@ -21,9 +21,7 @@ export default async function Projects() {
   }
 
   // Remove duplicates
-  const uniqueProjects = Array.from(
-    new Set(dependencies?.map((dep) => dep.id)),
-  )
+  const uniqueProjects = Array.from(new Set(dependencies?.map((dep) => dep.id)))
 
   return (
     <div className="grid grid-cols-1 gap-4 bg-background p-4 md:grid-cols-2 lg:grid-cols-3">

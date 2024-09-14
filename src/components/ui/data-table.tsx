@@ -44,7 +44,8 @@ export function DataTable<TData, TValue>({
       (item: any) =>
         item[searchField].toLowerCase().includes(searchTerm.toLowerCase()) &&
         (selectedEnvironment === 'all' ||
-          item.environment === selectedEnvironment || item.environment === 'LANDO'),
+          item.environment === selectedEnvironment ||
+          item.environment === 'LANDO'),
     )
   }, [data, searchTerm, selectedEnvironment, searchField])
 
