@@ -22,29 +22,7 @@ import { Badge } from '@/components/ui/badge'
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import { Switch } from './switch'
 import { EndOfLifeCell } from '@/components/EndOfLifeCell'
-
-function extractCycle(version: string): string {
-  const parts = version.split('.')
-  return parts.slice(0, 2).join('.')
-}
-
-const formatDate = (dateString: string): string => {
-  const now = new Date()
-  const date = new Date(dateString)
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-
-  if (diffInSeconds < 60) return 'just now'
-  if (diffInSeconds < 3600)
-    return `${Math.floor(diffInSeconds / 60)} minutes ago`
-  if (diffInSeconds < 86400)
-    return `${Math.floor(diffInSeconds / 3600)} hours ago`
-  if (diffInSeconds < 2592000)
-    return `${Math.floor(diffInSeconds / 86400)} days ago`
-  if (diffInSeconds < 31536000)
-    return `${Math.floor(diffInSeconds / 2592000)} months ago`
-
-  return `${Math.floor(diffInSeconds / 31536000)} years ago`
-}
+import { extractCycle, formatDate } from '@/utils/utility-functions'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -61,6 +39,7 @@ export function DataTable<TData, TValue>({
   searchField = 'key',
   showChart = false,
 }: DataTableProps<TData, TValue>) {
+
   const [searchTerm, setSearchTerm] = useState('')
   const [showLando, setShowLando] = useState(true)
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
@@ -82,31 +61,6 @@ export function DataTable<TData, TValue>({
       latestVersion: techInfo[0]?.latest,
     }))
   }, [filteredData, techInfo])
-
-  const getEnvironmentBadge = (environment: string) => {
-    switch (environment) {
-      case 'DEV':
-        return (
-          <Badge className="bg-blue-500 text-white hover:bg-blue-600">
-            DEV
-          </Badge>
-        )
-      case 'BETA':
-        return (
-          <Badge className="bg-orange-500 text-white hover:bg-orange-600">
-            BETA
-          </Badge>
-        )
-      case 'PROD':
-        return (
-          <Badge className="bg-green-500 text-white hover:bg-green-600">
-            PROD
-          </Badge>
-        )
-      default:
-        return <Badge variant="outline">{environment}</Badge>
-    }
-  }
 
   const versionData = useMemo(() => {
     const versionCounts: { [key: string]: { [env: string]: number } } = {}
@@ -289,4 +243,29 @@ export function DataTable<TData, TValue>({
       </div>
     </div>
   )
+}
+
+const getEnvironmentBadge = (environment: string) => {
+  switch (environment) {
+    case 'DEV':
+      return (
+        <Badge className="bg-blue-500 text-white hover:bg-blue-600">
+          DEV
+        </Badge>
+      )
+    case 'BETA':
+      return (
+        <Badge className="bg-orange-500 text-white hover:bg-orange-600">
+          BETA
+        </Badge>
+      )
+    case 'PROD':
+      return (
+        <Badge className="bg-green-500 text-white hover:bg-green-600">
+          PROD
+        </Badge>
+      )
+    default:
+      return <Badge variant="outline">{environment}</Badge>
+  }
 }
