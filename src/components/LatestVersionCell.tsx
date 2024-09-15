@@ -37,7 +37,7 @@ export function LatestVersionCell({
   const getMainVersion = (version?: string) => version?.split('.')[0]
   const isMainVersionSame =
     getMainVersion(currentVersion) === getMainVersion(latestVersion) ||
-    latestVersion === null
+    latestVersion === 'N/A'
 
   if (isLoading) {
     return <Loader2 className="h-4 w-4 animate-spin" />
