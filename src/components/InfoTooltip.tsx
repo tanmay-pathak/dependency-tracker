@@ -9,7 +9,7 @@ import {
 import { format } from 'date-fns'
 
 interface InfoTooltipProps {
-  data: Record<string, any> | Array<Record<string, any>>
+  data: Record<string, string> | Array<Record<string, string>>
   title: string
   type: 'eol' | 'latest' | 'current'
 }

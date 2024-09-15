@@ -19,7 +19,7 @@ export async function fetchVersionData(tech: string, version: string) {
     if (response.status === 404) return null
     if (!response.ok) throw new Error('Failed to fetch EOL data')
 
-    return response.json()
+    return (await response.json()) as Record<string, string>
   }
 
   let versionToTry = version
@@ -52,6 +52,7 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
 
   if (isLoading) return <Loader2 className="h-4 w-4 animate-spin" />
 
+  // @ts-expect-error - No proper type hints for this API exists.
   const eolValue = data?.eol
   const eolDisplay = getEolDisplay(eolValue)
   const isPastEol = checkIsPastEol(eolDisplay)

@@ -17,7 +17,7 @@ async function fetchTechData(tech: string) {
   if (!response.ok) {
     throw new Error('Failed to fetch tech data')
   }
-  return response.json()
+  return (await response.json()) as Record<string, string>[]
 }
 
 export function LatestVersionCell({
