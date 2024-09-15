@@ -2,9 +2,15 @@
 
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Info } from 'lucide-react'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
 import { useQuery } from '@tanstack/react-query'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 interface LatestVersionCellProps {
   currentVersion: string
@@ -43,11 +49,33 @@ export function LatestVersionCell({
     return <Loader2 className="h-4 w-4 animate-spin" />
   }
 
+  if (!techData) {
+    return (
+      <div className="flex items-center">
+        <Badge variant={isMainVersionSame ? 'default' : 'destructive'}>
+          {latestVersion}
+        </Badge>
+      </div>
+    )
+  }
+
   return (
-    <div className="flex items-center">
-      <Badge variant={isMainVersionSame ? 'default' : 'destructive'}>
-        {latestVersion}
-      </Badge>
-    </div>
+    <TooltipProvider delayDuration={200}>
+      <Tooltip>
+        <div className="flex items-center gap-1">
+          <Badge variant={isMainVersionSame ? 'default' : 'destructive'}>
+            {latestVersion}
+          </Badge>
+          <TooltipTrigger className="flex items-center gap-1">
+            <Info className="h-3 w-3 text-muted-foreground" />
+          </TooltipTrigger>
+        </div>
+        <TooltipContent className="bg-white">
+          <pre className="bg-white text-xs text-black">
+            {JSON.stringify(techData?.slice(0, 3), null, 2)}
+          </pre>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }

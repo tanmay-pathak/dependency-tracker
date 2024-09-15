@@ -1,9 +1,15 @@
 'use client'
 
-import { Loader2 } from 'lucide-react'
+import { Loader2, Info } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
 import { useQuery } from '@tanstack/react-query'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 interface EndOfLifeCellProps {
   searchKey: string
@@ -51,8 +57,32 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
   const eolDisplay = getEolDisplay(eolValue)
   const isPastEol = checkIsPastEol(eolDisplay)
 
+  if (!data) {
+    return (
+      <Badge variant={isPastEol ? 'destructive' : 'default'}>
+        {eolDisplay}
+      </Badge>
+    )
+  }
+
   return (
-    <Badge variant={isPastEol ? 'destructive' : 'default'}>{eolDisplay}</Badge>
+    <TooltipProvider delayDuration={0}>
+      <Tooltip>
+        <div className="flex items-center gap-1">
+          <Badge variant={isPastEol ? 'destructive' : 'default'}>
+            {eolDisplay}
+          </Badge>
+          <TooltipTrigger className="flex items-center gap-1">
+            <Info className="h-3 w-3 text-muted-foreground" />
+          </TooltipTrigger>
+        </div>
+        <TooltipContent className="bg-white">
+          <pre className="bg-white text-xs text-black">
+            {JSON.stringify(data, null, 2)}
+          </pre>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
 
