@@ -3,29 +3,18 @@ import { cookies } from 'next/headers'
 import { DataTable } from '@/components/ui/data-table'
 import { columns } from './columns'
 
-async function fetchTechInfo(technology: string) {
-  const response = await fetch(`https://endoflife.date/api/${technology}.json`)
-  if (!response.ok) {
-    console.error(`Failed to fetch tech info for ${technology}`, response)
-    return null
-  }
-  return response.json()
-}
-
 export default async function FullDependenciesPage({
   params: { search },
-  searchParams,
 }: {
   params: { search: string }
-  searchParams: { technology?: string }
 }) {
   const cookieStore = cookies()
   const supabase = createServerClient(cookieStore)
 
-  const [{ data: dependencies, error }, techInfo] = await Promise.all([
-    supabase.from('versions').select('*').ilike('key', `%${search}%`),
-    searchParams.technology ? fetchTechInfo(searchParams.technology) : null,
-  ])
+  const { data: dependencies, error } = await supabase
+    .from('versions')
+    .select('*')
+    .ilike('key', `%${search}%`)
 
   if (error) {
     return <div>Error: {error.message}</div>
@@ -36,7 +25,6 @@ export default async function FullDependenciesPage({
       <DataTable
         columns={columns}
         data={dependencies || []}
-        techInfo={techInfo}
         searchField="id"
         showChart={true}
       />

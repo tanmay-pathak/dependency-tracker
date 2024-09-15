@@ -23,11 +23,11 @@ export const columns: ColumnDef<Dependency>[] = [
     header: 'Tool',
   },
   {
-    accessorKey: 'value',
-    header: 'Version',
-  },
-  {
     accessorKey: 'modified_at',
     header: 'Updated',
+  },
+  {
+    accessorKey: 'value',
+    header: 'Version',
   },
 ]
