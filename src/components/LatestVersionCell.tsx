@@ -4,50 +4,35 @@ import React, { useState, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Loader2 } from 'lucide-react'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
+import { useQuery } from '@tanstack/react-query'
 
 interface LatestVersionCellProps {
   currentVersion: string
   searchKey: string
 }
 
+async function fetchLatestVersion(tech: string) {
+  const response = await fetch(`https://endoflife.date/api/${tech}.json`)
+  if (!response.ok) {
+    throw new Error('Failed to fetch latest version')
+  }
+  const data = await response.json()
+  return data[0]?.latest || 'N/A'
+}
+
 export function LatestVersionCell({
   currentVersion,
   searchKey,
 }: LatestVersionCellProps) {
-  const [latestVersion, setLatestVersion] = useState<string | undefined>(
-    undefined,
-  )
-  const [isLoading, setIsLoading] = useState(true)
+  const dependency = dependencyBySearch[searchKey.toLowerCase()]
 
-  useEffect(() => {
-    async function fetchLatestVersion() {
-      const dependency = dependencyBySearch[searchKey.toLowerCase()]
-      if (!dependency || !dependency.tech) {
-        setLatestVersion('N/A')
-        setIsLoading(false)
-        return
-      }
-
-      try {
-        const response = await fetch(
-          `https://endoflife.date/api/${dependency.tech}.json`,
-        )
-        if (response.ok) {
-          const data = await response.json()
-          setLatestVersion(data[0]?.latest || 'N/A')
-        } else {
-          setLatestVersion('N/A')
-        }
-      } catch (error) {
-        console.error('Error fetching latest version:', error)
-        setLatestVersion('Error')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchLatestVersion()
-  }, [searchKey])
+  const { data: latestVersion, isLoading } = useQuery({
+    queryKey: ['latestVersion', dependency?.tech],
+    queryFn: () => fetchLatestVersion(dependency?.tech || ''),
+    enabled: !!dependency?.tech,
+    staleTime: 1000 * 60 * 60 * 4, // 4 hours
+    retry: 3,
+  })
 
   const getMainVersion = (version?: string) => version?.split('.')[0]
   const isMainVersionSame =

@@ -1,68 +1,47 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Loader2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
+import { useQuery } from '@tanstack/react-query'
 
 interface EndOfLifeCellProps {
   searchKey: string
   version: string
 }
 
+async function fetchEolData(tech: string, version: string) {
+  const response = await fetch(
+    `https://endoflife.date/api/${tech}/${version}.json`,
+  )
+  if (!response.ok) {
+    throw new Error('Failed to fetch EOL data')
+  }
+  return response.json()
+}
+
 export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
-  const [eolDate, setEolDate] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isPastEol, setIsPastEol] = useState(false)
+  const dependency = dependencyBySearch[searchKey.toLowerCase()]
 
-  useEffect(() => {
-    async function fetchEolData() {
-      const dependency = dependencyBySearch[searchKey.toLowerCase()]
-      if (!dependency || !dependency.tech) {
-        setEolDate('N/A')
-        setIsLoading(false)
-        return
-      }
+  const { data, isLoading } = useQuery({
+    queryKey: ['eolData', dependency?.tech, version],
+    queryFn: () => fetchEolData(dependency?.tech || '', version),
+    enabled: !!dependency?.tech,
+    staleTime: 1000 * 60 * 60 * 4, // 4 hours
+    retry: 3,
+  })
 
-      try {
-        const response = await fetch(
-          `https://endoflife.date/api/${dependency.tech}/${version}.json`,
-        )
-        if (response.ok) {
-          const data = await response.json()
-          setEolDate(data.eol)
-
-          // Check if eol is a valid date and set isPastEol
-          if (data.eol && !isNaN(Date.parse(data.eol))) {
-            const eolDateObj = new Date(data.eol)
-            const currentDate = new Date()
-            setIsPastEol(eolDateObj < currentDate)
-          } else {
-            setIsPastEol(false)
-          }
-        } else {
-          setEolDate('N/A')
-          setIsPastEol(false)
-        }
-      } catch (error) {
-        console.error('Error fetching EOL data:', error)
-        setEolDate('Error')
-        setIsPastEol(false)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchEolData()
-  }, [searchKey, version])
+  const eolDate = data?.eol || 'N/A'
+  const isPastEol =
+    eolDate !== 'N/A' &&
+    !isNaN(Date.parse(eolDate)) &&
+    new Date(eolDate) < new Date()
 
   if (isLoading) {
     return <Loader2 className="h-4 w-4 animate-spin" />
   }
 
   return (
-    <Badge variant={isPastEol ? 'destructive' : 'default'}>
-      {eolDate || 'N/A'}
-    </Badge>
+    <Badge variant={isPastEol ? 'destructive' : 'default'}>{eolDate}</Badge>
   )
 }
