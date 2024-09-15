@@ -11,7 +11,7 @@ import { format } from 'date-fns'
 interface InfoTooltipProps {
   data: Record<string, any> | Array<Record<string, any>>
   title: string
-  type: 'eol' | 'latest'
+  type: 'eol' | 'latest' | 'current'
 }
 
 export function InfoTooltip({ data, title, type }: InfoTooltipProps) {
@@ -25,7 +25,7 @@ export function InfoTooltip({ data, title, type }: InfoTooltipProps) {
           <div className="rounded-md bg-white p-2 text-xs text-black">
             <h4 className="mb-2 font-semibold">{title}</h4>
             <ul className="space-y-1">
-              {type === 'eol'
+              {type === 'eol' || type === 'current'
                 ? renderEolData(data as Record<string, any>)
                 : renderLatestData(Array.isArray(data) ? data : [data])}
             </ul>
