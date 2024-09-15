@@ -26,7 +26,7 @@ export default function Header() {
                     href={item.href}
                     className={`transition-colors ${
                       pathname.startsWith(item.href)
-                        ? 'text-primary'
+                        ? 'text-primary font-bold'
                         : 'text-muted-foreground hover:text-primary'
                     }`}
                   >
