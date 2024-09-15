@@ -69,13 +69,16 @@ export function DataTable<TData, TValue>({
 
   const enhancedColumns = useMemo(() => {
     return [
-      ...columns.map(column => ({
+      ...columns.map((column) => ({
         ...column,
         cell: ({ row }: { row: any }) => (
           <div className="flex items-center gap-1">
             {renderCellContent(column, row)}
             {column.header === 'Version' && (
-              <CurrentVersionTooltip currentVersion={row.value} searchKey={row.key} />
+              <CurrentVersionTooltip
+                currentVersion={row.value}
+                searchKey={row.key}
+              />
             )}
           </div>
         ),

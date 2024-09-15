@@ -11,8 +11,8 @@ interface EndOfLifeCellProps {
   version: string
 }
 
-async function fetchEolData(tech: string, version: string) {
-  async function fetchVersionData(versionToFetch: string) {
+export async function fetchVersionData(tech: string, version: string) {
+  async function fetchDataForSpecificVersion(versionToFetch: string) {
     const url = `https://endoflife.date/api/${tech}/${versionToFetch}.json`
     const response = await fetch(url)
 
@@ -22,17 +22,21 @@ async function fetchEolData(tech: string, version: string) {
     return response.json()
   }
 
-  let data = await fetchVersionData(version)
+  let versionToTry = version
+  let data = null
 
-  if (!data) {
-    // Try to fetch the main version
-    const mainVersion = version.split('.')[0]
-    data = await fetchVersionData(mainVersion)
+  while (versionToTry) {
+    data = await fetchDataForSpecificVersion(versionToTry)
+    if (data) break
+
+    const versionParts = versionToTry.split('.')
+    versionParts.pop()
+    versionToTry = versionParts.join('.')
   }
 
-  if (!data) throw new Error('Failed to fetch EOL data')
+  if (!data) throw new Error('Failed to fetch version data')
 
-  return data
+  return { Showing_Info_For_Version: versionToTry, ...data }
 }
 
 export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
@@ -40,7 +44,7 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
 
   const { data, isLoading } = useQuery({
     queryKey: ['eolData', dependency?.tech, version],
-    queryFn: () => fetchEolData(dependency?.tech || '', version),
+    queryFn: () => fetchVersionData(dependency?.tech || '', version),
     enabled: !!dependency?.tech,
     staleTime: 1000 * 60 * 60 * 4, // 4 hours
     retry: 3,

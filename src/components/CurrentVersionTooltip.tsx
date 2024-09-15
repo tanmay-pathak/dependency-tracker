@@ -5,21 +5,17 @@ import { useQuery } from '@tanstack/react-query'
 import { InfoTooltip } from './InfoTooltip'
 import { Loader2 } from 'lucide-react'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
+import { fetchVersionData } from './EndOfLifeCell'
 
 interface CurrentVersionTooltipProps {
   currentVersion: string
   searchKey: string
 }
 
-async function fetchVersionData(tech: string, version: string) {
-  const response = await fetch(`https://endoflife.date/api/${tech}/${version}.json`)
-  if (!response.ok) {
-    throw new Error('Failed to fetch version data')
-  }
-  return response.json()
-}
-
-export function CurrentVersionTooltip({ currentVersion, searchKey }: CurrentVersionTooltipProps) {
+export function CurrentVersionTooltip({
+  currentVersion,
+  searchKey,
+}: CurrentVersionTooltipProps) {
   const dependency = dependencyBySearch[searchKey.toLowerCase()]
 
   const { data, isLoading } = useQuery({
