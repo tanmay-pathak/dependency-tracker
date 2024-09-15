@@ -196,21 +196,27 @@ const getEnvironmentBadge = (environment: string) => {
   switch (environment) {
     case 'DEV':
       return (
-        <Badge className="bg-blue-500 text-white hover:bg-blue-600">DEV</Badge>
+        <Badge className="w-full justify-center bg-blue-500 text-white hover:bg-blue-600">
+          DEV
+        </Badge>
       )
     case 'BETA':
       return (
-        <Badge className="bg-orange-500 text-white hover:bg-orange-600">
+        <Badge className="w-full justify-center bg-orange-500 text-white hover:bg-orange-600">
           BETA
         </Badge>
       )
     case 'PROD':
       return (
-        <Badge className="bg-green-500 text-white hover:bg-green-600">
+        <Badge className="w-full justify-center bg-green-500 text-white hover:bg-green-600">
           PROD
         </Badge>
       )
     default:
-      return <Badge variant="outline">{environment}</Badge>
+      return (
+        <Badge className="w-full justify-center" variant="outline">
+          {environment}
+        </Badge>
+      )
   }
 }

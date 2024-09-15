@@ -11,6 +11,10 @@ export type Dependency = {
 
 export const columns: ColumnDef<Dependency>[] = [
   {
+    accessorKey: 'modified_at',
+    header: 'Updated',
+  },
+  {
     accessorKey: 'environment',
     header: 'Environment',
   },
@@ -21,10 +25,6 @@ export const columns: ColumnDef<Dependency>[] = [
   {
     accessorKey: 'key',
     header: 'Tool',
-  },
-  {
-    accessorKey: 'modified_at',
-    header: 'Updated',
   },
   {
     accessorKey: 'value',
