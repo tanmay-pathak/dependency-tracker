@@ -81,6 +81,54 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.foreground'),
+            a: {
+              color: theme('colors.primary.DEFAULT'),
+              '&:hover': {
+                color: theme('colors.primary.DEFAULT'),
+              },
+            },
+            h1: {
+              color: theme('colors.foreground'),
+            },
+            h2: {
+              color: theme('colors.foreground'),
+            },
+            h3: {
+              color: theme('colors.foreground'),
+            },
+            h4: {
+              color: theme('colors.foreground'),
+            },
+            h5: {
+              color: theme('colors.foreground'),
+            },
+            h6: {
+              color: theme('colors.foreground'),
+            },
+            strong: {
+              color: theme('colors.foreground'),
+            },
+            code: {
+              color: theme('colors.foreground'),
+            },
+            figcaption: {
+              color: theme('colors.muted.foreground'),
+            },
+            blockquote: {
+              color: theme('colors.muted.foreground'),
+            },
+          },
+        },
+        dark: {
+          css: {
+            color: theme('colors.foreground'),
+          },
+        },
+      }),
     },
   },
   plugins: [require('@tailwindcss/typography'), require('tailwindcss-animate')],
