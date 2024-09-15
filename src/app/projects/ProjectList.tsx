@@ -37,7 +37,7 @@ export default function ProjectList({ projects }: ProjectListProps) {
           <Link href={`/projects/${project}`} key={project} className="block">
             <Card className="cursor-pointer">
               <CardHeader>
-                <CardTitle className="text-primary">{project}</CardTitle>
+                <CardTitle>{project}</CardTitle>
                 <CardDescription>Click to view dependencies</CardDescription>
               </CardHeader>
             </Card>

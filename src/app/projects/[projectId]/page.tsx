@@ -23,7 +23,7 @@ export default async function FullDependenciesPage({
   return (
     <div className="container mx-auto p-6">
       <div className="prose max-w-none pb-2 text-center">
-        <h2 className="text-white">{projectId}</h2>
+        <h2>{projectId}</h2>
       </div>
       <DataTable columns={columns} data={dependencies || []} />
     </div>

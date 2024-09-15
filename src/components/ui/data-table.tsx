@@ -130,6 +130,7 @@ export function DataTable<TData, TValue>({
               <Bar dataKey="DEV" fill="#3b82f6" stackId="stack" />
               <Bar dataKey="BETA" fill="#f97316" stackId="stack" />
               <Bar dataKey="PROD" fill="#22c55e" stackId="stack" />
+              <Bar dataKey="LANDO" fill="#f97516" stackId="stack" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -194,6 +195,12 @@ function renderCellContent(column: any, row: any) {
 
 const getEnvironmentBadge = (environment: string) => {
   switch (environment) {
+    case 'LANDO':
+      return (
+        <Badge className="w-full justify-center bg-orange-500 text-white hover:bg-orange-600">
+          LANDO
+        </Badge>
+      )
     case 'DEV':
       return (
         <Badge className="w-full justify-center bg-blue-500 text-white hover:bg-blue-600">
