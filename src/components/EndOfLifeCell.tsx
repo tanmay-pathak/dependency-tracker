@@ -11,13 +11,27 @@ interface EndOfLifeCellProps {
 }
 
 async function fetchEolData(tech: string, version: string) {
-  const response = await fetch(
-    `https://endoflife.date/api/${tech}/${version}.json`,
-  )
-  if (!response.ok) {
-    throw new Error('Failed to fetch EOL data')
+  async function fetchVersionData(versionToFetch: string) {
+    const url = `https://endoflife.date/api/${tech}/${versionToFetch}.json`
+    const response = await fetch(url)
+
+    if (response.status === 404) return null
+    if (!response.ok) throw new Error('Failed to fetch EOL data')
+
+    return response.json()
   }
-  return response.json()
+
+  let data = await fetchVersionData(version)
+
+  if (!data) {
+    // Try to fetch the main version
+    const mainVersion = version.split('.')[0]
+    data = await fetchVersionData(mainVersion)
+  }
+
+  if (!data) throw new Error('Failed to fetch EOL data')
+
+  return data
 }
 
 export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
@@ -31,17 +45,25 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
     retry: 3,
   })
 
-  const eolDate = data?.eol || 'N/A'
-  const isPastEol =
-    eolDate !== 'N/A' &&
-    !isNaN(Date.parse(eolDate)) &&
-    new Date(eolDate) < new Date()
+  if (isLoading) return <Loader2 className="h-4 w-4 animate-spin" />
 
-  if (isLoading) {
-    return <Loader2 className="h-4 w-4 animate-spin" />
-  }
+  const eolValue = data?.eol
+  const eolDisplay = getEolDisplay(eolValue)
+  const isPastEol = checkIsPastEol(eolDisplay)
 
   return (
-    <Badge variant={isPastEol ? 'destructive' : 'default'}>{eolDate}</Badge>
+    <Badge variant={isPastEol ? 'destructive' : 'default'}>{eolDisplay}</Badge>
   )
+}
+
+function getEolDisplay(eolValue: boolean | string | undefined): string {
+  if (typeof eolValue === 'boolean') return eolValue ? 'Yes' : 'No'
+  return eolValue || 'N/A'
+}
+
+function checkIsPastEol(eolDisplay: string): boolean {
+  if (eolDisplay === 'N/A') return false
+  if (eolDisplay === 'Yes') return true
+  const eolDate = new Date(eolDisplay)
+  return !isNaN(eolDate.getTime()) && eolDate < new Date()
 }
