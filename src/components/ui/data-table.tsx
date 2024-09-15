@@ -28,7 +28,6 @@ import { LatestVersionCell } from '@/components/LatestVersionCell'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  techInfo?: any
   searchField?: string
   showChart?: boolean
 }
@@ -36,7 +35,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  techInfo,
   searchField = 'key',
   showChart = false,
 }: DataTableProps<TData, TValue>) {
@@ -54,17 +52,9 @@ export function DataTable<TData, TValue>({
     )
   }, [data, searchTerm, selectedEnvironment, searchField, showLando])
 
-  const enhancedData = useMemo(() => {
-    if (!techInfo) return filteredData
-    return filteredData.map((item: any) => ({
-      ...item,
-      latestVersion: techInfo[0]?.latest,
-    }))
-  }, [filteredData, techInfo])
-
   const versionData = useMemo(() => {
     const versionCounts: { [key: string]: { [env: string]: number } } = {}
-    enhancedData.forEach((item: any) => {
+    filteredData.forEach((item: any) => {
       if (!versionCounts[item.value]) {
         versionCounts[item.value] = { DEV: 0, BETA: 0, PROD: 0 }
       }
@@ -74,7 +64,7 @@ export function DataTable<TData, TValue>({
       version,
       ...counts,
     }))
-  }, [enhancedData])
+  }, [filteredData])
 
   const enhancedColumns = useMemo(() => {
     return [
@@ -83,10 +73,7 @@ export function DataTable<TData, TValue>({
         id: 'latestVersion',
         header: 'Latest Version',
         cell: ({ row }: { row: any }) => (
-          <LatestVersionCell
-            currentVersion={row.value}
-            latestVersion={row.latestVersion}
-          />
+          <LatestVersionCell currentVersion={row.value} searchKey={row.key} />
         ),
       },
       {
@@ -106,32 +93,6 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex h-full flex-col">
-      {techInfo && (
-        <Table className="mb-4">
-          <TableBody>
-            <TableRow className="flex justify-center">
-              <TableCell>
-                <span className="font-semibold text-blue-600 dark:text-blue-400">
-                  Latest Version:
-                </span>
-                <span className="ml-2 text-gray-800 dark:text-gray-200">
-                  {techInfo[0]?.latest}
-                </span>
-              </TableCell>
-              {techInfo[0]?.releaseDate && (
-                <TableCell>
-                  <span className="font-semibold text-green-600 dark:text-green-400">
-                    Release Date:
-                  </span>
-                  <span className="ml-2 text-gray-800 dark:text-gray-200">
-                    {techInfo[0].releaseDate}
-                  </span>
-                </TableCell>
-              )}
-            </TableRow>
-          </TableBody>
-        </Table>
-      )}
       <div className="sticky top-0 z-10 flex justify-between gap-4 bg-background p-2">
         <Input
           placeholder={`Search by ${searchField}...`}
@@ -185,7 +146,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {enhancedData.length === 0 ? (
+            {filteredData.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={enhancedColumns.length}
@@ -195,7 +156,7 @@ export function DataTable<TData, TValue>({
                 </TableCell>
               </TableRow>
             ) : (
-              enhancedData.map((row: any, rowIndex) => (
+              filteredData.map((row: any, rowIndex) => (
                 <TableRow key={rowIndex}>
                   {enhancedColumns.map((column) => (
                     <TableCell key={column.id}>
