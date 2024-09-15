@@ -21,7 +21,7 @@ export default async function FullDependenciesPage({
   }
 
   return (
-    <div className="container prose prose-lg mx-auto p-6">
+    <div className="container mx-auto p-6">
       <DataTable
         columns={columns}
         data={dependencies || []}
