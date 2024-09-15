@@ -24,6 +24,7 @@ import { Switch } from './switch'
 import { EndOfLifeCell } from '@/components/EndOfLifeCell'
 import { extractCycle, formatDate } from '@/utils/utility-functions'
 import { LatestVersionCell } from '@/components/LatestVersionCell'
+import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -68,7 +69,20 @@ export function DataTable<TData, TValue>({
 
   const enhancedColumns = useMemo(() => {
     return [
-      ...columns,
+      ...columns.map((column) => ({
+        ...column,
+        cell: ({ row }: { row: any }) => (
+          <div className="flex items-center gap-1">
+            {renderCellContent(column, row)}
+            {column.header === 'Version' && (
+              <CurrentVersionTooltip
+                currentVersion={row.value}
+                searchKey={row.key}
+              />
+            )}
+          </div>
+        ),
+      })),
       {
         id: 'latestVersion',
         header: 'Latest Version',

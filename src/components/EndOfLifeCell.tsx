@@ -1,23 +1,18 @@
 'use client'
 
-import { Loader2, Info } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
 import { useQuery } from '@tanstack/react-query'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { InfoTooltip } from '@/components/InfoTooltip'
 
 interface EndOfLifeCellProps {
   searchKey: string
   version: string
 }
 
-async function fetchEolData(tech: string, version: string) {
-  async function fetchVersionData(versionToFetch: string) {
+export async function fetchVersionData(tech: string, version: string) {
+  async function fetchDataForSpecificVersion(versionToFetch: string) {
     const url = `https://endoflife.date/api/${tech}/${versionToFetch}.json`
     const response = await fetch(url)
 
@@ -27,17 +22,21 @@ async function fetchEolData(tech: string, version: string) {
     return response.json()
   }
 
-  let data = await fetchVersionData(version)
+  let versionToTry = version
+  let data = null
 
-  if (!data) {
-    // Try to fetch the main version
-    const mainVersion = version.split('.')[0]
-    data = await fetchVersionData(mainVersion)
+  while (versionToTry) {
+    data = await fetchDataForSpecificVersion(versionToTry)
+    if (data) break
+
+    const versionParts = versionToTry.split('.')
+    versionParts.pop()
+    versionToTry = versionParts.join('.')
   }
 
-  if (!data) throw new Error('Failed to fetch EOL data')
+  if (!data) throw new Error('Failed to fetch version data')
 
-  return data
+  return { Showing_Info_For_Version: versionToTry, ...data }
 }
 
 export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
@@ -45,7 +44,7 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
 
   const { data, isLoading } = useQuery({
     queryKey: ['eolData', dependency?.tech, version],
-    queryFn: () => fetchEolData(dependency?.tech || '', version),
+    queryFn: () => fetchVersionData(dependency?.tech || '', version),
     enabled: !!dependency?.tech,
     staleTime: 1000 * 60 * 60 * 4, // 4 hours
     retry: 3,
@@ -66,23 +65,12 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
   }
 
   return (
-    <TooltipProvider delayDuration={0}>
-      <Tooltip>
-        <div className="flex items-center gap-1">
-          <Badge variant={isPastEol ? 'destructive' : 'default'}>
-            {eolDisplay}
-          </Badge>
-          <TooltipTrigger className="flex items-center gap-1">
-            <Info className="h-3 w-3 text-muted-foreground" />
-          </TooltipTrigger>
-        </div>
-        <TooltipContent className="bg-white">
-          <pre className="bg-white text-xs text-black">
-            {JSON.stringify(data, null, 2)}
-          </pre>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <div className="flex items-center gap-1">
+      <Badge variant={isPastEol ? 'destructive' : 'default'}>
+        {eolDisplay}
+      </Badge>
+      <InfoTooltip data={data} title="End of Life Information" type="eol" />
+    </div>
   )
 }
 
