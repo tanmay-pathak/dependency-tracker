@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Loader2 } from 'lucide-react'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
@@ -11,13 +11,12 @@ interface LatestVersionCellProps {
   searchKey: string
 }
 
-async function fetchLatestVersion(tech: string) {
+async function fetchTechData(tech: string) {
   const response = await fetch(`https://endoflife.date/api/${tech}.json`)
   if (!response.ok) {
-    throw new Error('Failed to fetch latest version')
+    throw new Error('Failed to fetch tech data')
   }
-  const data = await response.json()
-  return data[0]?.latest || 'N/A'
+  return response.json()
 }
 
 export function LatestVersionCell({
@@ -26,14 +25,15 @@ export function LatestVersionCell({
 }: LatestVersionCellProps) {
   const dependency = dependencyBySearch[searchKey.toLowerCase()]
 
-  const { data: latestVersion, isLoading } = useQuery({
-    queryKey: ['latestVersion', dependency?.tech],
-    queryFn: () => fetchLatestVersion(dependency?.tech || ''),
+  const { data: techData, isLoading } = useQuery({
+    queryKey: ['techData', dependency?.tech],
+    queryFn: () => fetchTechData(dependency?.tech || ''),
     enabled: !!dependency?.tech,
     staleTime: 1000 * 60 * 60 * 4, // 4 hours
     retry: 3,
   })
 
+  const latestVersion = techData?.[0]?.latest || 'N/A'
   const getMainVersion = (version?: string) => version?.split('.')[0]
   const isMainVersionSame =
     getMainVersion(currentVersion) === getMainVersion(latestVersion) ||
@@ -46,7 +46,7 @@ export function LatestVersionCell({
   return (
     <div className="flex items-center">
       <Badge variant={isMainVersionSame ? 'default' : 'destructive'}>
-        {latestVersion || 'N/A'}
+        {latestVersion}
       </Badge>
     </div>
   )
