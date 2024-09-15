@@ -1,58 +1,43 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Loader2 } from 'lucide-react'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
+import { useQuery } from '@tanstack/react-query'
 
 interface LatestVersionCellProps {
   currentVersion: string
   searchKey: string
 }
 
+async function fetchTechData(tech: string) {
+  const response = await fetch(`https://endoflife.date/api/${tech}.json`)
+  if (!response.ok) {
+    throw new Error('Failed to fetch tech data')
+  }
+  return response.json()
+}
+
 export function LatestVersionCell({
   currentVersion,
   searchKey,
 }: LatestVersionCellProps) {
-  const [latestVersion, setLatestVersion] = useState<string | undefined>(
-    undefined,
-  )
-  const [isLoading, setIsLoading] = useState(true)
+  const dependency = dependencyBySearch[searchKey.toLowerCase()]
 
-  useEffect(() => {
-    async function fetchLatestVersion() {
-      const dependency = dependencyBySearch[searchKey.toLowerCase()]
-      if (!dependency || !dependency.tech) {
-        setLatestVersion('N/A')
-        setIsLoading(false)
-        return
-      }
+  const { data: techData, isLoading } = useQuery({
+    queryKey: ['techData', dependency?.tech],
+    queryFn: () => fetchTechData(dependency?.tech || ''),
+    enabled: !!dependency?.tech,
+    staleTime: 1000 * 60 * 60 * 4, // 4 hours
+    retry: 3,
+  })
 
-      try {
-        const response = await fetch(
-          `https://endoflife.date/api/${dependency.tech}.json`,
-        )
-        if (response.ok) {
-          const data = await response.json()
-          setLatestVersion(data[0]?.latest || 'N/A')
-        } else {
-          setLatestVersion('N/A')
-        }
-      } catch (error) {
-        console.error('Error fetching latest version:', error)
-        setLatestVersion('Error')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchLatestVersion()
-  }, [searchKey])
-
+  const latestVersion = techData?.[0]?.latest || 'N/A'
   const getMainVersion = (version?: string) => version?.split('.')[0]
   const isMainVersionSame =
     getMainVersion(currentVersion) === getMainVersion(latestVersion) ||
-    latestVersion === null
+    latestVersion === 'N/A'
 
   if (isLoading) {
     return <Loader2 className="h-4 w-4 animate-spin" />
@@ -61,7 +46,7 @@ export function LatestVersionCell({
   return (
     <div className="flex items-center">
       <Badge variant={isMainVersionSame ? 'default' : 'destructive'}>
-        {latestVersion || 'N/A'}
+        {latestVersion}
       </Badge>
     </div>
   )

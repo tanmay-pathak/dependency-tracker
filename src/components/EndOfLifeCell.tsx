@@ -1,68 +1,69 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Loader2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
+import { useQuery } from '@tanstack/react-query'
 
 interface EndOfLifeCellProps {
   searchKey: string
   version: string
 }
 
-export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
-  const [eolDate, setEolDate] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isPastEol, setIsPastEol] = useState(false)
+async function fetchEolData(tech: string, version: string) {
+  async function fetchVersionData(versionToFetch: string) {
+    const url = `https://endoflife.date/api/${tech}/${versionToFetch}.json`
+    const response = await fetch(url)
 
-  useEffect(() => {
-    async function fetchEolData() {
-      const dependency = dependencyBySearch[searchKey.toLowerCase()]
-      if (!dependency || !dependency.tech) {
-        setEolDate('N/A')
-        setIsLoading(false)
-        return
-      }
+    if (response.status === 404) return null
+    if (!response.ok) throw new Error('Failed to fetch EOL data')
 
-      try {
-        const response = await fetch(
-          `https://endoflife.date/api/${dependency.tech}/${version}.json`,
-        )
-        if (response.ok) {
-          const data = await response.json()
-          setEolDate(data.eol)
-
-          // Check if eol is a valid date and set isPastEol
-          if (data.eol && !isNaN(Date.parse(data.eol))) {
-            const eolDateObj = new Date(data.eol)
-            const currentDate = new Date()
-            setIsPastEol(eolDateObj < currentDate)
-          } else {
-            setIsPastEol(false)
-          }
-        } else {
-          setEolDate('N/A')
-          setIsPastEol(false)
-        }
-      } catch (error) {
-        console.error('Error fetching EOL data:', error)
-        setEolDate('Error')
-        setIsPastEol(false)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchEolData()
-  }, [searchKey, version])
-
-  if (isLoading) {
-    return <Loader2 className="h-4 w-4 animate-spin" />
+    return response.json()
   }
 
+  let data = await fetchVersionData(version)
+
+  if (!data) {
+    // Try to fetch the main version
+    const mainVersion = version.split('.')[0]
+    data = await fetchVersionData(mainVersion)
+  }
+
+  if (!data) throw new Error('Failed to fetch EOL data')
+
+  return data
+}
+
+export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
+  const dependency = dependencyBySearch[searchKey.toLowerCase()]
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['eolData', dependency?.tech, version],
+    queryFn: () => fetchEolData(dependency?.tech || '', version),
+    enabled: !!dependency?.tech,
+    staleTime: 1000 * 60 * 60 * 4, // 4 hours
+    retry: 3,
+  })
+
+  if (isLoading) return <Loader2 className="h-4 w-4 animate-spin" />
+
+  const eolValue = data?.eol
+  const eolDisplay = getEolDisplay(eolValue)
+  const isPastEol = checkIsPastEol(eolDisplay)
+
   return (
-    <Badge variant={isPastEol ? 'destructive' : 'default'}>
-      {eolDate || 'N/A'}
-    </Badge>
+    <Badge variant={isPastEol ? 'destructive' : 'default'}>{eolDisplay}</Badge>
   )
+}
+
+function getEolDisplay(eolValue: boolean | string | undefined): string {
+  if (typeof eolValue === 'boolean') return eolValue ? 'Yes' : 'No'
+  return eolValue || 'N/A'
+}
+
+function checkIsPastEol(eolDisplay: string): boolean {
+  if (eolDisplay === 'N/A') return false
+  if (eolDisplay === 'Yes') return true
+  const eolDate = new Date(eolDisplay)
+  return !isNaN(eolDate.getTime()) && eolDate < new Date()
 }
