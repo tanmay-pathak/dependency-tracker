@@ -7,6 +7,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { format } from 'date-fns'
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@radix-ui/react-popover'
 
 interface InfoTooltipProps {
   data: Record<string, string> | Array<Record<string, string>>
@@ -14,25 +19,41 @@ interface InfoTooltipProps {
   type: 'eol' | 'latest' | 'current'
 }
 
-export function InfoTooltip({ data, title, type }: InfoTooltipProps) {
+export function InfoTooltip(props: InfoTooltipProps) {
   return (
-    <TooltipProvider delayDuration={200}>
-      <Tooltip>
-        <TooltipTrigger className="flex items-center">
-          <Info className="h-3 w-3 text-muted-foreground" />
-        </TooltipTrigger>
-        <TooltipContent className="w-64 p-0">
-          <div className="rounded-md bg-white p-2 text-xs text-black">
-            <h4 className="mb-2 font-semibold">{title}</h4>
-            <ul className="space-y-1">
-              {type === 'eol' || type === 'current'
-                ? renderEolData(data as Record<string, any>)
-                : renderLatestData(Array.isArray(data) ? data : [data])}
-            </ul>
-          </div>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <>
+      <TooltipProvider delayDuration={200}>
+        <Tooltip>
+          <TooltipTrigger className="flex items-center">
+            <Info className="hidden h-3 w-3 text-muted-foreground sm:block" />
+          </TooltipTrigger>
+          <TooltipContent className="w-64 p-0">
+            <InfoContent {...props} />
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <Popover>
+        <PopoverTrigger className="flex items-center">
+          <Info className="h-3 w-3 text-muted-foreground sm:hidden" />
+        </PopoverTrigger>
+        <PopoverContent className="w-64 p-0">
+          <InfoContent {...props} />
+        </PopoverContent>
+      </Popover>
+    </>
+  )
+}
+
+const InfoContent = ({ title, type, data }: InfoTooltipProps) => {
+  return (
+    <div className="rounded-md bg-white p-2 text-xs text-black">
+      <h4 className="mb-2 font-semibold">{title}</h4>
+      <ul className="space-y-1">
+        {type === 'eol' || type === 'current'
+          ? renderEolData(data as Record<string, any>)
+          : renderLatestData(Array.isArray(data) ? data : [data])}
+      </ul>
+    </div>
   )
 }
 

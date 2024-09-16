@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Info } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
 import { useQuery } from '@tanstack/react-query'
 import { InfoTooltip } from './InfoTooltip'
