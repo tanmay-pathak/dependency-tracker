@@ -4,8 +4,6 @@ export const dependency = [
   { name: 'Drush', search: 'drush_version', tech: 'drush' },
   { name: 'Composer', search: 'composer_version', tech: 'composer' },
   { name: 'DB', search: 'db_version' },
-  { name: 'DB Hostname', search: 'db_hostname' },
-  { name: 'Platform', search: 'platform' },
   { name: 'NGINX', search: 'nginx_version', tech: 'nginx' },
   { name: 'Wordpress', search: 'wordpress_version', tech: 'wordpress' },
   { name: 'Varnish', search: 'varnish_version', tech: 'varnish' },
