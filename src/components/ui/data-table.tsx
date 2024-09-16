@@ -207,7 +207,7 @@ function renderCellContent(column: any, row: any) {
   return row[column.accessorKey]
 }
 
-const getEnvironmentBadge = (environment: string) => {
+export const getEnvironmentBadge = (environment: string) => {
   switch (environment) {
     case 'LANDO':
       return (

@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/ui/card'
-import { ArrowRight, Package } from 'lucide-react'
+import { ArrowRight, Package, BarChart } from 'lucide-react'
 import Link from 'next/link'
 
 export default function LandingPage() {
@@ -23,8 +23,14 @@ export default function LandingPage() {
             Effortlessly track dependencies across all your projects
           </p>
           <div className="mt-10 flex justify-center gap-4">
+            <Link href="/dashboard">
+              <Button size="lg" variant="outline">
+                Go to Dashboard
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
             <Link href="/projects">
-              <Button size="lg" variant="default">
+              <Button size="lg" variant="outline">
                 View Projects
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -38,14 +44,19 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="mt-20 grid gap-8 sm:grid-cols-2">
+        <div className="mt-20 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+          <FeatureCard
+            icon={<BarChart className="h-8 w-8" />}
+            title="Dashboard Overview"
+            description="Get a quick overview of your projects and dependencies"
+          />
           <FeatureCard
             icon={<Package className="h-8 w-8" />}
             title="Dependency Management"
             description="Keep track of all your project dependencies in one place"
           />
           <FeatureCard
-            icon={<ArrowRight className="h-8 w-8" />}
+            icon={<ArrowRight className="h-8 w-4" />}
             title="Project Overview"
             description="Get a comprehensive view of all your projects and their dependencies"
           />
