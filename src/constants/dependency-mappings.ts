@@ -8,6 +8,7 @@ export const dependency = [
   { name: 'Platform', search: 'platform' },
   { name: 'NGINX', search: 'nginx_version', tech: 'nginx' },
   { name: 'Wordpress', search: 'wordpress_version', tech: 'wordpress' },
+  { name: 'Varnish', search: 'varnish_version', tech: 'varnish' },
 ]
 
 export const dependencyByTech = dependency.reduce(
