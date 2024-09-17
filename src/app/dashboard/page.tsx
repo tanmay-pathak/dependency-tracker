@@ -2,6 +2,8 @@ import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import EOLDependenciesTable from './EOLDependenciesTable'
+import Link from 'next/link'
+import { ExternalLink } from 'lucide-react'
 
 async function getDashboardData() {
   const cookieStore = cookies()
@@ -37,22 +39,28 @@ export default async function DashboardPage() {
   return (
     <div className="container mx-auto p-6">
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Projects</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{projectCount}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Unique Tools</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{uniqueToolsCount}</p>
-          </CardContent>
-        </Card>
+        <Link href="/projects" className="block">
+          <Card className="relative" hover={false}>
+            <CardHeader>
+              <CardTitle>Total Projects</CardTitle>
+            </CardHeader>
+            <CardContent className="prose max-w-none">
+              <h1>{projectCount}</h1>
+            </CardContent>
+            <ExternalLink className="absolute right-4 top-4 size-4 text-muted-foreground" />
+          </Card>
+        </Link>
+        <Link href="/versions" className="block">
+          <Card className="relative" hover={false}>
+            <CardHeader>
+              <CardTitle>Unique Tools</CardTitle>
+            </CardHeader>
+            <CardContent className="prose max-w-none">
+              <h1>{uniqueToolsCount}</h1>
+            </CardContent>
+            <ExternalLink className="absolute right-4 top-4 size-4 text-muted-foreground" />
+          </Card>
+        </Link>
       </div>
       <EOLDependenciesTable versions={versions ?? []} />
     </div>
