@@ -3,12 +3,8 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { ExternalLink } from 'lucide-react'
 
 interface Technology {
   name: string
@@ -44,11 +40,13 @@ export default function TechnologyList({ technologies }: TechnologyListProps) {
             href={`/versions/${tech.search}?technology=${tech.tech}`}
             key={tech.search}
           >
-            <Card className="cursor-pointer">
+            <Card className="relative">
               <CardHeader>
-                <CardTitle>{tech.name}</CardTitle>
-                <CardDescription>Click to view versions</CardDescription>
+                <CardTitle className="prose max-w-none">
+                  <h2>{tech.name}</h2>
+                </CardTitle>
               </CardHeader>
+              <ExternalLink className="absolute right-4 top-4 size-4 text-muted-foreground" />
             </Card>
           </Link>
         ))}
