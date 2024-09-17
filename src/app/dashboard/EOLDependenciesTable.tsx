@@ -103,8 +103,11 @@ export default function EolDependenciesTable({
 
   return (
     <div className="mt-6">
-      <div className="prose max-w-none text-center">
-        <h2>Dependencies that have reached EOL</h2>
+      <div className="prose mb-3 max-w-none text-center">
+        <h1>
+          Past E.O.L Count:{' '}
+          <span className="text-destructive">{eolDependencies.length}</span>
+        </h1>
       </div>
       <Table>
         <TableHeader>
