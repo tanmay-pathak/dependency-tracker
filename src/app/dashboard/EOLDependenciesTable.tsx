@@ -17,6 +17,14 @@ import { getEnvironmentBadge } from '@/components/ui/data-table'
 import { isAfter, addMonths, addYears } from 'date-fns'
 import { Loader2 } from 'lucide-react'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 
 type EolDependency = {
   id: string
@@ -40,6 +48,8 @@ export default function EolDependenciesTable({
 }) {
   const [eolDependencies, setEolDependencies] = useState<EolDependency[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
+  const [showLando, setShowLando] = useState(true)
 
   useEffect(() => {
     async function fetchEolData() {
@@ -93,6 +103,16 @@ export default function EolDependenciesTable({
     })
   }, [eolDependencies])
 
+  const filteredEolDependencies = useMemo(() => {
+    return selectedEnvironment === 'all'
+      ? sortedEolDependencies
+      : sortedEolDependencies.filter(
+          (dep) =>
+            dep.environment === selectedEnvironment ||
+            (showLando && dep.environment === 'LANDO'),
+        )
+  }, [sortedEolDependencies, selectedEnvironment, showLando])
+
   if (isLoading) {
     return (
       <div className="mt-6 flex justify-center">
@@ -106,8 +126,32 @@ export default function EolDependenciesTable({
       <div className="prose mb-3 max-w-none text-center">
         <h1>
           Past E.O.L Count:{' '}
-          <span className="text-destructive">{eolDependencies.length}</span>
+          <span className="text-destructive">
+            {filteredEolDependencies.length}
+          </span>
         </h1>
+      </div>
+      <div className="mb-4 flex items-center justify-end gap-4">
+        {selectedEnvironment !== 'all' && (
+          <div className="flex h-9 min-w-fit items-center gap-2 rounded-md border px-3 py-2 text-sm">
+            Show Lando
+            <Switch checked={showLando} onCheckedChange={setShowLando} />
+          </div>
+        )}
+        <Select
+          value={selectedEnvironment}
+          onValueChange={(value) => setSelectedEnvironment(value)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select Environment" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Environments</SelectItem>
+            <SelectItem value="DEV">DEV</SelectItem>
+            <SelectItem value="BETA">BETA</SelectItem>
+            <SelectItem value="PROD">PROD</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <Table>
         <TableHeader>
@@ -121,7 +165,7 @@ export default function EolDependenciesTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedEolDependencies.map((dep, index) => (
+          {filteredEolDependencies.map((dep, index) => (
             <TableRow key={index}>
               <TableCell>{dep.id}</TableCell>
               <TableCell>{getEnvironmentBadge(dep.environment)}</TableCell>
