@@ -43,6 +43,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
+    setIsMenuOpen(false)
   }
 
   const navItems = [
@@ -58,44 +59,52 @@ export default function Header() {
           <Link href="/" className="text-2xl font-bold text-primary">
             Dependency Tracker
           </Link>
-          <nav className="hidden sm:block">
-            <ul className="flex space-x-4">
-              {navItems.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`transition-colors ${
-                      pathname.startsWith(item.href)
-                        ? 'font-bold text-primary'
-                        : 'text-muted-foreground hover:text-primary'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          {isLoggedIn && (
+            <nav className="hidden sm:block">
+              <ul className="flex space-x-4">
+                {navItems.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`transition-colors ${
+                        pathname.startsWith(item.href)
+                          ? 'font-bold text-primary'
+                          : 'text-muted-foreground hover:text-primary'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
           <div className="flex items-center space-x-4">
             {isLoggedIn ? (
-              <Button variant="outline" onClick={handleLogout}>
-                Logout
-              </Button>
+              <>
+                <Button
+                  variant="outline"
+                  onClick={handleLogout}
+                  className="hidden sm:block"
+                >
+                  Logout
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="sm:hidden"
+                  onClick={() => setIsMenuOpen((prev) => !prev)}
+                  aria-label="Toggle menu"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </>
             ) : (
               <LoginButton />
             )}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="sm:hidden"
-              onClick={() => setIsMenuOpen((prev) => !prev)}
-              aria-label="Toggle menu"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
           </div>
         </div>
-        {isMenuOpen && (
+        {isLoggedIn && isMenuOpen && (
           <nav className="mt-4 sm:hidden">
             <ul className="flex flex-col space-y-2">
               {navItems.map((item) => (
@@ -113,6 +122,15 @@ export default function Header() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Button
+                  variant="outline"
+                  onClick={handleLogout}
+                  className="w-full justify-start"
+                >
+                  Logout
+                </Button>
+              </li>
             </ul>
           </nav>
         )}
