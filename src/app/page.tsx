@@ -22,7 +22,7 @@ export default function LandingPage() {
           <p className="mx-auto mt-3 max-w-md text-base text-muted-foreground sm:text-lg md:mt-5 md:max-w-3xl md:text-xl">
             Effortlessly track dependencies across all your projects
           </p>
-          <div className="mt-10 flex justify-center gap-4">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Link href="/dashboard">
               <Button size="lg" variant="outline">
                 Go to Dashboard
