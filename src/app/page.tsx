@@ -6,6 +6,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardFooter,
 } from '@/components/ui/card'
 import { ArrowRight, Package, BarChart } from 'lucide-react'
 import Link from 'next/link'
@@ -22,26 +23,6 @@ export default function LandingPage() {
           <p className="mx-auto mt-3 max-w-md text-base text-muted-foreground sm:text-lg md:mt-5 md:max-w-3xl md:text-xl">
             Effortlessly track dependencies across all your projects
           </p>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Link href="/dashboard">
-              <Button size="lg" variant="outline">
-                Go to Dashboard
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/projects">
-              <Button size="lg" variant="outline">
-                View Projects
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/versions">
-              <Button size="lg" variant="outline">
-                View Versions
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
         </div>
 
         <div className="mt-20 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
@@ -49,16 +30,22 @@ export default function LandingPage() {
             icon={<BarChart className="h-8 w-8" />}
             title="Dashboard Overview"
             description="Get a quick overview of your projects and dependencies"
+            buttonText="Go to Dashboard"
+            buttonHref="/dashboard"
           />
           <FeatureCard
             icon={<Package className="h-8 w-8" />}
             title="Dependency Management"
             description="Keep track of all your project dependencies in one place"
+            buttonText="View Projects"
+            buttonHref="/projects"
           />
           <FeatureCard
-            icon={<ArrowRight className="h-8 w-4" />}
+            icon={<ArrowRight className="h-8 w-8" />}
             title="Project Overview"
             description="Get a comprehensive view of all your projects and their dependencies"
+            buttonText="View Versions"
+            buttonHref="/versions"
           />
         </div>
       </main>
@@ -70,11 +57,19 @@ interface FeatureCardProps {
   icon: React.ReactNode
   title: string
   description: string
+  buttonText: string
+  buttonHref: string
 }
 
-function FeatureCard({ icon, title, description }: FeatureCardProps) {
+function FeatureCard({
+  icon,
+  title,
+  description,
+  buttonText,
+  buttonHref,
+}: FeatureCardProps) {
   return (
-    <Card className="bg-card">
+    <Card className="flex flex-col bg-card" hover={false}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-card-foreground">
           {icon}
@@ -86,6 +81,14 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
           {description}
         </CardDescription>
       </CardContent>
+      <CardFooter className="mt-auto">
+        <Link href={buttonHref} className="w-full">
+          <Button variant="outline" className="w-full">
+            {buttonText}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </Link>
+      </CardFooter>
     </Card>
   )
 }
