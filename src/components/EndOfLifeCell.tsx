@@ -75,7 +75,7 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
   )
 }
 
-function getEolDisplay(eolValue: boolean | string | undefined): string {
+export function getEolDisplay(eolValue: boolean | string | undefined): string {
   if (typeof eolValue === 'boolean') return eolValue ? 'Yes' : 'No'
   return eolValue || 'N/A'
 }
