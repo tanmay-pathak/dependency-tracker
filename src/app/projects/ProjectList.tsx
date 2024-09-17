@@ -7,8 +7,8 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@/components/ui/card'
+import { ExternalLink } from 'lucide-react'
 
 interface ProjectListProps {
   projects: string[]
@@ -35,11 +35,13 @@ export default function ProjectList({ projects }: ProjectListProps) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {filteredProjects.map((project) => (
           <Link href={`/projects/${project}`} key={project} className="block">
-            <Card className="cursor-pointer">
+            <Card className="relative">
               <CardHeader>
-                <CardTitle>{project}</CardTitle>
-                <CardDescription>Click to view dependencies</CardDescription>
+                <CardTitle className="prose max-w-none">
+                  <h2>{project}</h2>
+                </CardTitle>
               </CardHeader>
+              <ExternalLink className="absolute right-4 top-4 size-4 text-muted-foreground" />
             </Card>
           </Link>
         ))}
