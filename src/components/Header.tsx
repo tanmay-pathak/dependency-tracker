@@ -2,9 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { Menu } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 export default function Header() {
   const pathname = usePathname()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navItems = [
     { href: '/dashboard', label: 'Dashboard' },
@@ -19,7 +23,7 @@ export default function Header() {
           <Link href="/" className="text-2xl font-bold text-primary">
             Dependency Tracker
           </Link>
-          <nav>
+          <nav className="hidden sm:block">
             <ul className="flex space-x-4">
               {navItems.map((item) => (
                 <li key={item.href}>
@@ -37,7 +41,37 @@ export default function Header() {
               ))}
             </ul>
           </nav>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="sm:hidden"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
         </div>
+        {isMenuOpen && (
+          <nav className="mt-4 sm:hidden">
+            <ul className="flex flex-col space-y-2">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`block py-2 transition-colors ${
+                      pathname.startsWith(item.href)
+                        ? 'font-bold text-primary'
+                        : 'text-muted-foreground hover:text-primary'
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
       </div>
     </header>
   )
