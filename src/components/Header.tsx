@@ -1,14 +1,49 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Menu } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
+import { LoginButton } from '@/components/LoginButton'
+import { createBrowserClient } from '@/utils/supabase'
 
 export default function Header() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const supabase = createBrowserClient()
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setIsLoggedIn(!!user)
+    }
+    checkUser()
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') {
+        setIsLoggedIn(true)
+        router.refresh()
+      } else if (event === 'SIGNED_OUT') {
+        setIsLoggedIn(false)
+        router.refresh()
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [supabase, router])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+  }
 
   const navItems = [
     { href: '/dashboard', label: 'Dashboard' },
@@ -41,15 +76,24 @@ export default function Header() {
               ))}
             </ul>
           </nav>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="sm:hidden"
-            onClick={() => setIsMenuOpen((prev) => !prev)}
-            aria-label="Toggle menu"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center space-x-4">
+            {isLoggedIn ? (
+              <Button variant="outline" onClick={handleLogout}>
+                Logout
+              </Button>
+            ) : (
+              <LoginButton />
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="sm:hidden"
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+              aria-label="Toggle menu"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
         {isMenuOpen && (
           <nav className="mt-4 sm:hidden">
