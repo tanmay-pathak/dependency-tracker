@@ -40,7 +40,7 @@ export default async function DashboardPage() {
     <div className="container mx-auto p-6">
       <div className="grid gap-6 md:grid-cols-2">
         <Link href="/projects" className="block">
-          <Card className="relative" hover={false}>
+          <Card className="relative">
             <CardHeader>
               <CardTitle>Total Projects</CardTitle>
             </CardHeader>
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
           </Card>
         </Link>
         <Link href="/versions" className="block">
-          <Card className="relative" hover={false}>
+          <Card className="relative">
             <CardHeader>
               <CardTitle>Unique Tools</CardTitle>
             </CardHeader>

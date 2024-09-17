@@ -3,11 +3,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { ExternalLink } from 'lucide-react'
 
 interface ProjectListProps {
