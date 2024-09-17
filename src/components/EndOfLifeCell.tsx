@@ -12,8 +12,17 @@ interface EndOfLifeCellProps {
 }
 
 export async function fetchVersionData(tech: string, version: string) {
+  let actualTech = tech
+  if (tech === 'db') {
+    if (version.toLowerCase().includes('mariadb')) {
+      actualTech = 'mariadb'
+    } else {
+      actualTech = 'mysql'
+    }
+  }
+
   async function fetchDataForSpecificVersion(versionToFetch: string) {
-    const url = `https://endoflife.date/api/${tech}/${versionToFetch}.json`
+    const url = `https://endoflife.date/api/${actualTech}/${versionToFetch}.json`
     const response = await fetch(url)
 
     if (response.status === 404) return null
@@ -36,7 +45,7 @@ export async function fetchVersionData(tech: string, version: string) {
 
   if (!data) throw new Error('Failed to fetch version data')
 
-  return { Showing_Info_For_Version: versionToTry, ...data }
+  return { Tech: actualTech, Showing_Info_For_Version: versionToTry, ...data }
 }
 
 export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {

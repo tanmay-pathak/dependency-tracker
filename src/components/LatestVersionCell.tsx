@@ -13,6 +13,10 @@ interface LatestVersionCellProps {
 }
 
 async function fetchTechData(tech: string) {
+  if (tech === 'db') {
+    return null
+  }
+
   const response = await fetch(`https://endoflife.date/api/${tech}.json`)
   if (!response.ok) {
     throw new Error('Failed to fetch tech data')
