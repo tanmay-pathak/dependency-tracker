@@ -182,7 +182,7 @@ export default function EolDependenciesTable({
                   variant={
                     isAfter(new Date(), addYears(new Date(dep.eol), 1))
                       ? 'destructive'
-                      : 'default'
+                      : 'warning'
                   }
                 >
                   {formatDate(dep.eol)}
