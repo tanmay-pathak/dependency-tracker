@@ -59,16 +59,17 @@ export function EnvironmentVersionTable({
           <TableHeader>
             <TableRow>
               <TableHead>Tool</TableHead>
+              <TableHead>LOCAL</TableHead>
               <TableHead>DEV</TableHead>
               <TableHead>BETA</TableHead>
-              <TableHead>LIVE</TableHead>
+              <TableHead>PROD</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredData.map(([key, versions]) => (
               <TableRow key={key}>
                 <TableCell>{key}</TableCell>
-                {['DEV', 'BETA', 'LIVE'].map((env) => (
+                {['LOCAL', 'DEV', 'BETA', 'PROD'].map((env) => (
                   <TableCell key={env}>
                     <div className="flex items-center gap-2">
                       {versions[env] || 'N/A'}
