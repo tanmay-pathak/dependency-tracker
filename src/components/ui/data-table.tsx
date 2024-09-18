@@ -40,7 +40,7 @@ export function DataTable<TData, TValue>({
   showChart = false,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [showLando, setShowLando] = useState(true)
+  const [showLocal, setShowLocal] = useState(false)
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
 
   const filteredData = useMemo(() => {
@@ -49,9 +49,9 @@ export function DataTable<TData, TValue>({
         item[searchField].toLowerCase().includes(searchTerm.toLowerCase()) &&
         (selectedEnvironment === 'all' ||
           item.environment === selectedEnvironment ||
-          (showLando && item.environment === 'LANDO')),
+          (showLocal && item.environment === 'LOCAL')),
     )
-  }, [data, searchTerm, selectedEnvironment, searchField, showLando])
+  }, [data, searchTerm, selectedEnvironment, searchField, showLocal])
 
   const versionData = useMemo(() => {
     const versionCounts: { [key: string]: { [env: string]: number } } = {}
@@ -114,10 +114,10 @@ export function DataTable<TData, TValue>({
           onChange={(e) => setSearchTerm(e.target.value)}
           autoFocus={true}
         />
-        {selectedEnvironment !== 'all' && (
+        {selectedEnvironment !== 'all' && selectedEnvironment !== 'LOCAL' && (
           <div className="flex h-9 min-w-fit items-center gap-2 rounded-md border px-3 py-2 text-sm">
-            Show Lando
-            <Switch checked={showLando} onCheckedChange={setShowLando} />
+            Show Local
+            <Switch checked={showLocal} onCheckedChange={setShowLocal} />
           </div>
         )}
         <Select
@@ -129,6 +129,7 @@ export function DataTable<TData, TValue>({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Environments</SelectItem>
+            <SelectItem value="LOCAL">LOCAL</SelectItem>
             <SelectItem value="DEV">DEV</SelectItem>
             <SelectItem value="BETA">BETA</SelectItem>
             <SelectItem value="PROD">PROD</SelectItem>
@@ -144,7 +145,7 @@ export function DataTable<TData, TValue>({
               <Bar dataKey="DEV" fill="#3b82f6" stackId="stack" />
               <Bar dataKey="BETA" fill="#f97316" stackId="stack" />
               <Bar dataKey="PROD" fill="#22c55e" stackId="stack" />
-              <Bar dataKey="LANDO" fill="#f97516" stackId="stack" />
+              <Bar dataKey="LOCAL" fill="#f97516" stackId="stack" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -209,10 +210,10 @@ function renderCellContent(column: any, row: any) {
 
 export const getEnvironmentBadge = (environment: string) => {
   switch (environment) {
-    case 'LANDO':
+    case 'LOCAL':
       return (
         <Badge className="w-full justify-center bg-orange-500 text-white hover:bg-orange-600">
-          LANDO
+          LOCAL
         </Badge>
       )
     case 'DEV':
