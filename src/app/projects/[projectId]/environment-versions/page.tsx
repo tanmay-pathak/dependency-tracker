@@ -1,10 +1,9 @@
 import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
-import { DataTable } from '@/components/ui/data-table'
-import { columns } from './columns'
+import { EnvironmentVersionTable } from '@/components/ui/environment-version-table'
 import Link from 'next/link'
 
-export default async function FullDependenciesPage({
+export default async function EnvironmentVersionsPage({
   params: { projectId },
 }: {
   params: { projectId: string }
@@ -25,11 +24,9 @@ export default async function FullDependenciesPage({
     <div className="container mx-auto p-6">
       <div className="prose max-w-none pb-2 text-center">
         <h2>{projectId}</h2>
-        <Link href={`/projects/${projectId}/environment-versions`}>
-          View Environments Side By Side
-        </Link>
+        <Link href={`/projects/${projectId}`}>Back to Project</Link>
       </div>
-      <DataTable columns={columns} data={dependencies || []} />
+      <EnvironmentVersionTable data={dependencies || []} />
     </div>
   )
 }
