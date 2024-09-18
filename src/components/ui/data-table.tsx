@@ -40,7 +40,7 @@ export function DataTable<TData, TValue>({
   showChart = false,
 }: DataTableProps<TData, TValue>) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [showLocal, setShowLocal] = useState(true)
+  const [showLocal, setShowLocal] = useState(false)
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
 
   const filteredData = useMemo(() => {
@@ -114,7 +114,7 @@ export function DataTable<TData, TValue>({
           onChange={(e) => setSearchTerm(e.target.value)}
           autoFocus={true}
         />
-        {selectedEnvironment !== 'all' && (
+        {selectedEnvironment !== 'all' && selectedEnvironment !== 'LOCAL' && (
           <div className="flex h-9 min-w-fit items-center gap-2 rounded-md border px-3 py-2 text-sm">
             Show Local
             <Switch checked={showLocal} onCheckedChange={setShowLocal} />
@@ -129,6 +129,7 @@ export function DataTable<TData, TValue>({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Environments</SelectItem>
+            <SelectItem value="LOCAL">LOCAL</SelectItem>
             <SelectItem value="DEV">DEV</SelectItem>
             <SelectItem value="BETA">BETA</SelectItem>
             <SelectItem value="PROD">PROD</SelectItem>
