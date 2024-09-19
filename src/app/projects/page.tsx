@@ -14,8 +14,10 @@ export default async function Projects() {
     return <div className="text-red-500">Error: {error.message}</div>
   }
 
-  // Remove duplicates
-  const uniqueProjects = Array.from(new Set(dependencies?.map((dep) => dep.id)))
+  // Remove duplicates and sort alphabetically
+  const uniqueProjects = Array.from(
+    new Set(dependencies?.map((dep) => dep.id)),
+  ).sort((a, b) => a.localeCompare(b))
 
   return (
     <div className="container mx-auto p-4">
