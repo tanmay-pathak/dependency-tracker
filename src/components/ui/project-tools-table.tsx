@@ -13,13 +13,11 @@ import { Input } from '@/components/ui/input'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 import { Dependency } from '@/app/versions/[search]/columns'
 
-interface EnvironmentVersionTableProps {
+interface ProjectToolsTableProps {
   data: Dependency[]
 }
 
-export function EnvironmentVersionTable({
-  data,
-}: EnvironmentVersionTableProps) {
+export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
   const [searchTerm, setSearchTerm] = React.useState('')
 
   const groupedData = useMemo(() => {

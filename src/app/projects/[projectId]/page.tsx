@@ -31,7 +31,7 @@ export default async function FullDependenciesPage({
       <div className="prose max-w-none pb-2">
         <h2 className="text-center">{projectId}</h2>
         <div className="flex justify-end">
-          <Link href={`/projects/${projectId}/environment-versions`} passHref>
+          <Link href={`/projects/${projectId}/tools`} passHref>
             <Button variant="outline" size="sm" asChild>
               <span>
                 <Table className="mr-2 h-4 w-4" />

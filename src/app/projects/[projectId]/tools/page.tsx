@@ -1,12 +1,12 @@
 import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
-import { EnvironmentVersionTable } from '@/components/ui/environment-version-table'
 import Link from 'next/link'
 import { Dependency } from '@/app/versions/[search]/columns'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
+import { ProjectToolsTable } from '@/components/ui/project-tools-table'
 
-export default async function EnvironmentVersionsPage({
+export default async function ToolsPage({
   params: { projectId },
 }: {
   params: { projectId: string }
@@ -37,7 +37,7 @@ export default async function EnvironmentVersionsPage({
         </div>
         <h2 className="text-center text-2xl font-bold">{projectId}</h2>
       </div>
-      <EnvironmentVersionTable data={dependencies} />
+      <ProjectToolsTable data={dependencies} />
     </div>
   )
 }
