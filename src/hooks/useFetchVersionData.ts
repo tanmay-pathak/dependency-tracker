@@ -54,6 +54,9 @@ const useFetchVersionData = (
     queryKey: ['versionData', tech, version],
     queryFn: () => fetchVersionData(tech, version),
     enabled: !!tech && !!version,
+    staleTime: 1000 * 60 * 60 * 24, // 1 day
+    refetchInterval: 1000 * 60 * 60 * 24, // 1 day
+    retry: 1,
   })
 
 export default useFetchVersionData
