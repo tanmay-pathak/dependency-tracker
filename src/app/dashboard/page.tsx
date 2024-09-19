@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import EOLDependenciesTable from './EOLDependenciesTable'
 import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
+import { Dependency } from '@/app/versions/[search]/columns'
 
 async function getDashboardData() {
   const cookieStore = cookies()
@@ -29,7 +30,7 @@ async function getDashboardData() {
   return {
     projectCount,
     uniqueToolsCount,
-    versions,
+    versions: (versions as Dependency[]) ?? [],
   }
 }
 
@@ -62,7 +63,7 @@ export default async function DashboardPage() {
           </Card>
         </Link>
       </div>
-      <EOLDependenciesTable versions={versions ?? []} />
+      <EOLDependenciesTable versions={versions} />
     </div>
   )
 }

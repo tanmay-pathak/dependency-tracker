@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { getEnvironmentBadge } from '@/components/ui/data-table'
-import { isAfter, addMonths, addYears } from 'date-fns'
+import { isAfter, addYears } from 'date-fns'
 import { Loader2 } from 'lucide-react'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 import {
@@ -25,13 +25,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
+import { Dependency } from '@/app/versions/[search]/columns'
 
-type EolDependency = {
-  id: string
-  environment: string
-  key: string
-  value: string
-  modified_at?: string
+interface EolDependency extends Dependency {
   eol: string
   eolDate: Date | null
 }
@@ -44,7 +40,7 @@ type VersionData = {
 export default function EolDependenciesTable({
   versions,
 }: {
-  versions: Array<Record<string, string>>
+  versions: Dependency[]
 }) {
   const [eolDependencies, setEolDependencies] = useState<EolDependency[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -69,11 +65,7 @@ export default function EolDependenciesTable({
             if (data && isEolReached(data.eol)) {
               const eolDisplay = getEolDisplay(data.eol)
               return {
-                id: version.id || '',
-                environment: version.environment || '',
-                key: version.key || '',
-                value: version.value || '',
-                modified_at: version.modified_at,
+                ...version,
                 eol: eolDisplay,
                 eolDate: parseEolDate(eolDisplay),
               }
@@ -86,7 +78,7 @@ export default function EolDependenciesTable({
       )
 
       setEolDependencies(
-        eolData.filter((item) => item !== null) as EolDependency[],
+        eolData.filter((item): item is EolDependency => item !== null),
       )
       setIsLoading(false)
     }
