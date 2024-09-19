@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { fetchVersionData, getEolDisplay } from '@/components/EndOfLifeCell'
+import { getEolDisplay } from '@/components/EndOfLifeCell'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
 import { extractCycle, formatDate } from '@/utils/utility-functions'
 import {
@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Dependency } from '@/app/versions/[search]/columns'
+import { fetchVersionData } from '@/hooks/useFetchVersionData'
 
 interface EolDependency extends Dependency {
   eol: string

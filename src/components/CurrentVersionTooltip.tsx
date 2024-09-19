@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { InfoTooltip } from './InfoTooltip'
 import { Loader2 } from 'lucide-react'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
-import { fetchVersionData } from './EndOfLifeCell'
+import useFetchVersionData from '@/hooks/useFetchVersionData'
 
 interface CurrentVersionTooltipProps {
   currentVersion: string
@@ -20,13 +20,10 @@ export function CurrentVersionTooltip({
 }: CurrentVersionTooltipProps) {
   const dependency = dependencyBySearch[searchKey.toLowerCase()]
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['versionData', dependency?.tech, currentVersion],
-    queryFn: () => fetchVersionData(dependency?.tech || '', currentVersion),
-    enabled: !!dependency?.tech && !!currentVersion,
-    staleTime: 1000 * 60 * 60 * 4, // 4 hours
-    retry: 3,
-  })
+  const { data, isLoading } = useFetchVersionData(
+    dependency?.tech || '',
+    currentVersion,
+  )
 
   if (isLoading) {
     return (
