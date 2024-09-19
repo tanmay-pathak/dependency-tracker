@@ -7,6 +7,7 @@ export const dependency = [
   { name: 'NGINX', search: 'nginx_version', tech: 'nginx' },
   { name: 'Wordpress', search: 'wordpress_version', tech: 'wordpress' },
   { name: 'Varnish', search: 'varnish_version', tech: 'varnish' },
+  { name: 'Provider', search: 'provider' },
 ]
 
 export const dependencyByTech = dependency.reduce(
