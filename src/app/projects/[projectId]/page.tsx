@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { DataTable } from '@/components/ui/data-table'
 import { columns } from './columns'
 import Link from 'next/link'
+import { Dependency } from '@/app/versions/[search]/columns'
 
 export default async function FullDependenciesPage({
   params: { projectId },
@@ -12,7 +13,7 @@ export default async function FullDependenciesPage({
   const cookieStore = cookies()
   const supabase = createServerClient(cookieStore)
 
-  const { data: dependencies, error } = await supabase
+  const { data, error } = await supabase
     .from('versions')
     .select('*')
     .eq('id', projectId)
@@ -20,6 +21,8 @@ export default async function FullDependenciesPage({
   if (error) {
     return <div>Error: {error.message}</div>
   }
+
+  const dependencies: Dependency[] = data || []
 
   return (
     <div className="container mx-auto p-6">
@@ -29,7 +32,7 @@ export default async function FullDependenciesPage({
           View Environments Side By Side
         </Link>
       </div>
-      <DataTable columns={columns} data={dependencies || []} />
+      <DataTable columns={columns} data={dependencies} />
     </div>
   )
 }
