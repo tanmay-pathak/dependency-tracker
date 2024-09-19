@@ -1,11 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table'
 
-export type Dependency = {
-  id: number
-  project: string
-  environment: string
+export interface Dependency {
+  id: string
   key: string
   value: string
+  environment: string
+  created_at: string
   modified_at: string
 }
 

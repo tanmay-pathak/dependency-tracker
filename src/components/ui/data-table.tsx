@@ -25,20 +25,21 @@ import { EndOfLifeCell } from '@/components/EndOfLifeCell'
 import { extractCycle, formatDate } from '@/utils/utility-functions'
 import { LatestVersionCell } from '@/components/LatestVersionCell'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
+import { Dependency } from '@/app/versions/[search]/columns'
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  searchField?: string
+interface DataTableProps {
+  columns: ColumnDef<Dependency, string | number | Date>[]
+  data: Dependency[]
+  searchField?: keyof Dependency
   showChart?: boolean
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable({
   columns,
   data,
   searchField = 'key',
   showChart = false,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [showLocal, setShowLocal] = useState(false)
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
