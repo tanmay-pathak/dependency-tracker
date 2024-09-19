@@ -2,6 +2,7 @@ import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
 import { EnvironmentVersionTable } from '@/components/ui/environment-version-table'
 import Link from 'next/link'
+import { Dependency } from '@/app/versions/[search]/columns'
 
 export default async function EnvironmentVersionsPage({
   params: { projectId },
@@ -11,7 +12,7 @@ export default async function EnvironmentVersionsPage({
   const cookieStore = cookies()
   const supabase = createServerClient(cookieStore)
 
-  const { data: dependencies, error } = await supabase
+  const { data, error } = await supabase
     .from('versions')
     .select('*')
     .eq('id', projectId)
@@ -19,6 +20,7 @@ export default async function EnvironmentVersionsPage({
   if (error) {
     return <div>Error: {error.message}</div>
   }
+  const dependencies: Dependency[] = data || []
 
   return (
     <div className="container mx-auto p-6">
@@ -26,7 +28,7 @@ export default async function EnvironmentVersionsPage({
         <h2>{projectId}</h2>
         <Link href={`/projects/${projectId}`}>Back to Project</Link>
       </div>
-      <EnvironmentVersionTable data={dependencies || []} />
+      <EnvironmentVersionTable data={dependencies} />
     </div>
   )
 }

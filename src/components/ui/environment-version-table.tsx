@@ -11,15 +11,10 @@ import {
 } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
-
-interface VersionData {
-  key: string
-  value: string
-  environment: string
-}
+import { Dependency } from '@/app/versions/[search]/columns'
 
 interface EnvironmentVersionTableProps {
-  data: VersionData[]
+  data: Dependency[]
 }
 
 export function EnvironmentVersionTable({
