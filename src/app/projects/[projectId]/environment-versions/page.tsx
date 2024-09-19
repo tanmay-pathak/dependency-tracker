@@ -35,7 +35,7 @@ export default async function EnvironmentVersionsPage({
             </Button>
           </Link>
         </div>
-        <h2 className="text-2xl font-bold text-center">{projectId}</h2>
+        <h2 className="text-center text-2xl font-bold">{projectId}</h2>
       </div>
       <EnvironmentVersionTable data={dependencies} />
     </div>

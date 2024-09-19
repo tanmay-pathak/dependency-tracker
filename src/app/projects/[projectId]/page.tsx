@@ -4,6 +4,8 @@ import { DataTable } from '@/components/ui/data-table'
 import { columns } from './columns'
 import Link from 'next/link'
 import { Dependency } from '@/app/versions/[search]/columns'
+import { Button } from '@/components/ui/button'
+import { Table } from 'lucide-react'
 
 export default async function FullDependenciesPage({
   params: { projectId },
@@ -26,11 +28,18 @@ export default async function FullDependenciesPage({
 
   return (
     <div className="container mx-auto p-6">
-      <div className="prose max-w-none pb-2 text-center">
-        <h2>{projectId}</h2>
-        <Link href={`/projects/${projectId}/environment-versions`}>
-          View Environments Side By Side
-        </Link>
+      <div className="prose max-w-none pb-2">
+        <h2 className="text-center">{projectId}</h2>
+        <div className="flex justify-end">
+          <Link href={`/projects/${projectId}/environment-versions`} passHref>
+            <Button variant="outline" size="sm" asChild>
+              <span>
+                <Table className="mr-2 h-4 w-4" />
+                Compare Environments
+              </span>
+            </Button>
+          </Link>
+        </div>
       </div>
       <DataTable columns={columns} data={dependencies} />
     </div>
