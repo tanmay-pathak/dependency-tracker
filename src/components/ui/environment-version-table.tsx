@@ -71,15 +71,12 @@ export function EnvironmentVersionTable({
                 <TableCell>{key}</TableCell>
                 {['LOCAL', 'DEV', 'BETA', 'PROD'].map((env) => (
                   <TableCell key={env}>
-                    <div className="flex items-center gap-2">
+                    <CurrentVersionTooltip
+                      currentVersion={versions[env]}
+                      searchKey={key}
+                    >
                       {versions[env] || 'N/A'}
-                      {versions[env] && (
-                        <CurrentVersionTooltip
-                          currentVersion={versions[env]}
-                          searchKey={key}
-                        />
-                      )}
-                    </div>
+                    </CurrentVersionTooltip>
                   </TableCell>
                 ))}
               </TableRow>

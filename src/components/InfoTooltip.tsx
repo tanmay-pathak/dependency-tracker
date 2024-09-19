@@ -17,11 +17,13 @@ interface InfoTooltipProps {
   data: Record<string, string> | Array<Record<string, string>>
   title: string
   type: 'eol' | 'latest' | 'current'
+  children?: React.ReactNode
 }
 
-export function InfoTooltip(props: InfoTooltipProps) {
+export function InfoTooltip({ children, ...props }: InfoTooltipProps) {
   return (
-    <>
+    <div className="flex items-center gap-2">
+      {children}
       <TooltipProvider delayDuration={200}>
         <Tooltip>
           <TooltipTrigger className="flex items-center">
@@ -40,11 +42,15 @@ export function InfoTooltip(props: InfoTooltipProps) {
           <InfoContent {...props} />
         </PopoverContent>
       </Popover>
-    </>
+    </div>
   )
 }
 
-const InfoContent = ({ title, type, data }: InfoTooltipProps) => {
+const InfoContent = ({
+  title,
+  type,
+  data,
+}: Omit<InfoTooltipProps, 'children'>) => {
   return (
     <div className="rounded-md bg-white p-2 text-xs text-black">
       <h4 className="mb-2 font-semibold">{title}</h4>

@@ -10,11 +10,13 @@ import { fetchVersionData } from './EndOfLifeCell'
 interface CurrentVersionTooltipProps {
   currentVersion: string
   searchKey: string
+  children?: React.ReactNode
 }
 
 export function CurrentVersionTooltip({
   currentVersion,
   searchKey,
+  children,
 }: CurrentVersionTooltipProps) {
   const dependency = dependencyBySearch[searchKey.toLowerCase()]
 
@@ -27,18 +29,21 @@ export function CurrentVersionTooltip({
   })
 
   if (isLoading) {
-    return <Loader2 className="h-4 w-4 animate-spin" />
+    return (
+      <>
+        {children}
+        <Loader2 className="h-4 w-4 animate-spin" />
+      </>
+    )
   }
 
   if (!data) {
-    return null
+    return <>{children}</>
   }
 
   return (
-    <InfoTooltip
-      data={data}
-      title="Current Version Information"
-      type="current"
-    />
+    <InfoTooltip data={data} title="Current Version Information" type="current">
+      {children}
+    </InfoTooltip>
   )
 }
