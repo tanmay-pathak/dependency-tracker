@@ -5,7 +5,7 @@ interface VersionData {
   [key: string]: string
 }
 
-async function fetchVersionData(
+export async function fetchVersionData(
   tech: string,
   version: string,
 ): Promise<VersionData> {
@@ -53,6 +53,7 @@ const useFetchVersionData = (
   useQuery({
     queryKey: ['versionData', tech, version],
     queryFn: () => fetchVersionData(tech, version),
+    enabled: !!tech && !!version,
   })
 
 export default useFetchVersionData
