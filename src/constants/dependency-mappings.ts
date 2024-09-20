@@ -8,6 +8,8 @@ export const dependency = [
   { name: 'Wordpress', search: 'wordpress_version', tech: 'wordpress' },
   { name: 'Varnish', search: 'varnish_version', tech: 'varnish' },
   { name: 'Provider', search: 'provider' },
+  { name: 'Drupal Admin Theme', search: 'drupal_admin_theme' },
+  { name: 'OS Version', search: 'os_version' },
 ]
 
 export const dependencyByTech = dependency.reduce(
