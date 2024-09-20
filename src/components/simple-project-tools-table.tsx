@@ -16,7 +16,7 @@ interface ProjectToolsTableProps {
   data: Dependency[]
 }
 
-export function FutureProjectToolsTable({ data }: ProjectToolsTableProps) {
+export function SimpleProjectToolsTable({ data }: ProjectToolsTableProps) {
   return (
     <div className="flex h-full flex-col">
       <div className="flex-grow overflow-auto">

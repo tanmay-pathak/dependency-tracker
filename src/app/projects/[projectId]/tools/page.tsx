@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { Dependency } from '@/constants/types'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, List } from 'lucide-react'
 import { ProjectToolsTable } from '@/components/project-tools-table'
 
 export default async function ToolsPage({
@@ -36,6 +36,14 @@ export default async function ToolsPage({
           </Link>
         </div>
         <h2 className="text-center text-2xl font-bold">{projectId}</h2>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          <Link href={`/projects/${projectId}/po`}>
+            <Button variant="outline" size="sm">
+              <List className="mr-2 h-4 w-4" />
+              Simple View
+            </Button>
+          </Link>
+        </div>
       </div>
       <ProjectToolsTable data={dependencies} />
     </div>
