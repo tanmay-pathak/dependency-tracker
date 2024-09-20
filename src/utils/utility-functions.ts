@@ -6,14 +6,18 @@ export const extractCycle = (version: string): string => {
 }
 
 export const formatDate = (dateString: string): string => {
-  const now = new Date()
-  const date = new Date(dateString)
+  try {
+    const now = new Date()
+    const date = new Date(dateString)
 
-  const distance = formatDistanceToNowStrict(date, { addSuffix: true })
+    const distance = formatDistanceToNowStrict(date, { addSuffix: true })
 
-  if (isAfter(date, now)) {
+    if (isAfter(date, now)) {
+      return distance
+    }
+
     return distance
+  } catch (error) {
+    return dateString
   }
-
-  return distance
 }
