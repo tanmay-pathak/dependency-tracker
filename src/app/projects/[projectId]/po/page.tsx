@@ -20,6 +20,7 @@ export default async function FuturePage({
     .eq('id', projectId)
     .eq('environment', 'DEV')
     .ilike('key', '%VERSION%')
+    .order('key', { ascending: true })
 
   if (error) {
     return <div>Error: {error.message}</div>
