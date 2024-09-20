@@ -5,14 +5,36 @@ interface VersionData {
   [key: string]: string
 }
 
+function getActualTechAndVersion(
+  tech: string,
+  version: string,
+): { actualTech: string; actualVersion: string } {
+  let actualTech = tech
+  let actualVersion = version
+
+  if (tech === 'db') {
+    actualTech = version.toLowerCase().includes('mariadb') ? 'mariadb' : 'mysql'
+  } else if (tech === 'os') {
+    if (version.startsWith('CentOS')) {
+      actualTech = 'centos'
+      actualVersion = version.replace(/[^\d.]/g, '').trim()
+    } else if (version.startsWith('Rocky')) {
+      actualTech = 'rocky-linux'
+      actualVersion = version.replace(/[^\d.]/g, '').trim()
+    } else if (version.startsWith('Red Hat')) {
+      actualTech = 'rhel'
+      actualVersion = version.replace(/[^\d.]/g, '').trim()
+    }
+  }
+
+  return { actualTech, actualVersion }
+}
+
 export async function fetchVersionData(
   tech: string,
   version: string,
 ): Promise<VersionData> {
-  let actualTech = tech
-  if (tech === 'db') {
-    actualTech = version.toLowerCase().includes('mariadb') ? 'mariadb' : 'mysql'
-  }
+  const { actualTech, actualVersion } = getActualTechAndVersion(tech, version)
 
   async function fetchDataForSpecificVersion(
     versionToFetch: string,
@@ -29,7 +51,7 @@ export async function fetchVersionData(
     }
   }
 
-  let versionToTry = version
+  let versionToTry = actualVersion
   let data: VersionData | null = null
 
   while (versionToTry) {

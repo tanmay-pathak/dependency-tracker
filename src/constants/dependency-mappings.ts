@@ -9,7 +9,7 @@ export const dependency = [
   { name: 'Varnish', search: 'varnish_version', tech: 'varnish' },
   { name: 'Provider', search: 'provider' },
   { name: 'Drupal Admin Theme', search: 'drupal_admin_theme' },
-  { name: 'OS Version', search: 'os_version' },
+  { name: 'OS Version', search: 'os_version', tech: 'os' },
 ]
 
 export const dependencyByTech = dependency.reduce(
