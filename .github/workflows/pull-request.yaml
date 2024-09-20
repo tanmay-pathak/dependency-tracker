@@ -1,27 +1,25 @@
-name: Pull Request Workflow
+name: Lint and Format Check
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   pull_request:
     branches:
       - main
 
 jobs:
-  pull_request_workflow:
+  lint_and_format_check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Cache npm dependencies
-        uses: actions/cache@v3
-        with:
+        uses: actions/cache@v4
+        wi  th:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
