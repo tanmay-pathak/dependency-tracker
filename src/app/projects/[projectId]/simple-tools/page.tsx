@@ -18,7 +18,7 @@ export default async function FuturePage({
     .from('versions')
     .select('*')
     .eq('id', projectId)
-    .eq('environment', 'DEV')
+    .eq('environment', 'PROD')
     .ilike('key', '%VERSION%')
     .order('key', { ascending: true })
 
