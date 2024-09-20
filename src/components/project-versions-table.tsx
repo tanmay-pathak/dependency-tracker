@@ -14,6 +14,7 @@ import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 import { Dependency } from '@/constants/types'
 import { LatestVersionCell } from './LatestVersionCell'
 import { EndOfLifeCell } from './EndOfLifeCell'
+import Link from 'next/link'
 
 interface ProjectVersionsTableProps {
   data: Dependency[]
@@ -69,7 +70,11 @@ export function ProjectVersionsTable({
           <TableBody>
             {filteredData.map(([key, versions]) => (
               <TableRow key={key}>
-                <TableCell>{key}</TableCell>
+                <Link href={`/projects/${key}/tools`}>
+                  <TableCell className="underline underline-offset-2 decoration-muted-foreground">
+                    {key}
+                  </TableCell>
+                </Link>
                 {['LOCAL', 'DEV', 'BETA', 'PROD'].map((env) => (
                   <TableCell key={env}>
                     <CurrentVersionTooltip
