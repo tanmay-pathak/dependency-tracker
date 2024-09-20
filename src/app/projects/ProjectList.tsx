@@ -35,7 +35,7 @@ export default function ProjectList({ projects }: ProjectListProps) {
             key={project}
             className="block"
           >
-            <Card className="relative">
+            <Card className="relative h-full">
               <CardHeader>
                 <CardTitle className="prose max-w-none">
                   <h2>{project}</h2>

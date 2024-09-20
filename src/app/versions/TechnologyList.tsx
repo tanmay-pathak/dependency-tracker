@@ -40,7 +40,7 @@ export default function TechnologyList({ technologies }: TechnologyListProps) {
             href={`/versions/${tech.search}/project?technology=${tech.tech}`}
             key={tech.search}
           >
-            <Card className="relative">
+            <Card className="relative h-full">
               <CardHeader>
                 <CardTitle className="prose max-w-none">
                   <h2>{tech.name}</h2>
