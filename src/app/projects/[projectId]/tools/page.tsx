@@ -28,10 +28,10 @@ export default async function ToolsPage({
     <div className="container mx-auto p-6">
       <div className="relative mb-4">
         <div className="absolute left-0 top-1/2 -translate-y-1/2">
-          <Link href={`/projects/${projectId}`}>
+          <Link href={`/projects`}>
             <Button variant="outline" size="sm">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Project
+              Projects
             </Button>
           </Link>
         </div>
