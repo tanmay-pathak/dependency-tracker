@@ -76,7 +76,7 @@ export function ProjectVersionsTable({
                       currentVersion={versions[env]}
                       searchKey={tech}
                     >
-                      {versions[env] || 'N/A'}
+                      {versions[env] || '-'}
                     </CurrentVersionTooltip>
                   </TableCell>
                 ))}

@@ -72,7 +72,7 @@ export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
                       currentVersion={versions[env]}
                       searchKey={key}
                     >
-                      {versions[env] || 'N/A'}
+                      {versions[env] || '-'}
                     </CurrentVersionTooltip>
                   </TableCell>
                 ))}

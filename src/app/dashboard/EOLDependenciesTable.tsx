@@ -201,7 +201,7 @@ function isEolReachedOrUpcoming(
   eolValue: boolean | string | undefined,
 ): boolean {
   if (typeof eolValue === 'boolean') return eolValue
-  if (eolValue === 'N/A') return false
+  if (eolValue === '-') return false
   if (eolValue === 'Yes') return true
   const eolDate = new Date(eolValue || '')
   if (isNaN(eolDate.getTime())) return false
@@ -211,7 +211,7 @@ function isEolReachedOrUpcoming(
 }
 
 function parseEolDate(eolDisplay: string): Date | null {
-  if (eolDisplay === 'Yes' || eolDisplay === 'No' || eolDisplay === 'N/A') {
+  if (eolDisplay === 'Yes' || eolDisplay === 'No' || eolDisplay === '-') {
     return null
   }
   const date = new Date(eolDisplay)

@@ -19,11 +19,11 @@ export function LatestVersionCell({
   const dependency = dependencyBySearch[searchKey.toLowerCase()]
   const { data: techData, isLoading } = useFetchTechData(dependency?.tech || '')
 
-  const latestVersion = techData?.[0]?.latest || 'N/A'
+  const latestVersion = techData?.[0]?.latest || '-'
   const getMainVersion = (version?: string) => version?.split('.')[0]
   const isMainVersionSame =
     getMainVersion(currentVersion) === getMainVersion(latestVersion) ||
-    latestVersion === 'N/A' ||
+    latestVersion === '-' ||
     currentVersion === undefined
 
   if (isLoading) {
@@ -32,7 +32,10 @@ export function LatestVersionCell({
 
   return (
     <div className="flex items-center gap-1">
-      <Badge variant={isMainVersionSame ? 'default' : 'destructive'}>
+      <Badge
+        variant={isMainVersionSame ? 'default' : 'destructive'}
+        className={`${latestVersion === '-' ? 'bg-transparent text-white' : ''}`}
+      >
         {latestVersion}
       </Badge>
       {techData && techData.length > 0 && <InfoTooltip data={techData} />}
