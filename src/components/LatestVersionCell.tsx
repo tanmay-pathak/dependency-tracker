@@ -34,7 +34,7 @@ export function LatestVersionCell({
     <div className="flex items-center gap-1">
       <Badge
         variant={isMainVersionSame ? 'default' : 'destructive'}
-        className={`${latestVersion === '-' ? 'bg-transparent text-white' : ''}`}
+        className={`${latestVersion === '-' ? 'bg-transparent text-white hover:bg-transparent' : ''}`}
       >
         {latestVersion}
       </Badge>
