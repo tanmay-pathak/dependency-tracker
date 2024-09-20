@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Dependency } from '@/app/versions/[search]/columns'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
-import { ProjectToolsTable } from '@/components/ui/project-tools-table'
+import { ProjectToolsTable } from '@/components/project-tools-table'
 
 export default async function ToolsPage({
   params: { projectId },

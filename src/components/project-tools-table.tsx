@@ -12,8 +12,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 import { Dependency } from '@/app/versions/[search]/columns'
-import { LatestVersionCell } from '../LatestVersionCell'
-import { EndOfLifeCell } from '../EndOfLifeCell'
+import { LatestVersionCell } from './LatestVersionCell'
+import { EndOfLifeCell } from './EndOfLifeCell'
 
 interface ProjectToolsTableProps {
   data: Dependency[]

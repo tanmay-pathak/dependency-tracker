@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
-import { Switch } from './switch'
+import { Switch } from './ui/switch'
 import { EndOfLifeCell } from '@/components/EndOfLifeCell'
 import { extractCycle, formatDate } from '@/utils/utility-functions'
 import { LatestVersionCell } from '@/components/LatestVersionCell'
