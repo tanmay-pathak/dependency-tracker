@@ -1,7 +1,7 @@
 import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import { Dependency } from '@/app/versions/[search]/columns'
+import { Dependency } from '@/constants/types'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { ProjectToolsTable } from '@/components/project-tools-table'
