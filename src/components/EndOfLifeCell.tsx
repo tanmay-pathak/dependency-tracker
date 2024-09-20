@@ -27,7 +27,10 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
 
   if (!data) {
     return (
-      <Badge variant={isPastEol ? 'destructive' : 'default'}>
+      <Badge
+        variant={isPastEol ? 'destructive' : 'default'}
+        className={`${eolDisplay === '-' ? 'bg-transparent text-white' : ''}`}
+      >
         {eolDisplay}
       </Badge>
     )
@@ -38,18 +41,18 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
       <Badge variant={isPastEol ? 'destructive' : 'default'}>
         {eolDisplay}
       </Badge>
-      <InfoTooltip data={data} title="End of Life Information" type="eol" />
+      <InfoTooltip data={[data]} />
     </div>
   )
 }
 
 export function getEolDisplay(eolValue: boolean | string | undefined): string {
   if (typeof eolValue === 'boolean') return eolValue ? 'Yes' : 'No'
-  return eolValue || 'N/A'
+  return eolValue || '-'
 }
 
 function checkIsPastEol(eolDisplay: string): boolean {
-  if (eolDisplay === 'N/A') return false
+  if (eolDisplay === '-') return false
   if (eolDisplay === 'Yes') return true
   const eolDate = new Date(eolDisplay)
   return !isNaN(eolDate.getTime()) && eolDate < new Date()

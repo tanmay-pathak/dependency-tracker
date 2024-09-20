@@ -1,6 +1,6 @@
 import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
-import { DataTable } from '@/components/ui/data-table'
+import { DataTable } from '@/components/data-table'
 import { columns } from './columns'
 import { Dependency } from '@/app/versions/[search]/columns'
 

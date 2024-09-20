@@ -14,9 +14,7 @@ import {
 } from '@radix-ui/react-popover'
 
 interface InfoTooltipProps {
-  data: Record<string, string> | Array<Record<string, string>>
-  title: string
-  type: 'eol' | 'latest' | 'current'
+  data: Array<Record<string, string>>
   children?: React.ReactNode
 }
 
@@ -46,24 +44,17 @@ export function InfoTooltip({ children, ...props }: InfoTooltipProps) {
   )
 }
 
-const InfoContent = ({
-  title,
-  type,
-  data,
-}: Omit<InfoTooltipProps, 'children'>) => {
+const InfoContent = ({ data }: Omit<InfoTooltipProps, 'children'>) => {
   return (
     <div className="rounded-md bg-white p-2 text-xs text-black">
-      <h4 className="mb-2 font-semibold">{title}</h4>
       <ul className="space-y-1">
-        {type === 'eol' || type === 'current'
-          ? renderEolData(data as Record<string, any>)
-          : renderLatestData(Array.isArray(data) ? data : [data])}
+        {renderArray(Array.isArray(data) ? data : [data])}
       </ul>
     </div>
   )
 }
 
-function renderEolData(data: Record<string, any>) {
+function renderObject(data: Record<string, any>) {
   return Object.entries(data).map(([key, value]) => (
     <li key={key} className="flex justify-between">
       <span className="font-medium">{formatKey(key)}:</span>
@@ -72,10 +63,10 @@ function renderEolData(data: Record<string, any>) {
   ))
 }
 
-function renderLatestData(data: Array<Record<string, any>>) {
+function renderArray(data: Array<Record<string, any>>) {
   return data.slice(0, 3).map((item, index) => (
     <div key={index} className="flex flex-col gap-1 rounded-md border p-2">
-      {renderEolData(item)}
+      {renderObject(item)}
     </div>
   ))
 }

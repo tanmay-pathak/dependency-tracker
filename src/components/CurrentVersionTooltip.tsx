@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { InfoTooltip } from './InfoTooltip'
 import { Loader2 } from 'lucide-react'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
@@ -38,9 +37,5 @@ export function CurrentVersionTooltip({
     return <>{children}</>
   }
 
-  return (
-    <InfoTooltip data={data} title="Current Version Information" type="current">
-      {children}
-    </InfoTooltip>
-  )
+  return <InfoTooltip data={[data]}>{children}</InfoTooltip>
 }

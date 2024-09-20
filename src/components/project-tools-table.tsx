@@ -12,8 +12,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 import { Dependency } from '@/app/versions/[search]/columns'
-import { LatestVersionCell } from '../LatestVersionCell'
-import { EndOfLifeCell } from '../EndOfLifeCell'
+import { LatestVersionCell } from './LatestVersionCell'
+import { EndOfLifeCell } from './EndOfLifeCell'
 
 interface ProjectToolsTableProps {
   data: Dependency[]
@@ -72,7 +72,7 @@ export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
                       currentVersion={versions[env]}
                       searchKey={key}
                     >
-                      {versions[env] || 'N/A'}
+                      {versions[env] || '-'}
                     </CurrentVersionTooltip>
                   </TableCell>
                 ))}
