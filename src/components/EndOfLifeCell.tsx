@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { dependencyBySearch } from '@/constants/dependency-mappings'
 import { InfoTooltip } from '@/components/InfoTooltip'
 import useFetchVersionData from '@/hooks/useFetchVersionData'
+import { formatDate } from '@/utils/utility-functions'
 
 interface EndOfLifeCellProps {
   searchKey: string
@@ -24,6 +25,7 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
   const eolValue = data?.eol
   const eolDisplay = getEolDisplay(eolValue)
   const isPastEol = checkIsPastEol(eolDisplay)
+  const formattedDate = formatDate(eolDisplay)
 
   if (!data) {
     return (
@@ -39,7 +41,7 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
   return (
     <div className="flex items-center gap-1">
       <Badge variant={isPastEol ? 'destructive' : 'default'}>
-        {eolDisplay}
+        {formattedDate}
       </Badge>
       <InfoTooltip data={[data]} />
     </div>
