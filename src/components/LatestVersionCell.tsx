@@ -35,13 +35,7 @@ export function LatestVersionCell({
       <Badge variant={isMainVersionSame ? 'default' : 'destructive'}>
         {latestVersion}
       </Badge>
-      {techData && techData.length > 0 && (
-        <InfoTooltip
-          data={techData}
-          title="Latest Version Information"
-          type="latest"
-        />
-      )}
+      {techData && techData.length > 0 && <InfoTooltip data={techData} />}
     </div>
   )
 }

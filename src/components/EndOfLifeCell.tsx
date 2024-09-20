@@ -38,7 +38,7 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
       <Badge variant={isPastEol ? 'destructive' : 'default'}>
         {eolDisplay}
       </Badge>
-      <InfoTooltip data={data} title="End of Life Information" type="eol" />
+      <InfoTooltip data={[data]} />
     </div>
   )
 }
