@@ -29,7 +29,7 @@ export function EndOfLifeCell({ searchKey, version }: EndOfLifeCellProps) {
     return (
       <Badge
         variant={isPastEol ? 'destructive' : 'default'}
-        className={`${eolDisplay === '-' ? 'bg-transparent text-white' : ''}`}
+        className={`${eolDisplay === '-' ? 'bg-transparent text-white hover:bg-transparent' : ''}`}
       >
         {eolDisplay}
       </Badge>

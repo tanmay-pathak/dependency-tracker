@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import EOLDependenciesTable from './EOLDependenciesTable'
 import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
-import { Dependency } from '@/app/versions/[search]/columns'
+import { Dependency } from '@/constants/types'
 
 async function getDashboardData() {
   const cookieStore = cookies()

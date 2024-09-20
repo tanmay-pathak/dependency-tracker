@@ -25,7 +25,7 @@ import { EndOfLifeCell } from '@/components/EndOfLifeCell'
 import { extractCycle, formatDate } from '@/utils/utility-functions'
 import { LatestVersionCell } from '@/components/LatestVersionCell'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
-import { Dependency } from '@/app/versions/[search]/columns'
+import { Dependency } from '@/constants/types'
 
 interface DataTableProps {
   columns: ColumnDef<Dependency, string | number | Date>[]

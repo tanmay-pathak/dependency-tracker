@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
-import { Dependency } from '@/app/versions/[search]/columns'
+import { Dependency } from '@/constants/types'
 import { fetchVersionData } from '@/hooks/useFetchVersionData'
 
 interface EolDependency extends Dependency {
