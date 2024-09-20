@@ -71,7 +71,7 @@ export function ProjectVersionsTable({
             {filteredData.map(([key, versions]) => (
               <TableRow key={key}>
                 <Link href={`/projects/${key}/tools`}>
-                  <TableCell className="underline underline-offset-2 decoration-muted-foreground">
+                  <TableCell className="underline decoration-muted-foreground underline-offset-2">
                     {key}
                   </TableCell>
                 </Link>
