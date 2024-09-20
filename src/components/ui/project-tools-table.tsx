@@ -34,9 +34,9 @@ export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
   }, [data])
 
   const filteredData = useMemo(() => {
-    return Object.entries(groupedData).filter(([key]) =>
-      key.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
+    return Object.entries(groupedData)
+      .filter(([key]) => key.toLowerCase().includes(searchTerm.toLowerCase()))
+      .sort(([a], [b]) => a.localeCompare(b))
   }, [groupedData, searchTerm])
 
   return (
