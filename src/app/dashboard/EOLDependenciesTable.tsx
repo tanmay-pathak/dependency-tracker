@@ -45,7 +45,7 @@ export default function EolDependenciesTable({
 }) {
   const [eolDependencies, setEolDependencies] = useState<EolDependency[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string>('all')
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string>('PROD')
   const [showLocal, setShowLocal] = useState(false)
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function EolDependenciesTable({
               dependency.tech,
               cycle,
             )) as VersionData
-            if (data && isEolReached(data.eol)) {
+            if (data && isEolReachedOrUpcoming(data.eol)) {
               const eolDisplay = getEolDisplay(data.eol)
               return {
                 ...version,
@@ -120,7 +120,11 @@ export default function EolDependenciesTable({
         <h1>
           Past E.O.L Count:{' '}
           <span className="text-destructive">
-            {filteredEolDependencies.length}
+            {
+              filteredEolDependencies.filter(
+                (dep) => dep.eolDate && dep.eolDate < new Date(),
+              ).length
+            }
           </span>
         </h1>
       </div>
@@ -174,9 +178,11 @@ export default function EolDependenciesTable({
               <TableCell>
                 <Badge
                   variant={
-                    isAfter(new Date(), addYears(new Date(dep.eol), 1))
-                      ? 'destructive'
-                      : 'warning'
+                    isAfter(new Date(dep.eol), new Date())
+                      ? 'success'
+                      : isAfter(new Date(), addYears(new Date(dep.eol), 1))
+                        ? 'destructive'
+                        : 'warning'
                   }
                 >
                   {formatDate(dep.eol)}
@@ -191,12 +197,17 @@ export default function EolDependenciesTable({
   )
 }
 
-function isEolReached(eolValue: boolean | string | undefined): boolean {
+function isEolReachedOrUpcoming(
+  eolValue: boolean | string | undefined,
+): boolean {
   if (typeof eolValue === 'boolean') return eolValue
   if (eolValue === 'N/A') return false
   if (eolValue === 'Yes') return true
   const eolDate = new Date(eolValue || '')
-  return !isNaN(eolDate.getTime()) && eolDate < new Date()
+  if (isNaN(eolDate.getTime())) return false
+  const sixMonthsFromNow = new Date()
+  sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 12)
+  return eolDate <= sixMonthsFromNow
 }
 
 function parseEolDate(eolDisplay: string): Date | null {
