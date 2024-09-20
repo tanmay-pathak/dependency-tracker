@@ -8,7 +8,7 @@ import { InfoTooltip } from './InfoTooltip'
 import useFetchTechData from '@/hooks/useFetchTechData'
 
 interface LatestVersionCellProps {
-  currentVersion: string
+  currentVersion?: string
   searchKey: string
 }
 
@@ -23,7 +23,8 @@ export function LatestVersionCell({
   const getMainVersion = (version?: string) => version?.split('.')[0]
   const isMainVersionSame =
     getMainVersion(currentVersion) === getMainVersion(latestVersion) ||
-    latestVersion === 'N/A'
+    latestVersion === 'N/A' ||
+    currentVersion === undefined
 
   if (isLoading) {
     return <Loader2 className="h-4 w-4 animate-spin" />

@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 import { Dependency } from '@/app/versions/[search]/columns'
+import { LatestVersionCell } from '../LatestVersionCell'
 
 interface ProjectToolsTableProps {
   data: Dependency[]
@@ -56,6 +57,7 @@ export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
               <TableHead>DEV</TableHead>
               <TableHead>BETA</TableHead>
               <TableHead>PROD</TableHead>
+              <TableHead>Latest Version</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -72,6 +74,9 @@ export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
                     </CurrentVersionTooltip>
                   </TableCell>
                 ))}
+                <TableCell>
+                  <LatestVersionCell searchKey={key} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
