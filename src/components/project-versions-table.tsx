@@ -58,7 +58,7 @@ export function ProjectVersionsTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tool</TableHead>
+              <TableHead>Project</TableHead>
               <TableHead>LOCAL</TableHead>
               <TableHead>DEV</TableHead>
               <TableHead>BETA</TableHead>
