@@ -19,6 +19,8 @@ Track all dependency across all your projects at one place.
    ```
    NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
    NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
+   BASIC_AUTH_USER=[INSERT BASIC HTTP AUTH USER]
+   BASIC_AUTH_PASSWORD=[INSERT BASIC HTTP AUTH PASSWORD]
    ```
 
    Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
@@ -32,6 +34,17 @@ Track all dependency across all your projects at one place.
    The project should now be running on [localhost:3000](http://localhost:3000/).
 
 > Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+
+# Example DB
+
+The app is currently configured to use the following type of data from the table `versions`:
+
+```csv
+created_at,id,environment,key,value,modified_at
+{dateandtime},{your-project-name},{LOCAL/DEV/BETA/PROD},{your-tool-name},{current-version},{dateandtime}
+```
+
+Create your DB matching the above example.
 
 # Documentation
 
@@ -47,3 +60,4 @@ Track all dependency across all your projects at one place.
 - `npm run test` — Runs all the jest tests in the project.
 - `npm run test:ci` — Runs all the jest tests in the project, Jest will assume it is running in a CI environment.
 - `npm run analyze` — Builds the project and opens the bundle analyzer.
+- `npm run prepush` — Runs all checks.
