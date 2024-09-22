@@ -47,8 +47,12 @@ export default async function Log() {
           {dependencies.map((item) => (
             <TableRow key={`${item.id}-${item.key}-${item.created_at}`}>
               {tableHeaders.map((header) => (
-                <TableCell key={`${item.id}-${item.key}-${item.created_at}-${header}`}>
-                  {header === 'created_at' || header === 'modified_at' ? formatDate(item[header as keyof Dependency] as string) : item[header as keyof Dependency] as string}
+                <TableCell
+                  key={`${item.id}-${item.key}-${item.created_at}-${header}`}
+                >
+                  {header === 'created_at' || header === 'modified_at'
+                    ? formatDate(item[header as keyof Dependency] as string)
+                    : (item[header as keyof Dependency] as string)}
                 </TableCell>
               ))}
             </TableRow>
