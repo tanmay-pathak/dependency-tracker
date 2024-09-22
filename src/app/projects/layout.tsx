@@ -1,4 +1,4 @@
-import Header from '@/components/Header' // Changed from import { Header } to import Header
+import Header from '@/components/Header'
 
 export default function ProjectsLayout({
   children,
