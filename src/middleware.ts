@@ -3,14 +3,19 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   const basicAuth = request.headers.get('authorization')
   const url = request.nextUrl
+
+  const validUser = process.env.BASIC_AUTH_USER
+  const validPassword = process.env.BASIC_AUTH_PASSWORD
+
+  if (!validUser || !validPassword) {
+    return NextResponse.next()
+  }
+
   if (basicAuth) {
     const authValue = basicAuth.split(' ')[1]
     const [user, pwd] = atob(authValue).split(':')
 
-    const validUser = process.env.BASIC_AUTH_USER
-    const validPassWord = process.env.BASIC_AUTH_PASSWORD
-
-    if (user === validUser && pwd === validPassWord) {
+    if (user === validUser && pwd === validPassword) {
       return NextResponse.next()
     }
   }
