@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { ExternalLink } from 'lucide-react'
+import { useQueryState } from 'nuqs'
 
 interface Technology {
   name: string
@@ -17,7 +18,9 @@ interface TechnologyListProps {
 }
 
 export default function TechnologyList({ technologies }: TechnologyListProps) {
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useQueryState('search', {
+    defaultValue: '',
+  })
 
   const filteredTechnologies = useMemo(() => {
     return technologies.filter((tech) =>

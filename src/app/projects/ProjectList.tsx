@@ -1,17 +1,20 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { ExternalLink } from 'lucide-react'
+import { useQueryState } from 'nuqs'
 
 interface ProjectListProps {
   projects: string[]
 }
 
 export default function ProjectList({ projects }: ProjectListProps) {
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useQueryState('search', {
+    defaultValue: '',
+  })
 
   const filteredProjects = useMemo(() => {
     return projects.filter((project) =>

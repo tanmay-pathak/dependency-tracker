@@ -27,6 +27,7 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { Dependency } from '@/constants/types'
 import { fetchVersionData } from '@/hooks/useFetchVersionData'
+import { parseAsBoolean, useQueryState } from 'nuqs'
 
 interface EolDependency extends Dependency {
   eol: string
@@ -45,8 +46,13 @@ export default function EolDependenciesTable({
 }) {
   const [eolDependencies, setEolDependencies] = useState<EolDependency[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string>('PROD')
-  const [showLocal, setShowLocal] = useState(false)
+  const [selectedEnvironment, setSelectedEnvironment] = useQueryState('env', {
+    defaultValue: 'PROD',
+  })
+  const [showLocal, setShowLocal] = useQueryState(
+    'local',
+    parseAsBoolean.withDefault(false),
+  )
 
   useEffect(() => {
     async function fetchEolData() {

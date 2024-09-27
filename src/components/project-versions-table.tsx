@@ -15,6 +15,7 @@ import { Dependency } from '@/constants/types'
 import { LatestVersionCell } from './LatestVersionCell'
 import { EndOfLifeCell } from './EndOfLifeCell'
 import Link from 'next/link'
+import { useQueryState } from 'nuqs'
 
 interface ProjectVersionsTableProps {
   data: Dependency[]
@@ -25,7 +26,9 @@ export function ProjectVersionsTable({
   data,
   tech,
 }: ProjectVersionsTableProps) {
-  const [searchTerm, setSearchTerm] = React.useState('')
+  const [searchTerm, setSearchTerm] = useQueryState('search', {
+    defaultValue: '',
+  })
 
   const groupedData = useMemo(() => {
     const grouped: { [key: string]: { [env: string]: string } } = {}
