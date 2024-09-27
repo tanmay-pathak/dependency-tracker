@@ -10,6 +10,7 @@ export const dependency = [
   { name: 'Provider', search: 'provider' },
   { name: 'Drupal Admin Theme', search: 'drupal_admin_theme' },
   { name: 'OS Version', search: 'os_version', tech: 'os' },
+  { name: 'Lando', search: 'lando' },
 ]
 
 export const dependencyByTech = dependency.reduce(
