@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import {
   Table,
   TableBody,
@@ -14,13 +14,16 @@ import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 import { Dependency } from '@/constants/types'
 import { LatestVersionCell } from './LatestVersionCell'
 import { EndOfLifeCell } from './EndOfLifeCell'
+import { useQueryState } from 'nuqs'
 
 interface ProjectToolsTableProps {
   data: Dependency[]
 }
 
 export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
-  const [searchTerm, setSearchTerm] = React.useState('')
+  const [searchTerm, setSearchTerm] = useQueryState('search', {
+    defaultValue: '',
+  })
 
   const groupedData = useMemo(() => {
     const grouped: { [key: string]: { [env: string]: string } } = {}
