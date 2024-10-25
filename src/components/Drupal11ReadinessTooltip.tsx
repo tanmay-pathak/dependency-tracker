@@ -99,26 +99,30 @@ function formatValue(value: any): any {
     }
     return renderObject(value)
   }
-  return String(value)
+  return String(value || 'N/A')
 }
 
 function formatKey(key: string): string {
-  return key.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase())
+  return key
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase to separate words
+    .replace(/_/g, ' ')
+    .replace(/^\w/, (c) => c.toUpperCase())
 }
 
 function renderArray(data: Array<Record<string, any>>) {
-  return data.map((item, index) => (
-    <div
-      key={index}
-      className={`flex flex-col gap-1 rounded-md border p-2 ${
-        item.class.includes('color-warning')
-          ? 'bg-yellow-100'
-          : item.class.includes('color-error')
-            ? 'bg-red-100'
-            : 'bg-green-100'
-      }`}
-    >
+  return data.map((item, index) => <StatusItem key={index} item={item} />)
+}
+
+const StatusItem = ({ item }: { item: Record<string, any> }) => {
+  const statusClass = item.class.includes('color-warning')
+    ? 'bg-yellow-100 text-yellow-800'
+    : item.class.includes('color-error')
+      ? 'bg-red-100 text-red-800'
+      : 'bg-green-100 text-green-800'
+
+  return (
+    <div className={`flex flex-col gap-1 rounded-md border p-2 ${statusClass}`}>
       {renderObject(item.data)}
     </div>
-  ))
+  )
 }
