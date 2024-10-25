@@ -13,7 +13,7 @@ import {
 } from '@radix-ui/react-popover'
 
 interface Drupal11ReadinessTooltipProps {
-  data: Array<Record<string, string>>
+  data: Array<Record<string, any>>
   children?: React.ReactNode
 }
 
@@ -75,16 +75,29 @@ function renderObject(data: Record<string, any>) {
 
 function formatValue(value: any): any {
   if (Array.isArray(value)) {
-    return value.map((item, index) => (
-      <span key={index} className="mr-2 inline-block">
-        {formatValue(item)}
-      </span>
-    ))
+    return (
+      <ul className="list-inside list-disc">
+        {value.map((item, index) => (
+          <li key={index} className="mr-2 inline-block">
+            {formatValue(item)}
+          </li>
+        ))}
+      </ul>
+    )
   } else if (typeof value === 'object' && value !== null) {
     if (value['#type'] === 'markup' && value['#markup']) {
       return value['#markup']
+    } else if (value['#type'] === 'link' && value['#title']) {
+      return (
+        <a
+          href={value['#url']?.path || '#'}
+          className="text-blue-500 underline"
+        >
+          {value['#title']}
+        </a>
+      )
     }
-    return renderObject(value) // Recursively render nested objects
+    return renderObject(value)
   }
   return String(value)
 }
@@ -95,8 +108,17 @@ function formatKey(key: string): string {
 
 function renderArray(data: Array<Record<string, any>>) {
   return data.map((item, index) => (
-    <div key={index} className="flex flex-col gap-1 rounded-md border p-2">
-      {renderObject(item)}
+    <div
+      key={index}
+      className={`flex flex-col gap-1 rounded-md border p-2 ${
+        item.class.includes('color-warning')
+          ? 'bg-yellow-100'
+          : item.class.includes('color-error')
+            ? 'bg-red-100'
+            : 'bg-green-100'
+      }`}
+    >
+      {renderObject(item.data)}
     </div>
   ))
 }
