@@ -15,6 +15,7 @@ import { Dependency } from '@/constants/types'
 import { LatestVersionCell } from './LatestVersionCell'
 import { EndOfLifeCell } from './EndOfLifeCell'
 import { useQueryState } from 'nuqs'
+import { Cell } from './DataCells'
 
 interface ProjectToolsTableProps {
   data: Dependency[]
@@ -71,12 +72,7 @@ export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
                 <TableCell>{key}</TableCell>
                 {['LOCAL', 'DEV', 'BETA', 'PROD'].map((env) => (
                   <TableCell key={env}>
-                    <CurrentVersionTooltip
-                      currentVersion={versions[env]}
-                      searchKey={key}
-                    >
-                      {versions[env] || '-'}
-                    </CurrentVersionTooltip>
+                    <Cell tech={key} version={versions[env]} />
                   </TableCell>
                 ))}
                 <TableCell>

@@ -27,7 +27,7 @@ export function InfoTooltip({ children, ...props }: InfoTooltipProps) {
           <TooltipTrigger className="flex items-center">
             <Info className="hidden h-3 w-3 text-muted-foreground sm:block" />
           </TooltipTrigger>
-          <TooltipContent className="w-64 p-0">
+          <TooltipContent className="max-h-64 w-64 overflow-y-auto p-0">
             <InfoContent {...props} />
           </TooltipContent>
         </Tooltip>
@@ -36,7 +36,7 @@ export function InfoTooltip({ children, ...props }: InfoTooltipProps) {
         <PopoverTrigger className="flex items-center">
           <Info className="h-3 w-3 text-muted-foreground sm:hidden" />
         </PopoverTrigger>
-        <PopoverContent className="w-64 p-0">
+        <PopoverContent className="max-h-64 w-64 overflow-y-auto p-0">
           <InfoContent {...props} />
         </PopoverContent>
       </Popover>
@@ -64,7 +64,7 @@ function renderObject(data: Record<string, any>) {
 }
 
 function renderArray(data: Array<Record<string, any>>) {
-  return data.slice(0, 3).map((item, index) => (
+  return data.map((item, index) => (
     <div key={index} className="flex flex-col gap-1 rounded-md border p-2">
       {renderObject(item)}
     </div>

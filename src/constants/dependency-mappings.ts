@@ -11,7 +11,10 @@ export const dependency = [
   { name: 'Drupal Admin Theme', search: 'drupal_admin_theme' },
   { name: 'OS Version', search: 'os_version', tech: 'os' },
   { name: 'Lando', search: 'lando' },
-  { name: 'Drupal 11 Readiness', search: 'drupal_11_readiness' },
+  {
+    name: 'Drupal 11 Readiness',
+    search: 'drupal_11_readiness',
+  },
 ]
 
 export const dependencyByTech = dependency.reduce(
