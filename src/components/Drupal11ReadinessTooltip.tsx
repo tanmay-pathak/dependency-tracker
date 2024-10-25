@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Info } from 'lucide-react'
 import {
   Tooltip,
@@ -21,6 +21,8 @@ export function Drupal11ReadinessTooltip({
   children,
   ...props
 }: Drupal11ReadinessTooltipProps) {
+  const processedData = useMemo(() => preprocessData(props.data), [props.data])
+
   return (
     <div className="flex items-center gap-2">
       {children}
@@ -30,7 +32,7 @@ export function Drupal11ReadinessTooltip({
             <Info className="hidden h-3 w-3 text-muted-foreground sm:block" />
           </TooltipTrigger>
           <TooltipContent className="w-100 max-h-64 overflow-y-auto p-0">
-            <Content {...props} />
+            <Content data={processedData} />
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -39,19 +41,58 @@ export function Drupal11ReadinessTooltip({
           <Info className="h-3 w-3 text-muted-foreground sm:hidden" />
         </PopoverTrigger>
         <PopoverContent className="w-100 max-h-64 overflow-y-auto p-0">
-          <Content {...props} />
+          <Content data={processedData} />
         </PopoverContent>
       </Popover>
     </div>
   )
 }
 
+// Data pre-processing function
+function preprocessData(data: any) {
+  const statusLabels = {
+    'color-warning': 'Warning',
+    'color-error': 'Error',
+    'color-success': 'Success',
+  }
+  // @ts-ignore
+  return data.map((item) => ({
+    class: item.class,
+    requirement: extractText(item.data.requirement),
+    status: extractStatus(item.data.status),
+    // @ts-ignore
+    statusLabel: statusLabels[item.class] || 'Unknown',
+  }))
+}
+
+function extractText(requirement: any) {
+  if (typeof requirement.data === 'string') {
+    return capitalizeSentence(requirement.data)
+  }
+  return requirement.data?.['#markup'] || 'N/A'
+}
+
+function extractStatus(status: any) {
+  if (typeof status.data === 'string') {
+    return capitalizeSentence(status.data)
+  }
+  if (status.data?.['#type'] === 'link') {
+    return {
+      text: status.data['#title'],
+      url: status.data['#url'].path || '#',
+    }
+  }
+  return 'N/A'
+}
+
+function capitalizeSentence(text: string) {
+  return text.replace(/(^\w|\.\s*\w)/g, (match) => match.toUpperCase())
+}
+
 const Content = ({ data }: Omit<Drupal11ReadinessTooltipProps, 'children'>) => {
   return (
     <div className="rounded-md bg-white p-2 text-xs text-black">
-      <ul className="space-y-1">
-        {renderArray(Array.isArray(data) ? data : [data])}
-      </ul>
+      <ul className="space-y-1">{renderArray(data)}</ul>
     </div>
   )
 }
@@ -85,15 +126,10 @@ function formatValue(value: any): any {
       </ul>
     )
   } else if (typeof value === 'object' && value !== null) {
-    if (value['#type'] === 'markup' && value['#markup']) {
-      return value['#markup']
-    } else if (value['#type'] === 'link' && value['#title']) {
+    if (value.text && value.url) {
       return (
-        <a
-          href={value['#url']?.path || '#'}
-          className="text-blue-500 underline"
-        >
-          {value['#title']}
+        <a href={value.url} className="text-blue-500 underline">
+          {value.text}
         </a>
       )
     }
@@ -104,7 +140,7 @@ function formatValue(value: any): any {
 
 function formatKey(key: string): string {
   return key
-    .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase to separate words
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/_/g, ' ')
     .replace(/^\w/, (c) => c.toUpperCase())
 }
@@ -122,7 +158,9 @@ const StatusItem = ({ item }: { item: Record<string, any> }) => {
 
   return (
     <div className={`flex flex-col gap-1 rounded-md border p-2 ${statusClass}`}>
-      {renderObject(item.data)}
+      <div className="font-bold">{item.statusLabel}</div>
+      <div>{item.requirement}</div>
+      <div>{formatValue(item.status)}</div>
     </div>
   )
 }
