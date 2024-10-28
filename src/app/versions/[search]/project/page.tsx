@@ -6,16 +6,12 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { ProjectVersionsTable } from '@/components/project-versions-table'
 
-export default async function VersionsPage(
-  props: {
-    params: Promise<{ search: string }>
-  }
-) {
-  const params = await props.params;
+export default async function VersionsPage(props: {
+  params: Promise<{ search: string }>
+}) {
+  const params = await props.params
 
-  const {
-    search
-  } = params;
+  const { search } = params
 
   const cookieStore = await cookies()
   const supabase = createServerClient(cookieStore)

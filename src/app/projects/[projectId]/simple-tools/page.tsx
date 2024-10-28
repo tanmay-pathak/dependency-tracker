@@ -6,16 +6,12 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { SimpleProjectToolsTable } from '@/components/simple-project-tools-table'
 
-export default async function FuturePage(
-  props: {
-    params: Promise<{ projectId: string }>
-  }
-) {
-  const params = await props.params;
+export default async function FuturePage(props: {
+  params: Promise<{ projectId: string }>
+}) {
+  const params = await props.params
 
-  const {
-    projectId
-  } = params;
+  const { projectId } = params
 
   const cookieStore = await cookies()
   const supabase = createServerClient(cookieStore)
