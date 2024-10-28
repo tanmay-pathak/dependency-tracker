@@ -7,7 +7,7 @@ import { ExternalLink } from 'lucide-react'
 import { Dependency } from '@/constants/types'
 
 async function getDashboardData() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const supabase = createServerClient(cookieStore)
 
   const [{ data: projects }, { data: tools }, { data: versions }] =
