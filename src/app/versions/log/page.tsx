@@ -12,7 +12,7 @@ import { Dependency } from '@/constants/types'
 import { formatDate } from '@/utils/utility-functions'
 
 export default async function Log() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const supabase = createServerClient(cookieStore)
 
   const { data, error } = await supabase
