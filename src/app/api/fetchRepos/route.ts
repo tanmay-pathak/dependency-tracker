@@ -11,10 +11,11 @@ export type RepoData = {
 
 const fetchRepos = async (owner: string): Promise<RepoData[]> => {
   const response = await axios.get<RepoData[]>(
-    `https://api.github.com/users/${owner}/repos`,
+    `https://api.github.com/user/repos?visibility=all`,
     {
       headers: {
-        Authorization: `${process.env.GH_ACCESS_TOKEN}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+        Authorization: `Bearer ${process.env.GH_ACCESS_TOKEN}`,
       },
     },
   )

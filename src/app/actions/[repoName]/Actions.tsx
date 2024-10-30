@@ -7,7 +7,7 @@ type Props = { repoName: string }
 const Actions = ({ repoName }: Props) => {
   const { data } = useFetchActionsData({
     repoName: repoName as string,
-    owner: 'theophilusn',
+    owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
     filter: 'completed',
   })
 

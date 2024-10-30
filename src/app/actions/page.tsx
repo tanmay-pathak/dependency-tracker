@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 export default function ActionsPage() {
   const { data } = useFetchRepos({
-    owner: 'theophilusn',
+    owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
   })
 
   return (
