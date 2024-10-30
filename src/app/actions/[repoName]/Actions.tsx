@@ -13,6 +13,9 @@ const Actions = ({ repoName }: Props) => {
 
   return (
     <div className="container mx-auto p-4">
+      <div className="mb-4">
+        <h2 className="text-center text-2xl font-bold uppercase">{repoName}</h2>
+      </div>
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
         {data?.workflow_runs.map((action) => (
           <ActionCard
