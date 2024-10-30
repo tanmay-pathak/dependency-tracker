@@ -10,7 +10,6 @@ export type RepoData = {
   name: string
   full_name: string
   private: boolean
-  // Add other relevant fields as needed
 }
 
 const fetchReposFromServer = async (

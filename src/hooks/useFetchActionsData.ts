@@ -40,8 +40,8 @@ const useFetchActionsData = (
     queryKey: ['actionsData', options],
     queryFn: () => fetchActionsDataFromServer(options),
     enabled: options.repoName !== '' && options.owner !== '',
-    staleTime: 1000 * 60 * 60 * 24, // 1 day
-    refetchInterval: 1000 * 60 * 60 * 24, // 1 day
+    staleTime: 1000 * 60 * 15, // 15 minutes
+    refetchInterval: 1000 * 60 * 15, // 15 minutes
     retry: 1,
   })
 

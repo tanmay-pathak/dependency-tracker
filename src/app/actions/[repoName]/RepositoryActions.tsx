@@ -4,7 +4,7 @@ import useFetchActionsData from '@/hooks/useFetchActionsData'
 
 type Props = { repoName: string }
 
-const Actions = ({ repoName }: Props) => {
+const RepositoryActions = ({ repoName }: Props) => {
   const { data } = useFetchActionsData({
     repoName: repoName as string,
     owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
@@ -33,4 +33,4 @@ const Actions = ({ repoName }: Props) => {
   )
 }
 
-export default Actions
+export default RepositoryActions

@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import axios from 'axios'
-
-export type RepoData = {
-  id: number
-  name: string
-  full_name: string
-  private: boolean
-  // Add other relevant fields as needed
-}
+import { RepoData } from '@/hooks/useFetchRepos'
 
 const fetchRepos = async (owner: string): Promise<RepoData[]> => {
   const response = await axios.get<RepoData[]>(

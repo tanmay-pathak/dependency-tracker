@@ -1,30 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import axios from 'axios'
-
-export type ActionOptions = {
-  repoName: string
-  owner: string
-  filter:
-    | 'completed'
-    | 'action_required'
-    | 'cancelled'
-    | 'failure'
-    | 'neutral'
-    | 'skipped'
-    | 'stale'
-    | 'success'
-    | 'timed_out'
-    | 'in_progress'
-    | 'queued'
-    | 'requested'
-    | 'waiting'
-    | 'pending'
-}
-
-export type ghActions = {
-  total_count: number
-  workflow_runs: any[]
-}
+import { ActionOptions, ghActions } from '@/hooks/useFetchActionsData'
 
 const fetchTechData = async (options: ActionOptions): Promise<ghActions> => {
   const url = `https://api.github.com/repos/${options.owner}/${options.repoName}/actions/runs?status=${options.filter}`

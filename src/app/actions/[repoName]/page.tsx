@@ -1,4 +1,4 @@
-import Actions from './Actions'
+import RepositoryActions from './RepositoryActions'
 
 export default async function ActionsForRepo(props: {
   params: Promise<{ repoName: string }>
@@ -6,5 +6,5 @@ export default async function ActionsForRepo(props: {
   const params = await props.params
   const { repoName } = params
 
-  return <Actions repoName={repoName} />
+  return <RepositoryActions repoName={repoName} />
 }
