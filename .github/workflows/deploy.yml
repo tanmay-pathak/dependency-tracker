@@ -1,0 +1,29 @@
+name: Preview deploy for non-collaborators
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: "The branch to deploy"
+        required: true
+        type: string
+
+jobs:
+  add-empty-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch_name }}
+
+      - name: Set up git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create empty commit
+        run: |
+          git commit --allow-empty -m "ci: trigger deploy preview"
+          git push origin ${{ github.event.inputs.branch_name }}
