@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import TechnologyList from './TechnologyList'
 import { dependency } from '@/constants/dependency-mappings'
+import { CardListSkeleton } from '@/components/card-list-skeleton'
 
 export default function VersionsPage() {
   const sortedDependencies = [...dependency].sort((a, b) =>
@@ -9,7 +10,7 @@ export default function VersionsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <Suspense>
+      <Suspense fallback={<CardListSkeleton />}>
         <TechnologyList technologies={sortedDependencies} />
       </Suspense>
     </div>

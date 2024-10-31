@@ -1,8 +1,10 @@
 import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
 import ProjectList from './ProjectList'
+import { Suspense } from 'react'
+import { CardListSkeleton } from '@/components/card-list-skeleton'
 
-export default async function Projects() {
+export async function ProjectsComponent() {
   const cookieStore = await cookies()
   const supabase = createServerClient(cookieStore)
 
@@ -23,5 +25,13 @@ export default async function Projects() {
     <div className="container mx-auto p-4">
       <ProjectList projects={uniqueProjects} />
     </div>
+  )
+}
+
+export default function Projects() {
+  return (
+    <Suspense fallback={<CardListSkeleton />}>
+      <ProjectsComponent />
+    </Suspense>
   )
 }
