@@ -2,7 +2,7 @@ import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
 import ProjectList from './ProjectList'
 import { Suspense } from 'react'
-import { Skeleton } from '@/components/ui/skeleton'
+import { CardListSkeleton } from '@/components/card-list-skeleton'
 
 export async function ProjectsComponent() {
   const cookieStore = await cookies()
@@ -28,19 +28,9 @@ export async function ProjectsComponent() {
   )
 }
 
-function ProjectListSkeleton() {
-  return (
-    <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {Array.from({ length: 20 }).map((_, i) => (
-        <Skeleton key={i} className="h-[125px] w-full rounded-xl" />
-      ))}
-    </div>
-  )
-}
-
 export default function Projects() {
   return (
-    <Suspense fallback={<ProjectListSkeleton />}>
+    <Suspense fallback={<CardListSkeleton />}>
       <ProjectsComponent />
     </Suspense>
   )
