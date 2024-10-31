@@ -17,7 +17,7 @@ export default function ActionsHomePage() {
         {isLoading ? (
           <>
             {Array.from({ length: 10 }).map((_, index) => (
-              <div className="flex flex-col space-y-3">
+              <div key={index} className="flex flex-col space-y-3">
                 <Skeleton className="h-[100px] w-[250px] rounded-xl" />
               </div>
             ))}
