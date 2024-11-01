@@ -31,7 +31,7 @@ const RepositoryActions = ({ repoName }: Props) => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {data?.workflow_runs.map((action) => (
             <ActionCard
               key={action.id}

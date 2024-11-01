@@ -33,7 +33,9 @@ export default function ActionsHomePage() {
                 <Card className="relative h-full">
                   <CardHeader>
                     <CardTitle>
-                      <span className="text-2xl font-bold">{repo.name}</span>
+                      <span className="break-words text-2xl font-bold">
+                        {repo.name}
+                      </span>
                     </CardTitle>
                   </CardHeader>
                   <ExternalLink className="absolute right-4 top-4 size-4 text-muted-foreground" />

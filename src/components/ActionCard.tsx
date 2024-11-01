@@ -20,7 +20,7 @@ const ActionCard = ({
   link,
 }: Props) => {
   return (
-    <div className="{successState ? '' : 'bg-red-100'} flex flex-col justify-between gap-4 rounded-sm border px-4 py-6">
+    <div className="{successState ? '' : 'bg-red-100'} flex flex-col justify-between gap-4 rounded-xl border bg-card px-4 py-6 text-card-foreground shadow transition-all hover:scale-105">
       <div className="flex flex-col gap-2">
         <h1 className="mb-4 text-xl font-medium">{title}</h1>
         <p>
