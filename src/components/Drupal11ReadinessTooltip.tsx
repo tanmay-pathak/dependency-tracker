@@ -56,13 +56,21 @@ function preprocessData(data: any) {
     'color-success': 'Success',
   }
   // @ts-ignore
-  return data.map((item) => ({
+  const processedData = data.map((item) => ({
     class: item.class,
     requirement: extractText(item.data.requirement),
     status: extractStatus(item.data.status),
     // @ts-ignore
     statusLabel: statusLabels[item.class] || 'Unknown',
   }))
+
+  // Sort errors first, then warnings, then successes
+  return processedData.sort(
+    (a: { statusLabel: string }, b: { statusLabel: string }) => {
+      const order: Record<string, number> = { Error: 1, Warning: 2, Success: 3 }
+      return order[a.statusLabel] - order[b.statusLabel]
+    },
+  )
 }
 
 function extractText(requirement: any) {
