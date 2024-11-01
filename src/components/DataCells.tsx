@@ -24,13 +24,17 @@ export const Drupal11ReadinessCell = ({ version }: { version: any }) => {
   const isError = parsedVersion.some(
     (item: any) =>
       item.class &&
-      typeof item.class === 'string' &&
-      item.class === 'color-error',
+      ((typeof item.class === 'string' && item.class === 'color-error') ||
+        (Array.isArray(item.class) && item.class.includes('color-error'))),
   )
 
   return (
     <Drupal11ReadinessTooltip data={parsedVersion}>
-      {isError ? <Badge variant={'destructive'}>No</Badge> : 'Yes'}
+      {isError ? (
+        <Badge variant={'destructive'}>No</Badge>
+      ) : (
+        <Badge variant={'success'}>Yes</Badge>
+      )}
     </Drupal11ReadinessTooltip>
   )
 }
