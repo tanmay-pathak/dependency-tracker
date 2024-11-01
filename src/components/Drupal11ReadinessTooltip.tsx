@@ -82,6 +82,9 @@ function extractStatus(status: any) {
       url: status.data['#url'].path || '#',
     }
   }
+  if (status.data?.['#markup']) {
+    return status.data['#markup']
+  }
   return 'N/A'
 }
 
@@ -134,6 +137,8 @@ function formatValue(value: any): any {
       )
     }
     return renderObject(value)
+  } else if (typeof value === 'string' && /<\/?[a-z][\s\S]*>/i.test(value)) {
+    return <span dangerouslySetInnerHTML={{ __html: value }} />
   }
   return String(value || 'N/A')
 }
