@@ -3,11 +3,11 @@ import { Button } from './ui/button'
 import { Activity, Clock4Icon, Flag, GitBranch } from 'lucide-react'
 
 type Props = {
-  title: string
-  branch: string
+  title?: string | null
+  branch?: string | null
   runStart: string
-  status: string
-  conclusion: string
+  status?: string | null
+  conclusion?: string | null
   link: string
 }
 

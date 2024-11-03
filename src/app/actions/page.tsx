@@ -7,9 +7,11 @@ import Link from 'next/link'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function ActionsHomePage() {
-  const { data, isLoading } = useFetchRepos({
-    owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
-  })
+  const { data, isLoading } = useFetchRepos()
+
+  if (data === undefined && !isLoading) {
+    return <>Something went wrong...</>
+  }
 
   return (
     <div className="container mx-auto p-4">

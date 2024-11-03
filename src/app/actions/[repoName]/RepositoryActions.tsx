@@ -12,6 +12,10 @@ const RepositoryActions = ({ repoName }: Props) => {
     filter: 'completed',
   })
 
+  if (data === undefined && !isLoading) {
+    return <>Something went wrong...</>
+  }
+
   return (
     <div className="container mx-auto p-4">
       <div className="mb-4">
