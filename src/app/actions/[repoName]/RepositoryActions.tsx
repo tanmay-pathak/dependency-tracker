@@ -37,15 +37,7 @@ const RepositoryActions = ({ repoName }: Props) => {
       ) : (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {data?.workflow_runs.map((action) => (
-            <ActionCard
-              key={action.id}
-              title={action.name}
-              branch={action.head_branch}
-              runStart={action.created_at}
-              status={action.status}
-              conclusion={action.conclusion}
-              link={action.html_url}
-            />
+            <ActionCard key={action.id} action={action} />
           ))}
         </div>
       )}
