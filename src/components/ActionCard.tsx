@@ -1,6 +1,7 @@
 import { components } from '@octokit/openapi-types'
 import { Button } from './ui/button'
 import { Activity, Clock4Icon, Flag, GitBranch } from 'lucide-react'
+import { formatDate } from '@/utils/utility-functions'
 
 type Props = {
   action: components['schemas']['workflow-run']
@@ -14,6 +15,7 @@ const ActionCard = ({
     status,
     created_at: runStart,
     name: title,
+    actor,
   },
 }: Props) => {
   return (
@@ -24,7 +26,7 @@ const ActionCard = ({
           <GitBranch className="inline" /> {head_branch}
         </p>
         <p>
-          <Clock4Icon className="inline" /> {runStart}
+          <Clock4Icon className="inline" /> {formatDate(runStart)}
         </p>
         <p>
           <Activity className="inline" /> {status}
@@ -38,6 +40,19 @@ const ActionCard = ({
             {conclusion}
           </span>
         </p>
+        <a
+          className="flex w-fit items-center"
+          href={actor?.html_url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src={actor?.avatar_url}
+            alt={actor?.login}
+            className="mr-2 inline h-6 w-6 rounded-full"
+          />
+          {actor?.login}
+        </a>
       </div>
 
       <a href={link} target="_blank" className="w-full">
