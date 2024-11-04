@@ -10,6 +10,8 @@ const octokit = new Octokit({
 export async function fetchRepos() {
   const response = await octokit.repos.listForOrg({
     org: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
+    per_page: 200,
+    sort: 'full_name',
   })
   return response.data
 }
