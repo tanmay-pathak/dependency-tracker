@@ -19,7 +19,7 @@ const ActionCard = ({
   },
 }: Props) => {
   return (
-    <div className="flex flex-col justify-between gap-4 rounded-xl border bg-card px-4 py-6 text-card-foreground shadow transition-all hover:scale-105">
+    <div className="flex flex-col justify-between gap-4 rounded-xl border bg-card px-4 py-6 text-card-foreground shadow transition-all hover:scale-95">
       <div className="flex flex-col gap-2">
         <h1 className="mb-4 text-xl font-medium">{title}</h1>
         <p>
