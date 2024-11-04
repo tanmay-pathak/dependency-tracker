@@ -27,7 +27,7 @@ export default function RootLayout({
       className={GeistSans.className}
       style={{ colorScheme: 'dark' }}
     >
-      <body className="bg-background text-foreground">
+      <body className="overscroll-y-none bg-background text-foreground">
         <NextTopLoader showSpinner={false} height={2} color="#2acf80" />
         <ThemeProvider
           attribute="class"
