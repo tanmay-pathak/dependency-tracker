@@ -20,6 +20,7 @@ export async function fetchActionsData(options: ActionOptions) {
   const response = await octokit.actions.listWorkflowRunsForRepo({
     repo: options.repoName,
     owner: options.owner,
+    status: options.filter,
   })
   return response.data
 }

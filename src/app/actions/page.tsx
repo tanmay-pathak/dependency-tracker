@@ -4,7 +4,6 @@ import { CardListSkeleton } from '@/components/card-list-skeleton'
 import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
 
-
 export async function ActionsComponent() {
   const cookieStore = await cookies()
   const supabase = createServerClient(cookieStore)
@@ -24,13 +23,11 @@ export async function ActionsComponent() {
 
   return (
     <div>
-      <ActionsHomePage projects={uniqueProjects}/>
+      <ActionsHomePage projects={uniqueProjects} />
     </div>
   )
 }
 
 export default function Actions() {
-  return(
-      <ActionsComponent />
-  )
+  return <ActionsComponent />
 }
