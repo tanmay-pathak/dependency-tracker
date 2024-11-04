@@ -21,13 +21,13 @@ export async function ActionsComponent() {
     new Set(dependencies?.map((dep) => dep.id)),
   ).sort((a, b) => a.localeCompare(b))
 
-  return (
-    <div>
-      <ActionsHomePage projects={uniqueProjects} />
-    </div>
-  )
+  return <ActionsHomePage projects={uniqueProjects} />
 }
 
 export default function Actions() {
-  return <ActionsComponent />
+  return (
+    <Suspense fallback={<CardListSkeleton />}>
+      <ActionsComponent />
+    </Suspense>
+  )
 }
