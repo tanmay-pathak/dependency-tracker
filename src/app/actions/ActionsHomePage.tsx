@@ -31,6 +31,16 @@ export default function ActionsHomePage({ projects }: ProjectListProps) {
       })) ?? [],
   })
 
+  let actions = results
+    .map((query) => {
+      const { data } = query
+      const result = data?.workflow_runs.map((action) => {
+        return <ActionCard key={action.id} action={action} />
+      })
+      return result
+    })
+    .flat()
+  const isLoading = results.some((query) => query.isLoading)
   return (
     <div>
       <div className="container mx-auto grid flex-1 grid-cols-8 p-4">
@@ -41,13 +51,13 @@ export default function ActionsHomePage({ projects }: ProjectListProps) {
             </h2>
           </div>
           <div className="flex max-h-screen flex-col gap-4 overflow-x-hidden overflow-y-scroll overscroll-y-none scrollbar-thin scrollbar-track-transparent scrollbar-thumb-stone-700">
-            {results.map((query) => {
-              const { data } = query
-              const result = data?.workflow_runs.map((action) => {
-                return <ActionCard key={action.id} action={action} />
-              })
-              return result
-            })}
+            {actions.length === 0 ? (
+              <h2 className="text-lg">No Current Actions</h2>
+            ) : isLoading ? (
+              <h2 className="text-lg">Loading Current Actions...</h2>
+            ) : (
+              actions
+            )}
           </div>
         </div>
         <div className="col-span-6">
