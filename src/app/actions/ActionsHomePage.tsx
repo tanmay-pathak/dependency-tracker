@@ -1,6 +1,7 @@
 'use client'
 
 import ActionCard from '@/components/ActionCard'
+import InProgressSkeleton from '@/components/skeletons/in-progress-actions-skeleton'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { ActionOptions } from '@/hooks/useFetchActionsData'
 import { fetchActionsData } from '@/server-actions/github'
@@ -54,7 +55,7 @@ export default function ActionsHomePage({ projects }: ProjectListProps) {
             {actions.length === 0 ? (
               <h2 className="text-lg">No Current Actions</h2>
             ) : isLoading ? (
-              <h2 className="text-lg">Loading Current Actions...</h2>
+              <InProgressSkeleton />
             ) : (
               actions
             )}
