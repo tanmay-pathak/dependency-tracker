@@ -10,7 +10,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
-import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
 import { Dependency } from '@/constants/types'
 import { LatestVersionCell } from './LatestVersionCell'
 import { EndOfLifeCell } from './EndOfLifeCell'

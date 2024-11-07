@@ -5,6 +5,8 @@ import { Dependency } from '@/constants/types'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, List } from 'lucide-react'
 import { ProjectToolsTable } from '@/components/project-tools-table'
+import { fetchDependabotAlertsData } from '@/server-actions/github'
+import CardWithLink from '@/components/card-with-link'
 
 export default async function ToolsPage(props: {
   params: Promise<{ projectId: string }>
@@ -25,6 +27,9 @@ export default async function ToolsPage(props: {
     return <div>Error: {error.message}</div>
   }
   const dependencies: Dependency[] = data || []
+
+  const alerts = await fetchDependabotAlertsData(projectId)
+  const count = alerts.filter((alert) => alert.state === 'open').length
 
   return (
     <div className="container mx-auto p-6">
@@ -47,6 +52,16 @@ export default async function ToolsPage(props: {
           </Link>
         </div>
       </div>
+      {count > 0 && (
+        <CardWithLink
+          title="Open Dependabot Security Issues"
+          content={count.toString()}
+          link={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${projectId}/security/dependabot`}
+          isExternalLink={true}
+          className="md:w-1/2"
+          contentClassName="text-red-500"
+        />
+      )}
       <ProjectToolsTable data={dependencies} />
     </div>
   )
