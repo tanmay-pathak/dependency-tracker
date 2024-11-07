@@ -34,6 +34,7 @@ export default function ProjectList({ projects }: ProjectListProps) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {filteredProjects.map((project) => (
           <Link
+            prefetch={true}
             href={`/projects/${project}/tools`}
             key={project}
             className="block"

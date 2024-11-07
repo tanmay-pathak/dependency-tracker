@@ -30,7 +30,7 @@ export default async function ToolsPage(props: {
     <div className="container mx-auto p-6">
       <div className="relative mb-4">
         <div className="absolute left-0 top-1/2 -translate-y-1/2">
-          <Link href={`/projects`}>
+          <Link prefetch={true} href={`/projects`}>
             <Button variant="outline" size="sm">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Projects
@@ -39,7 +39,7 @@ export default async function ToolsPage(props: {
         </div>
         <h2 className="text-center text-2xl font-bold">{projectId}</h2>
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
-          <Link href={`/projects/${projectId}/simple-tools`}>
+          <Link prefetch={true} href={`/projects/${projectId}/simple-tools`}>
             <Button variant="outline" size="sm">
               <List className="mr-2 h-4 w-4" />
               Simple View

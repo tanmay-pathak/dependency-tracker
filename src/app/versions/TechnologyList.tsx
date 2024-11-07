@@ -40,6 +40,7 @@ export default function TechnologyList({ technologies }: TechnologyListProps) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {filteredTechnologies.map((tech) => (
           <Link
+            prefetch={true}
             href={`/versions/${tech.search}/project${tech.tech ? `?technology=${tech.tech}` : ''}`}
             key={tech.search}
           >

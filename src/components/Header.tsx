@@ -29,6 +29,7 @@ export default function Header() {
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
+                    prefetch={true}
                     href={item.href}
                     className={`transition-colors ${
                       pathname.startsWith(item.href)
@@ -58,6 +59,7 @@ export default function Header() {
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
+                    prefetch={true}
                     href={item.href}
                     className={`block py-2 transition-colors ${
                       pathname.startsWith(item.href)

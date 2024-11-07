@@ -82,7 +82,7 @@ function FeatureCard({
         </CardDescription>
       </CardContent>
       <CardFooter className="mt-auto">
-        <Link href={buttonHref} className="w-full">
+        <Link prefetch={true} href={buttonHref} className="w-full">
           <Button variant="outline" className="w-full">
             {buttonText}
             <ArrowRight className="ml-2 h-4 w-4" />
