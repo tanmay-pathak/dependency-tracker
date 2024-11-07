@@ -2,6 +2,7 @@ import { components } from '@octokit/openapi-types'
 import { Button } from './ui/button'
 import { Activity, Clock4Icon, Flag, GitBranch } from 'lucide-react'
 import { formatDate } from '@/utils/utility-functions'
+import { Card, CardContent, CardFooter, CardHeader } from './ui/card'
 
 type Props = {
   action: components['schemas']['workflow-run']
@@ -19,9 +20,11 @@ const ActionCard = ({
   },
 }: Props) => {
   return (
-    <div className="flex flex-col justify-between gap-4 rounded-xl border bg-card px-4 py-6 text-card-foreground shadow transition-all hover:scale-95">
-      <div className="flex flex-col gap-2">
-        <h1 className="mb-4 text-xl font-medium">{title}</h1>
+    <Card>
+      <CardHeader>
+        <h1 className="text-xl font-medium">{title}</h1>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-2">
         <p>
           <GitBranch className="inline" /> {head_branch}
         </p>
@@ -53,12 +56,13 @@ const ActionCard = ({
           />
           {actor?.login}
         </a>
-      </div>
-
-      <a href={link} target="_blank" className="w-full">
-        <Button className="w-full">View Run</Button>
-      </a>
-    </div>
+      </CardContent>
+      <CardFooter>
+        <a href={link} target="_blank" className="w-full">
+          <Button className="w-full">View Run</Button>
+        </a>
+      </CardFooter>
+    </Card>
   )
 }
 
