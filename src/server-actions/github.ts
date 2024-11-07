@@ -16,6 +16,14 @@ export async function fetchRepos() {
   return response.data
 }
 
+export async function fetchDependabotAlertsData(repoName: string) {
+  const response = await octokit.dependabot.listAlertsForRepo({
+    owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
+    repo: repoName,
+  })
+  return response.data
+}
+
 export async function fetchActionsData(options: ActionOptions) {
   const response = await octokit.actions.listWorkflowRunsForRepo({
     repo: options.repoName,
