@@ -20,7 +20,6 @@ const RepositoryActions = ({ repoName }: Props) => {
 
   const { data, isLoading } = useFetchActionsData({
     repoName: repoName as string,
-    owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
     filter: selectedFilter as Filter,
   })
 

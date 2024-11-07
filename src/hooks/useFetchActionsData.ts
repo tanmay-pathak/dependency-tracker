@@ -9,7 +9,6 @@ export type Filter = Exclude<
 
 export type ActionOptions = {
   repoName: string
-  owner: string
   filter: Filter
 }
 
@@ -17,7 +16,7 @@ const useFetchActionsData = (options: ActionOptions) =>
   useQuery({
     queryKey: ['actionsData', options],
     queryFn: () => fetchActionsData(options),
-    enabled: options.repoName !== '' && options.owner !== '',
+    enabled: options.repoName !== '',
     staleTime: 1000 * 60 * 15, // 15 minutes
     refetchInterval: 1000 * 60 * 15, // 15 minutes
     retry: 1,

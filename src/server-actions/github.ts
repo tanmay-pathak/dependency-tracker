@@ -7,9 +7,11 @@ const octokit = new Octokit({
   auth: process.env.GH_ACCESS_TOKEN,
 })
 
+const owner = process.env.NEXT_PUBLIC_GITHUB_OWNER ?? ''
+
 export async function fetchRepos() {
   const response = await octokit.repos.listForOrg({
-    org: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
+    org: owner,
     per_page: 200,
     sort: 'full_name',
   })
@@ -17,17 +19,22 @@ export async function fetchRepos() {
 }
 
 export async function fetchDependabotAlertsData(repoName: string) {
-  const response = await octokit.dependabot.listAlertsForRepo({
-    owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
-    repo: repoName,
-  })
-  return response.data
+  try {
+    const response = await octokit.dependabot.listAlertsForRepo({
+      owner,
+      repo: repoName,
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error fetching Dependabot alerts:', error)
+    return []
+  }
 }
 
 export async function fetchActionsData(options: ActionOptions) {
   const response = await octokit.actions.listWorkflowRunsForRepo({
+    owner,
     repo: options.repoName,
-    owner: options.owner,
     status: options.filter,
   })
   return response.data

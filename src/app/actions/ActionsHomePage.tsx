@@ -15,7 +15,6 @@ interface ProjectListProps {
 
 const actionOptions: ActionOptions = {
   repoName: '',
-  owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
   filter: 'in_progress',
 }
 
