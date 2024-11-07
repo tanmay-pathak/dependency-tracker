@@ -1,8 +1,7 @@
 'use client'
 import ActionCard from '@/components/ActionCard'
 import { Skeleton } from '@/components/ui/skeleton'
-import useFetchActionsData from '@/hooks/useFetchActionsData'
-import { useState } from 'react'
+import useFetchActionsData, { Filter } from '@/hooks/useFetchActionsData'
 import {
   Select,
   SelectContent,
@@ -10,22 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Endpoints } from '@octokit/types'
+import { useQueryState } from 'nuqs'
 
 type Props = { repoName: string }
 
 const RepositoryActions = ({ repoName }: Props) => {
-  const [selectedFilter, setSelectedFilter] =
-    useState<
-      Exclude<
-        Endpoints['GET /repos/{owner}/{repo}/actions/runs']['parameters']['status'],
-        undefined
-      >
-    >('completed')
+  const [selectedFilter, setSelectedFilter] = useQueryState('filter', {
+    defaultValue: 'completed' as Filter,
+  })
+
   const { data, isLoading } = useFetchActionsData({
     repoName: repoName as string,
     owner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? '',
-    filter: selectedFilter,
+    filter: selectedFilter as Filter,
   })
 
   if (data === undefined && !isLoading) {

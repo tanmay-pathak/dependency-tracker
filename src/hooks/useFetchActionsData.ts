@@ -2,13 +2,15 @@ import { fetchActionsData } from '@/server-actions/github'
 import { useQuery } from '@tanstack/react-query'
 import { Endpoints } from '@octokit/types'
 
+export type Filter = Exclude<
+  Endpoints['GET /repos/{owner}/{repo}/actions/runs']['parameters']['status'],
+  undefined
+>
+
 export type ActionOptions = {
   repoName: string
   owner: string
-  filter: Exclude<
-    Endpoints['GET /repos/{owner}/{repo}/actions/runs']['parameters']['status'],
-    undefined
-  >
+  filter: Filter
 }
 
 const useFetchActionsData = (options: ActionOptions) =>
