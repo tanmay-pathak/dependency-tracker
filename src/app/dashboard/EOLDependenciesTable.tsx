@@ -13,7 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
-import { getEnvironmentBadge } from '@/components/data-table'
+import { getEnvironmentBadge } from '@/components/env-badges'
 import { isAfter, addYears } from 'date-fns'
 import { Loader2 } from 'lucide-react'
 import { CurrentVersionTooltip } from '@/components/CurrentVersionTooltip'
