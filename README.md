@@ -21,6 +21,8 @@ Track all dependency across all your projects at one place.
    NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
    BASIC_AUTH_USER=[INSERT BASIC HTTP AUTH USER]
    BASIC_AUTH_PASSWORD=[INSERT BASIC HTTP AUTH PASSWORD]
+   GH_ACCESS_TOKEN=[INSERT GITHUB ACCESS TOKEN]
+   NEXT_PUBLIC_GITHUB_OWNER=[INSERT GITHUB OWNER/ORG NAME]
    ```
 
    Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)

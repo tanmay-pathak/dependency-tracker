@@ -1,9 +1,7 @@
 import React from 'react'
 import { Skeleton } from '../ui/skeleton'
 
-type Props = {}
-
-const InProgressSkeleton = (props: Props) => {
+const InProgressSkeleton = () => {
   return (
     <div className="flex flex-col gap-8 px-2">
       {Array.from({ length: 9 }).map((_, index) => (

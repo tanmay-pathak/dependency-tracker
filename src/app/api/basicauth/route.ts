@@ -1,4 +1,4 @@
-export async function GET(request: Request) {
+export async function GET() {
   return new Response('Authentication Required!', {
     status: 401,
     headers: {
