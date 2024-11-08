@@ -7,7 +7,7 @@ const octokit = new Octokit({
   auth: process.env.GH_ACCESS_TOKEN,
 })
 
-const owner = process.env.NEXT_PUBLIC_GITHUB_OWNER ?? ''
+const owner = process.env.NEXT_PUBLIC_GITHUB_OWNER!
 
 export async function fetchRepos() {
   const response = await octokit.repos.listForOrg({
