@@ -1,10 +1,10 @@
-import { createServerClient } from '@/utils/supabase'
-import { cookies } from 'next/headers'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import EOLDependenciesTable from './EOLDependenciesTable'
-import Link from 'next/link'
-import { ExternalLink } from 'lucide-react'
 import { Dependency } from '@/constants/types'
+import { createServerClient } from '@/utils/supabase'
+import { ExternalLink } from 'lucide-react'
+import { cookies } from 'next/headers'
+import Link from 'next/link'
+import EOLDependenciesTable from './EOLDependenciesTable'
 
 async function getDashboardData() {
   const cookieStore = await cookies()
