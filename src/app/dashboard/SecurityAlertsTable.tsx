@@ -10,7 +10,9 @@ import {
 } from '@/components/ui/table'
 import { fetchDependabotAlertsData } from '@/server-actions/github'
 import { createServerClient } from '@/utils/supabase'
+import { ExternalLink } from 'lucide-react'
 import { cookies } from 'next/headers'
+import Link from 'next/link'
 
 type ProjectToAlert = {
   project: string
@@ -32,7 +34,7 @@ const SecurityAlertsTable = async () => {
   for (const project of uniqueProjects) {
     const alerts = await fetchDependabotAlertsData(project)
     const count = alerts.filter((alert) => alert.state === 'open').length
-    // const count = 0
+
     if (count === 0) {
       continue
     }
@@ -68,17 +70,27 @@ const SecurityAlertsTable = async () => {
         <TableBody>
           {projectToOpenAlerts.map((project, index) => (
             <TableRow key={index}>
-              <TableCell>{project.project}</TableCell>
+              <Link href={`/projects/${project.project}/tools`}>
+                <TableCell className="underline decoration-muted-foreground underline-offset-2">
+                  {project.project}
+                </TableCell>
+              </Link>
               <TableCell className="w-10">
                 {getEnvironmentBadge(project.environment)}
               </TableCell>
               <TableCell>
-                <Badge
-                  variant={'destructive'}
-                  className="flex w-10 justify-center text-center"
+                <Link
+                  href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot`}
+                  target={'_blank'}
+                  rel={'noopener noreferrer'}
                 >
-                  {project.count}
-                </Badge>
+                  <Badge
+                    variant={'destructive'}
+                    className="flex w-fit justify-center gap-1 text-center"
+                  >
+                    {project.count} <ExternalLink className="size-3" />
+                  </Badge>
+                </Link>
               </TableCell>
               <TableCell>now</TableCell>
             </TableRow>
