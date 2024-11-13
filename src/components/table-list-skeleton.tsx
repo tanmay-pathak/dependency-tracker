@@ -43,6 +43,9 @@ export const TableRowSkeleton = () => {
       <TableCell>
         <Skeleton className="h-4 w-16" />
       </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-16" />
+      </TableCell>
     </TableRow>
   )
 }
