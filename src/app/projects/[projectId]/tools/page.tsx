@@ -1,12 +1,12 @@
+import CardWithLink from '@/components/card-with-link'
+import { ProjectToolsTable } from '@/components/project-tools-table'
+import { Button } from '@/components/ui/button'
+import { Dependency } from '@/constants/types'
+import { fetchDependabotAlertsData } from '@/server-actions/github'
 import { createServerClient } from '@/utils/supabase'
+import { ArrowLeft, List } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import { Dependency } from '@/constants/types'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, List } from 'lucide-react'
-import { ProjectToolsTable } from '@/components/project-tools-table'
-import { fetchDependabotAlertsData } from '@/server-actions/github'
-import CardWithLink from '@/components/card-with-link'
 
 export default async function ToolsPage(props: {
   params: Promise<{ projectId: string }>
@@ -53,14 +53,24 @@ export default async function ToolsPage(props: {
         </div>
       </div>
       {count > 0 && (
-        <CardWithLink
-          title="Open Dependabot Security Issues"
-          content={count.toString()}
-          link={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${projectId}/security/dependabot`}
-          isExternalLink={true}
-          className="md:w-1/2"
-          contentClassName="text-red-500"
-        />
+        <div className="flex gap-2">
+          <CardWithLink
+            title="Open Dependabot Security Issues"
+            content={count.toString()}
+            link={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${projectId}/security/dependabot`}
+            isExternalLink={true}
+            className="md:w-1/2"
+            contentClassName="text-red-500"
+          />
+          <CardWithLink
+            title="Full List of Dependencies"
+            content={projectId}
+            link={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${projectId}/network/dependencies`}
+            isExternalLink={true}
+            className="md:w-1/2"
+            contentClassName="text-card"
+          />
+        </div>
       )}
       <ProjectToolsTable data={dependencies} />
     </div>

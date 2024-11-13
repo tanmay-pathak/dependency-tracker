@@ -27,7 +27,7 @@ const CardWithLink = ({
         target={isExternalLink ? '_blank' : '_self'}
         rel={isExternalLink ? 'noopener noreferrer' : undefined}
       >
-        <Card className="relative">
+        <Card className="relative" hover={false}>
           <CardHeader>
             <CardTitle>{title}</CardTitle>
           </CardHeader>
