@@ -1,4 +1,5 @@
 import { getEnvironmentBadge } from '@/components/env-badges'
+import { InfoTooltip } from '@/components/InfoTooltip'
 import { TableRowSkeleton } from '@/components/table-list-skeleton'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -21,11 +22,13 @@ type ProjectToAlert = {
   environment: string
   count: number
   modified: string
+  alerts: Awaited<ReturnType<typeof fetchDependabotAlertsData>>
 }
 
 async function fetchProjectAlerts(project: string) {
   const alerts = await fetchDependabotAlertsData(project)
-  const count = alerts.filter((alert) => alert.state === 'open').length
+  const openAlerts = alerts.filter((alert) => alert.state === 'open')
+  const count = openAlerts.length
 
   if (count === 0) return null
 
@@ -34,10 +37,19 @@ async function fetchProjectAlerts(project: string) {
     environment: 'PROD',
     count,
     modified: new Date().toISOString(),
+    alerts: openAlerts,
   }
 }
 
 function AlertRow({ project }: { project: ProjectToAlert }) {
+  const tooltipData = project.alerts.map((alert) => ({
+    Package:
+      alert.security_advisory?.vulnerabilities[0]?.package?.name || 'Unknown',
+    Severity: alert.security_advisory?.severity || 'Unknown',
+    State: alert.state,
+    Created: new Date(alert.created_at).toLocaleDateString(),
+  }))
+
   return (
     <TableRow>
       <Link href={`/projects/${project.project}/tools`}>
@@ -61,6 +73,11 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
             {project.count} <ExternalLink className="size-3" />
           </Badge>
         </Link>
+      </TableCell>
+      <TableCell>
+        <InfoTooltip data={tooltipData}>
+          <span className="sr-only">Alert Details</span>
+        </InfoTooltip>
       </TableCell>
       <TableCell>now</TableCell>
     </TableRow>
@@ -94,6 +111,7 @@ const SecurityAlertsTable = async () => {
             <TableHead>Project</TableHead>
             <TableHead>Environment</TableHead>
             <TableHead>Count</TableHead>
+            <TableHead>Details</TableHead>
             <TableHead>Last Updated</TableHead>
           </TableRow>
         </TableHeader>
