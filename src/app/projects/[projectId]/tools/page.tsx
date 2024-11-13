@@ -52,26 +52,24 @@ export default async function ToolsPage(props: {
           </Link>
         </div>
       </div>
-      {count > 0 && (
-        <div className="flex gap-2">
-          <CardWithLink
-            title="Open Dependabot Security Issues"
-            content={count.toString()}
-            link={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${projectId}/security/dependabot`}
-            isExternalLink={true}
-            className="md:w-1/2"
-            contentClassName="text-red-500"
-          />
-          <CardWithLink
-            title="Full List of Dependencies"
-            content={projectId}
-            link={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${projectId}/network/dependencies`}
-            isExternalLink={true}
-            className="md:w-1/2"
-            contentClassName="text-card"
-          />
-        </div>
-      )}
+      <div className="flex gap-2">
+        <CardWithLink
+          title="Open Dependabot Security Issues"
+          content={count.toString()}
+          link={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${projectId}/security/dependabot`}
+          isExternalLink={true}
+          className="md:w-1/2"
+          contentClassName={count ? 'text-destructive' : ''}
+        />
+        <CardWithLink
+          title="Full List of Dependencies"
+          content={projectId}
+          link={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${projectId}/network/dependencies`}
+          isExternalLink={true}
+          className="md:w-1/2"
+          contentClassName="text-card"
+        />
+      </div>
       <ProjectToolsTable data={dependencies} />
     </div>
   )

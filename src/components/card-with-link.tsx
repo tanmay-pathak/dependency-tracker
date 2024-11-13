@@ -34,7 +34,7 @@ const CardWithLink = ({
           <CardContent className="prose max-w-none">
             <h1 className={contentClassName}>{content}</h1>
           </CardContent>
-          <ExternalLink className="absolute right-4 top-4 size-4 text-muted-foreground" />
+          <ExternalLink className="absolute right-4 top-4 size-5 text-muted-foreground" />
         </Card>
       </Link>
     </div>
