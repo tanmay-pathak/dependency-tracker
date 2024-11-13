@@ -59,7 +59,4 @@ Create your DB matching the above example.
 - `npm run lint` — Runs ESLint for all files in the `src` directory.
 - `npm run format-check` — Runs Prettier and checks if any files have formatting issues.
 - `npm run format` — Runs Prettier and formats files.
-- `npm run test` — Runs all the jest tests in the project.
-- `npm run test:ci` — Runs all the jest tests in the project, Jest will assume it is running in a CI environment.
-- `npm run analyze` — Builds the project and opens the bundle analyzer.
 - `npm run prepush` — Runs all checks.

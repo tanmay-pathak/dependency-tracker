@@ -2,15 +2,14 @@ import Header from '@/components/Header'
 import { Button } from '@/components/ui/button'
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from '@/components/ui/card'
-import { ArrowRight, Package, BarChart } from 'lucide-react'
+import { Activity, ArrowRight, BarChart, Package, Shield } from 'lucide-react'
 import Link from 'next/link'
-
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -25,27 +24,41 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="mt-20 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <div className="mt-20 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <FeatureCard
             icon={<BarChart className="h-8 w-8" />}
             title="Dashboard Overview"
-            description="Get a quick overview of your projects and dependencies"
+            description="View key metrics and insights about your projects' dependencies"
             buttonText="Go to Dashboard"
             buttonHref="/dashboard"
           />
           <FeatureCard
             icon={<Package className="h-8 w-8" />}
-            title="Dependency Management"
-            description="Keep track of all your project dependencies in one place"
+            title="Project Management"
+            description="Browse and manage all your GitHub repositories and their dependencies"
             buttonText="View Projects"
             buttonHref="/projects"
           />
           <FeatureCard
             icon={<ArrowRight className="h-8 w-8" />}
-            title="Project Overview"
-            description="Get a comprehensive view of all your projects and their dependencies"
+            title="Version Tracking"
+            description="Track version changes and updates across your project dependencies"
             buttonText="View Versions"
             buttonHref="/versions"
+          />
+          <FeatureCard
+            icon={<Shield className="h-8 w-8" />}
+            title="Security Alerts"
+            description="Monitor Dependabot alerts and security vulnerabilities in your dependencies"
+            buttonText="View Alerts"
+            buttonHref="/security-alerts"
+          />
+          <FeatureCard
+            icon={<Activity className="h-8 w-8" />}
+            title="GitHub Actions"
+            description="Monitor CI/CD workflows and automated dependency updates"
+            buttonText="View Actions"
+            buttonHref="/actions"
           />
         </div>
       </main>
