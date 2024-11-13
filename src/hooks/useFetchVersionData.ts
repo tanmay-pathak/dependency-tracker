@@ -45,7 +45,7 @@ export async function fetchVersionData(
       return data
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return null
+        return {}
       }
       throw new Error('Failed to fetch EOL data')
     }
@@ -63,7 +63,7 @@ export async function fetchVersionData(
     versionToTry = versionParts.join('.')
   }
 
-  if (!data) throw new Error('Failed to fetch version data')
+  if (!data) return {}
 
   return { Tech: actualTech, Showing_Info_For_Version: versionToTry, ...data }
 }
