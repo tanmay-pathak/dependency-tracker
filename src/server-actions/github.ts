@@ -19,6 +19,7 @@ export async function fetchRepos() {
 }
 
 export async function fetchDependabotAlertsData(repoName: string) {
+  'use cache'
   try {
     const response = await octokit.dependabot.listAlertsForRepo({
       owner,
