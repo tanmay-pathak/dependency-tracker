@@ -48,6 +48,7 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
     Severity: alert.security_advisory?.severity || 'Unknown',
     State: alert.state,
     Created: new Date(alert.created_at).toLocaleDateString(),
+    Summary: alert.security_advisory?.summary || 'No summary available',
   }))
 
   return (
