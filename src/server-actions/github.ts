@@ -20,7 +20,7 @@ export async function fetchRepos() {
 
 export async function fetchDependabotAlertsData(
   repoName: string,
-  severity: string,
+  severity?: string,
 ) {
   try {
     const response = await octokit.dependabot.listAlertsForRepo({
