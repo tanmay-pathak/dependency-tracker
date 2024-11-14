@@ -18,11 +18,16 @@ export async function fetchRepos() {
   return response.data
 }
 
-export async function fetchDependabotAlertsData(repoName: string) {
+export async function fetchDependabotAlertsData(
+  repoName: string,
+  severity: string,
+) {
   try {
     const response = await octokit.dependabot.listAlertsForRepo({
       owner,
       repo: repoName,
+      severity: severity,
+      state: 'open',
     })
     return response.data
   } catch (error) {
