@@ -75,6 +75,9 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
     project.highAlerts.length +
     project.mediumAlerts.length +
     project.lowAlerts.length
+
+  if (!total) return null
+
   return (
     <TableRow>
       <Link href={`/projects/${project.project}/tools`}>
@@ -83,97 +86,118 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
         </TableCell>
       </Link>
       <TableCell>
-        <div className="flex gap-2">
-          <Link
-            href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Acritical`}
-            target={'_blank'}
-            rel={'noopener noreferrer'}
-          >
-            <Badge
-              variant={
-                project.criticalAlerts.length > 10 ? 'destructive' : 'default'
-              }
-              className="flex w-fit min-w-16 justify-center gap-1 text-center"
+        {project.criticalAlerts.length ? (
+          <div className="flex gap-2">
+            <Link
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Acritical`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
             >
-              {project.criticalAlerts.length}{' '}
-              <ExternalLink className="size-3" />
-            </Badge>
-          </Link>
-          <InfoTooltip data={toolTipData[0]}>
-            <span className="sr-only">Alert Details</span>
-          </InfoTooltip>
-        </div>
+              <Badge
+                variant={
+                  project.criticalAlerts.length > 10 ? 'destructive' : 'default'
+                }
+                className="flex w-fit min-w-16 justify-center gap-1 text-center"
+              >
+                {project.criticalAlerts.length}{' '}
+                <ExternalLink className="size-3" />
+              </Badge>
+            </Link>
+            <InfoTooltip data={toolTipData[0]}>
+              <span className="sr-only">Alert Details</span>
+            </InfoTooltip>
+          </div>
+        ) : (
+          <>-</>
+        )}
       </TableCell>
       <TableCell>
-        <div className="flex gap-2">
-          <Link
-            href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Ahigh`}
-            target={'_blank'}
-            rel={'noopener noreferrer'}
-          >
-            <Badge
-              variant={
-                project.highAlerts.length > 10 ? 'destructive' : 'default'
-              }
-              className="flex w-fit min-w-16 justify-center gap-1 text-center"
+        {project.highAlerts.length > 0 ? (
+          <div className="flex gap-2">
+            <Link
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Ahigh`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
             >
-              {project.highAlerts.length} <ExternalLink className="size-3" />
-            </Badge>
-          </Link>
-          <InfoTooltip data={toolTipData[1]}>
-            <span className="sr-only">Alert Details</span>
-          </InfoTooltip>
-        </div>
+              <Badge
+                variant={
+                  project.highAlerts.length > 10 ? 'destructive' : 'default'
+                }
+                className="flex w-fit min-w-16 justify-center gap-1 text-center"
+              >
+                {project.highAlerts.length} <ExternalLink className="size-3" />
+              </Badge>
+            </Link>
+            <InfoTooltip data={toolTipData[1]}>
+              <span className="sr-only">Alert Details</span>
+            </InfoTooltip>
+          </div>
+        ) : (
+          <>-</>
+        )}
       </TableCell>
       <TableCell>
-        <div className="flex gap-2">
-          <Link
-            href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Amedium`}
-            target={'_blank'}
-            rel={'noopener noreferrer'}
-          >
-            <Badge
-              variant={
-                project.mediumAlerts.length > 10 ? 'destructive' : 'default'
-              }
-              className="flex w-fit min-w-16 justify-center gap-1 text-center"
+        {project.mediumAlerts.length > 0 ? (
+          <div className="flex gap-2">
+            <Link
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Amedium`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
             >
-              {project.mediumAlerts.length} <ExternalLink className="size-3" />
-            </Badge>
-          </Link>
-          <InfoTooltip data={toolTipData[2]}>
-            <span className="sr-only">Alert Details</span>
-          </InfoTooltip>
-        </div>
+              <Badge
+                variant={
+                  project.mediumAlerts.length > 10 ? 'destructive' : 'default'
+                }
+                className="flex w-fit min-w-16 justify-center gap-1 text-center"
+              >
+                {project.mediumAlerts.length}{' '}
+                <ExternalLink className="size-3" />
+              </Badge>
+            </Link>
+            <InfoTooltip data={toolTipData[2]}>
+              <span className="sr-only">Alert Details</span>
+            </InfoTooltip>
+          </div>
+        ) : (
+          <>-</>
+        )}
       </TableCell>
       <TableCell>
-        <div className="flex gap-2">
-          <Link
-            href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Alow`}
-            target={'_blank'}
-            rel={'noopener noreferrer'}
-          >
-            <Badge
-              variant={
-                project.lowAlerts.length > 10 ? 'destructive' : 'default'
-              }
-              className="flex w-fit min-w-16 justify-center gap-1 text-center"
+        {project.lowAlerts.length > 0 ? (
+          <div className="flex gap-2">
+            <Link
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Alow`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
             >
-              {project.lowAlerts.length} <ExternalLink className="size-3" />
-            </Badge>
-          </Link>
-          <InfoTooltip data={toolTipData[3]}>
-            <span className="sr-only">Alert Details</span>
-          </InfoTooltip>
-        </div>
+              <Badge
+                variant={
+                  project.lowAlerts.length > 10 ? 'destructive' : 'default'
+                }
+                className="flex w-fit min-w-16 justify-center gap-1 text-center"
+              >
+                {project.lowAlerts.length} <ExternalLink className="size-3" />
+              </Badge>
+            </Link>
+            <InfoTooltip data={toolTipData[3]}>
+              <span className="sr-only">Alert Details</span>
+            </InfoTooltip>
+          </div>
+        ) : (
+          <>-</>
+        )}
       </TableCell>
       <TableCell>
-        <Badge
-          variant={total > 40 ? 'destructive' : 'default'}
-          className="min-w-12"
-        >
-          {total}
-        </Badge>
+        {total > 0 ? (
+          <Badge
+            variant={total > 40 ? 'destructive' : 'default'}
+            className="min-w-12"
+          >
+            {total}
+          </Badge>
+        ) : (
+          <>-</>
+        )}
       </TableCell>
     </TableRow>
   )
@@ -204,11 +228,21 @@ const SecurityAlertsTable = async () => {
         <TableHeader>
           <TableRow>
             <TableHead>Project</TableHead>
-            <TableHead>Critical Alerts</TableHead>
-            <TableHead>High Alerts</TableHead>
-            <TableHead>Medium Alerts</TableHead>
-            <TableHead>Low Alerts</TableHead>
-            <TableHead>Total Alerts</TableHead>
+            <TableHead>
+              <Badge variant={'destructive'}>Critical Alerts</Badge>
+            </TableHead>
+            <TableHead>
+              <Badge variant={'warning'}>High Alerts</Badge>
+            </TableHead>
+            <TableHead>
+              <Badge variant={'default'}>Medium Alerts</Badge>
+            </TableHead>
+            <TableHead>
+              <Badge variant={'outline'}>Low Alerts</Badge>
+            </TableHead>
+            <TableHead>
+              <Badge variant={'outline'}>Total Alerts</Badge>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
