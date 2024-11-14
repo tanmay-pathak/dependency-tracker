@@ -18,7 +18,9 @@ const LoadingState = () => {
       <div className="prose mb-3 max-w-none text-center">
         <h1>Loading...</h1>
       </div>
-      <TableSkeleton />
+      <TableSkeleton
+        headers={['Project', 'Environment', 'Count', 'Details', 'Last Updated']}
+      />
     </>
   )
 }

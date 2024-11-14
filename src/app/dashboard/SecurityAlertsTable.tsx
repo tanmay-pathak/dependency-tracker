@@ -118,7 +118,10 @@ const SecurityAlertsTable = async () => {
         </TableHeader>
         <TableBody>
           {uniqueProjects.map((project) => (
-            <Suspense key={project} fallback={<TableRowSkeleton />}>
+            <Suspense
+              key={project}
+              fallback={<TableRowSkeleton cellCount={5} />}
+            >
               <ProjectAlerts project={project} />
             </Suspense>
           ))}
