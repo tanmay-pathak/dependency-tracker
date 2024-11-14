@@ -90,7 +90,9 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
             rel={'noopener noreferrer'}
           >
             <Badge
-              variant={'destructive'}
+              variant={
+                project.criticalAlerts.length > 10 ? 'destructive' : 'default'
+              }
               className="flex w-fit min-w-16 justify-center gap-1 text-center"
             >
               {project.criticalAlerts.length}{' '}
@@ -110,7 +112,9 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
             rel={'noopener noreferrer'}
           >
             <Badge
-              variant={'warning'}
+              variant={
+                project.highAlerts.length > 10 ? 'destructive' : 'default'
+              }
               className="flex w-fit min-w-16 justify-center gap-1 text-center"
             >
               {project.highAlerts.length} <ExternalLink className="size-3" />
@@ -129,7 +133,9 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
             rel={'noopener noreferrer'}
           >
             <Badge
-              variant={'default'}
+              variant={
+                project.mediumAlerts.length > 10 ? 'destructive' : 'default'
+              }
               className="flex w-fit min-w-16 justify-center gap-1 text-center"
             >
               {project.mediumAlerts.length} <ExternalLink className="size-3" />
@@ -148,7 +154,9 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
             rel={'noopener noreferrer'}
           >
             <Badge
-              variant={'secondary'}
+              variant={
+                project.lowAlerts.length > 10 ? 'destructive' : 'default'
+              }
               className="flex w-fit min-w-16 justify-center gap-1 text-center"
             >
               {project.lowAlerts.length} <ExternalLink className="size-3" />
@@ -160,15 +168,12 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
         </div>
       </TableCell>
       <TableCell>
-        {total > 40 ? (
-          <Badge variant={'destructive'} className="min-w-12">
-            {total}
-          </Badge>
-        ) : (
-          <Badge variant={'outline'} className="min-w-12">
-            {total}
-          </Badge>
-        )}
+        <Badge
+          variant={total > 40 ? 'destructive' : 'default'}
+          className="min-w-12"
+        >
+          {total}
+        </Badge>
       </TableCell>
     </TableRow>
   )
