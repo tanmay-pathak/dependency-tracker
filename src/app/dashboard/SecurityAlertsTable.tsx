@@ -1,4 +1,3 @@
-import { getEnvironmentBadge } from '@/components/env-badges'
 import { InfoTooltip } from '@/components/InfoTooltip'
 import { TableRowSkeleton } from '@/components/table-list-skeleton'
 import { Badge } from '@/components/ui/badge'
@@ -20,36 +19,64 @@ import { Suspense, use } from 'react'
 type ProjectToAlert = {
   project: string
   environment: string
-  count: number
   modified: string
-  alerts: Awaited<ReturnType<typeof fetchDependabotAlertsData>>
+  criticalAlerts: Awaited<ReturnType<typeof fetchDependabotAlertsData>>
+  highAlerts: Awaited<ReturnType<typeof fetchDependabotAlertsData>>
+  mediumAlerts: Awaited<ReturnType<typeof fetchDependabotAlertsData>>
+  lowAlerts: Awaited<ReturnType<typeof fetchDependabotAlertsData>>
 }
 
 async function fetchProjectAlerts(project: string) {
-  const alerts = await fetchDependabotAlertsData(project)
-  const openAlerts = alerts.filter((alert) => alert.state === 'open')
-  const count = openAlerts.length
+  const criticalAlertsPromise = fetchDependabotAlertsData(project, 'critical')
+  const highAlertsPromise = fetchDependabotAlertsData(project, 'high')
+  const mediumAlertsPromise = fetchDependabotAlertsData(project, 'medium')
+  const lowAlertsPromise = fetchDependabotAlertsData(project, 'low')
 
-  if (count === 0) return null
+  const [criticalAlerts, highAlerts, mediumAlerts, lowAlerts] =
+    await Promise.all([
+      criticalAlertsPromise,
+      highAlertsPromise,
+      mediumAlertsPromise,
+      lowAlertsPromise,
+    ])
 
   return {
     project,
     environment: 'PROD',
-    count,
     modified: new Date().toISOString(),
-    alerts: openAlerts,
+    criticalAlerts: criticalAlerts,
+    highAlerts: highAlerts,
+    mediumAlerts: mediumAlerts,
+    lowAlerts: lowAlerts,
   }
 }
 
 function AlertRow({ project }: { project: ProjectToAlert }) {
-  const tooltipData = project.alerts.map((alert) => ({
-    Package:
-      alert.security_advisory?.vulnerabilities[0]?.package?.name || 'Unknown',
-    Severity: alert.security_advisory?.severity || 'Unknown',
-    State: alert.state,
-    Created: new Date(alert.created_at).toLocaleDateString(),
-    Summary: alert.security_advisory?.summary || 'No summary available',
-  }))
+  const data = [
+    project.criticalAlerts,
+    project.highAlerts,
+    project.mediumAlerts,
+    project.lowAlerts,
+  ]
+  const toolTipData = data.map((alerts) => {
+    const innerToolTipData = alerts.map((alert) => ({
+      Package:
+        alert.security_advisory?.vulnerabilities[0]?.package?.name || 'Unknown',
+      Severity: alert.security_advisory?.severity || 'Unknown',
+      State: alert.state,
+      Created: new Date(alert.created_at).toLocaleDateString(),
+      Summary: alert.security_advisory?.summary || 'No summary available',
+    }))
+    return innerToolTipData
+  })
+
+  const total =
+    project.criticalAlerts.length +
+    project.highAlerts.length +
+    project.mediumAlerts.length +
+    project.lowAlerts.length
+
+  if (!total) return null
 
   return (
     <TableRow>
@@ -58,29 +85,120 @@ function AlertRow({ project }: { project: ProjectToAlert }) {
           {project.project}
         </TableCell>
       </Link>
-      <TableCell className="w-10">
-        {getEnvironmentBadge(project.environment)}
+      <TableCell>
+        {project.criticalAlerts.length ? (
+          <div className="flex gap-2">
+            <Link
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Acritical`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
+            >
+              <Badge
+                variant={
+                  project.criticalAlerts.length > 10 ? 'destructive' : 'default'
+                }
+                className="flex w-fit min-w-16 justify-center gap-1 text-center"
+              >
+                {project.criticalAlerts.length}{' '}
+                <ExternalLink className="size-3" />
+              </Badge>
+            </Link>
+            <InfoTooltip data={toolTipData[0]}>
+              <span className="sr-only">Alert Details</span>
+            </InfoTooltip>
+          </div>
+        ) : (
+          <>-</>
+        )}
       </TableCell>
       <TableCell>
-        <Link
-          href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot`}
-          target={'_blank'}
-          rel={'noopener noreferrer'}
-        >
+        {project.highAlerts.length > 0 ? (
+          <div className="flex gap-2">
+            <Link
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Ahigh`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
+            >
+              <Badge
+                variant={
+                  project.highAlerts.length > 10 ? 'destructive' : 'default'
+                }
+                className="flex w-fit min-w-16 justify-center gap-1 text-center"
+              >
+                {project.highAlerts.length} <ExternalLink className="size-3" />
+              </Badge>
+            </Link>
+            <InfoTooltip data={toolTipData[1]}>
+              <span className="sr-only">Alert Details</span>
+            </InfoTooltip>
+          </div>
+        ) : (
+          <>-</>
+        )}
+      </TableCell>
+      <TableCell>
+        {project.mediumAlerts.length > 0 ? (
+          <div className="flex gap-2">
+            <Link
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Amedium`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
+            >
+              <Badge
+                variant={
+                  project.mediumAlerts.length > 10 ? 'destructive' : 'default'
+                }
+                className="flex w-fit min-w-16 justify-center gap-1 text-center"
+              >
+                {project.mediumAlerts.length}{' '}
+                <ExternalLink className="size-3" />
+              </Badge>
+            </Link>
+            <InfoTooltip data={toolTipData[2]}>
+              <span className="sr-only">Alert Details</span>
+            </InfoTooltip>
+          </div>
+        ) : (
+          <>-</>
+        )}
+      </TableCell>
+      <TableCell>
+        {project.lowAlerts.length > 0 ? (
+          <div className="flex gap-2">
+            <Link
+              href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER}/${project.project}/security/dependabot?q=is%3Aopen+severity%3Alow`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
+            >
+              <Badge
+                variant={
+                  project.lowAlerts.length > 10 ? 'destructive' : 'default'
+                }
+                className="flex w-fit min-w-16 justify-center gap-1 text-center"
+              >
+                {project.lowAlerts.length} <ExternalLink className="size-3" />
+              </Badge>
+            </Link>
+            <InfoTooltip data={toolTipData[3]}>
+              <span className="sr-only">Alert Details</span>
+            </InfoTooltip>
+          </div>
+        ) : (
+          <>-</>
+        )}
+      </TableCell>
+      <TableCell>
+        {total > 0 ? (
           <Badge
-            variant={'destructive'}
-            className="flex w-fit justify-center gap-1 text-center"
+            variant={total > 40 ? 'destructive' : 'default'}
+            className="min-w-12"
           >
-            {project.count} <ExternalLink className="size-3" />
+            {total}
           </Badge>
-        </Link>
+        ) : (
+          <>-</>
+        )}
       </TableCell>
-      <TableCell>
-        <InfoTooltip data={tooltipData}>
-          <span className="sr-only">Alert Details</span>
-        </InfoTooltip>
-      </TableCell>
-      <TableCell>now</TableCell>
     </TableRow>
   )
 }
@@ -110,10 +228,21 @@ const SecurityAlertsTable = async () => {
         <TableHeader>
           <TableRow>
             <TableHead>Project</TableHead>
-            <TableHead>Environment</TableHead>
-            <TableHead>Count</TableHead>
-            <TableHead>Details</TableHead>
-            <TableHead>Last Updated</TableHead>
+            <TableHead>
+              <Badge variant={'destructive'}>Critical Alerts</Badge>
+            </TableHead>
+            <TableHead>
+              <Badge variant={'warning'}>High Alerts</Badge>
+            </TableHead>
+            <TableHead>
+              <Badge variant={'default'}>Medium Alerts</Badge>
+            </TableHead>
+            <TableHead>
+              <Badge variant={'outline'}>Low Alerts</Badge>
+            </TableHead>
+            <TableHead>
+              <Badge variant={'outline'}>Total Alerts</Badge>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
