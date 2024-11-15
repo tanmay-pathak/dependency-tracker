@@ -146,7 +146,12 @@ function formatValue(value: any): any {
     }
     return renderObject(value)
   } else if (typeof value === 'string' && /<\/?[a-z][\s\S]*>/i.test(value)) {
-    return <span dangerouslySetInnerHTML={{ __html: value }} />
+    return (
+      <span
+        className="[&_a]:text-blue-500 [&_a]:underline"
+        dangerouslySetInnerHTML={{ __html: value }}
+      />
+    )
   }
   return String(value || 'N/A')
 }

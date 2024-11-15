@@ -127,7 +127,16 @@ const StatusItem = ({ item }: { item: UpgradeStatusItem }) => {
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1">
           <div className="mb-2 font-medium">{item.checkName}</div>
-          <p className="mb-2 text-gray-600">{item.description}</p>
+          <p
+            className="mb-2 text-gray-600"
+            dangerouslySetInnerHTML={{
+              __html: item.description.replace(
+                /(https?:\/\/[^\s]+)/g,
+                (url) =>
+                  `<a href="${url}" class="text-blue-500 underline">${url}</a>`,
+              ),
+            }}
+          />
           <div className="flex flex-wrap gap-2">
             <span
               className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${config.badge}`}
