@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/table'
 import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
+import Link from 'next/link'
 
 export default async function D11Page() {
   const cookieStore = await cookies()
@@ -43,7 +44,11 @@ export default async function D11Page() {
         <TableBody>
           {uniqueProjects.map((project) => (
             <TableRow key={project}>
-              <TableCell>{project}</TableCell>
+              <Link href={`/projects/${project}/tools`}>
+                <TableCell className="underline decoration-muted-foreground underline-offset-2">
+                  {project}
+                </TableCell>
+              </Link>
               {tools.map((tool) => (
                 <TableCell key={tool}>-</TableCell>
               ))}
