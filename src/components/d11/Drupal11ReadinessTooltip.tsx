@@ -1,5 +1,3 @@
-import React, { useMemo } from 'react'
-import { Info } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -8,9 +6,11 @@ import {
 } from '@/components/ui/tooltip'
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from '@radix-ui/react-popover'
+import { Info } from 'lucide-react'
+import React, { useMemo } from 'react'
 
 interface Drupal11ReadinessTooltipProps {
   data: Array<Record<string, any>>
@@ -163,15 +163,48 @@ function renderArray(data: Array<Record<string, any>>) {
 }
 
 const StatusItem = ({ item }: { item: Record<string, any> }) => {
-  const statusClass = item.class.includes('color-warning')
-    ? 'bg-yellow-100 text-yellow-800'
+  const statusConfig = {
+    Warning: {
+      containerClass: 'bg-yellow-50',
+      badge: 'bg-yellow-100 text-yellow-800',
+      icon: '⚠️',
+    },
+    Error: {
+      containerClass: 'bg-red-50',
+      badge: 'bg-red-100 text-red-800',
+      icon: '🚫',
+    },
+    Success: {
+      containerClass: 'bg-green-50',
+      badge: 'bg-green-100 text-green-800',
+      icon: '✅',
+    },
+    Unknown: {
+      containerClass: 'bg-gray-50',
+      badge: 'bg-gray-100 text-gray-800',
+      icon: '❓',
+    },
+  }
+
+  const status = item.class.includes('color-warning')
+    ? 'Warning'
     : item.class.includes('color-error')
-      ? 'bg-red-100 text-red-800'
-      : 'bg-green-100 text-green-800'
+      ? 'Error'
+      : 'Success'
+
+  const config = statusConfig[status]
 
   return (
-    <div className={`flex flex-col gap-1 rounded-md border p-2 ${statusClass}`}>
-      <div className="font-bold">{item.statusLabel}</div>
+    <div
+      className={`flex flex-col gap-1 rounded-md border p-2 ${config.containerClass}`}
+    >
+      <div className="flex items-center gap-2">
+        <span
+          className={`rounded px-1.5 py-0.5 text-xs font-medium ${config.badge}`}
+        >
+          {config.icon} {status}
+        </span>
+      </div>
       <div>{item.requirement}</div>
       <div>{formatValue(item.status)}</div>
     </div>

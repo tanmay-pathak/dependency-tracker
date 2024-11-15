@@ -1,5 +1,6 @@
 import { CurrentVersionTooltip } from './CurrentVersionTooltip'
 import { Drupal11ReadinessTooltip } from './d11/Drupal11ReadinessTooltip'
+import { D11UpgradeCustomTooltip } from './d11/UpgradeCustomTooltip'
 import { Badge } from './ui/badge'
 
 export const Cell = ({ tech, version }: { tech: string; version: string }) => {
@@ -51,10 +52,20 @@ export const DrupalUpgradeStatusCustomCell = ({
   try {
     parsedVersion = JSON.parse(version)
   } catch (error) {
-    console.error('Error parsing version:', error)
-    console.log(version)
     parsedVersion = null
   }
 
-  return <>Data 😁</>
+  const isError = parsedVersion.some(
+    (item: any) => item.severity && item.severity !== 'info',
+  )
+
+  return (
+    <D11UpgradeCustomTooltip data={parsedVersion}>
+      {isError ? (
+        <Badge variant={'destructive'}>No</Badge>
+      ) : (
+        <Badge variant={'success'}>Yes</Badge>
+      )}
+    </D11UpgradeCustomTooltip>
+  )
 }
