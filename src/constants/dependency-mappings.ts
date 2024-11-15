@@ -14,6 +14,7 @@ export const dependency = [
   {
     name: 'Drupal 11 Readiness',
     search: 'drupal_11_readiness',
+    link: '/d11',
   },
 ]
 

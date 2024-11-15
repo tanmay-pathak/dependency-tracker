@@ -1,16 +1,17 @@
 'use client'
 
-import { useMemo } from 'react'
-import Link from 'next/link'
-import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 import { useQueryState } from 'nuqs'
+import { useMemo } from 'react'
 
 interface Technology {
   name: string
   search: string
   tech?: string
+  link?: string
 }
 
 interface TechnologyListProps {
@@ -41,7 +42,10 @@ export default function TechnologyList({ technologies }: TechnologyListProps) {
         {filteredTechnologies.map((tech) => (
           <Link
             prefetch={true}
-            href={`/versions/${tech.search}/project${tech.tech ? `?technology=${tech.tech}` : ''}`}
+            href={
+              tech.link ||
+              `/versions/${tech.search}/project${tech.tech ? `?technology=${tech.tech}` : ''}`
+            }
             key={tech.search}
           >
             <Card className="relative h-full">
