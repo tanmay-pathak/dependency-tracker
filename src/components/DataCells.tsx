@@ -55,6 +55,10 @@ export const DrupalUpgradeStatusCustomCell = ({
     parsedVersion = null
   }
 
+  if (parsedVersion === null) {
+    return <Badge variant="outline">N/A</Badge>
+  }
+
   const isError =
     parsedVersion?.some(
       (item: any) => item.severity && item.severity !== 'info',
