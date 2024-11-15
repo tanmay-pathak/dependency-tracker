@@ -13,7 +13,7 @@ import { Dependency } from '@/constants/types'
 import Link from 'next/link'
 import { useQueryState } from 'nuqs'
 import { useMemo } from 'react'
-import { Cell } from '@/components/d11/DataCells'
+import { Cell } from '@/components/DataCells'
 import { EndOfLifeCell } from './EndOfLifeCell'
 import { LatestVersionCell } from './LatestVersionCell'
 

@@ -1,6 +1,6 @@
-import { CurrentVersionTooltip } from '../CurrentVersionTooltip'
-import { Drupal11ReadinessTooltip } from '../Drupal11ReadinessTooltip'
-import { Badge } from '../ui/badge'
+import { CurrentVersionTooltip } from './CurrentVersionTooltip'
+import { Drupal11ReadinessTooltip } from './d11/Drupal11ReadinessTooltip'
+import { Badge } from './ui/badge'
 
 export const Cell = ({ tech, version }: { tech: string; version: string }) => {
   switch (tech.toLowerCase()) {

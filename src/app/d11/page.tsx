@@ -1,4 +1,4 @@
-import { Cell } from '@/components/d11/DataCells'
+import { Cell } from '@/components/DataCells'
 import {
   Table,
   TableBody,
