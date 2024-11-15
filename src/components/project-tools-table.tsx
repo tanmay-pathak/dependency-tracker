@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -9,12 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Input } from '@/components/ui/input'
 import { Dependency } from '@/constants/types'
-import { LatestVersionCell } from './LatestVersionCell'
-import { EndOfLifeCell } from './EndOfLifeCell'
 import { useQueryState } from 'nuqs'
-import { Cell } from './DataCells'
+import { useMemo } from 'react'
+import { Cell } from '@/components/DataCells'
+import { EndOfLifeCell } from './EndOfLifeCell'
+import { LatestVersionCell } from './LatestVersionCell'
 
 interface ProjectToolsTableProps {
   data: Dependency[]

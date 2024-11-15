@@ -1,19 +1,21 @@
 import { CurrentVersionTooltip } from './CurrentVersionTooltip'
-import { Drupal11ReadinessTooltip } from './Drupal11ReadinessTooltip'
+import { Drupal11ReadinessTooltip } from './d11/Drupal11ReadinessTooltip'
+import { D11UpgradeCustomTooltip } from './d11/UpgradeCustomTooltip'
 import { Badge } from './ui/badge'
 
 export const Cell = ({ tech, version }: { tech: string; version: string }) => {
-  return (
-    <>
-      {tech.toLowerCase() === 'drupal_11_readiness' ? (
-        <Drupal11ReadinessCell version={version} />
-      ) : (
+  switch (tech.toLowerCase()) {
+    case 'drupal_11_readiness':
+      return <Drupal11ReadinessCell version={version} />
+    case 'drupal_upgrade_status_custom':
+      return <DrupalUpgradeStatusCustomCell version={version} />
+    default:
+      return (
         <CurrentVersionTooltip currentVersion={version} searchKey={tech}>
           {version || '-'}
         </CurrentVersionTooltip>
-      )}
-    </>
-  )
+      )
+  }
 }
 
 export const Drupal11ReadinessCell = ({ version }: { version: any }) => {
@@ -36,5 +38,39 @@ export const Drupal11ReadinessCell = ({ version }: { version: any }) => {
         <Badge variant={'success'}>Yes</Badge>
       )}
     </Drupal11ReadinessTooltip>
+  )
+}
+
+export const DrupalUpgradeStatusCustomCell = ({
+  version,
+}: {
+  version: any
+}) => {
+  if (!version) return <>-</>
+
+  let parsedVersion
+  try {
+    parsedVersion = JSON.parse(version)
+  } catch (error) {
+    parsedVersion = null
+  }
+
+  if (parsedVersion === null) {
+    return <Badge variant="outline">N/A</Badge>
+  }
+
+  const isError =
+    parsedVersion?.some(
+      (item: any) => item.severity && item.severity !== 'info',
+    ) ?? false
+
+  return (
+    <D11UpgradeCustomTooltip data={parsedVersion}>
+      {isError ? (
+        <Badge variant={'destructive'}>No</Badge>
+      ) : (
+        <Badge variant={'success'}>Yes</Badge>
+      )}
+    </D11UpgradeCustomTooltip>
   )
 }
