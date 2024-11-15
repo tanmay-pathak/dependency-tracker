@@ -15,6 +15,7 @@ export default function Header() {
     { href: '/projects', label: 'Projects' },
     { href: '/versions', label: 'Versions' },
     { href: '/security-alerts', label: 'Security' },
+    { href: '/calendar', label: 'Calendar' },
     { href: '/actions', label: 'Actions' },
   ]
 
