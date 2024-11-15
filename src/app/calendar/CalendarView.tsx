@@ -3,6 +3,7 @@
 import { Calendar } from '@/components/ui/calendar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { format, isSameMonth } from 'date-fns'
+import Link from 'next/link'
 import { useState } from 'react'
 
 interface CalendarEvent {
@@ -10,6 +11,7 @@ interface CalendarEvent {
   description?: string
   start: Date
   end: Date
+  affectedProjects: string[]
 }
 
 interface CalendarViewProps {
@@ -64,6 +66,28 @@ export function CalendarView({ events }: CalendarViewProps) {
                     {event.description && (
                       <p className="mt-2 text-sm">{event.description}</p>
                     )}
+                    {event.affectedProjects.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Affected Projects:
+                        </p>
+                        <div className="mt-1 flex flex-wrap gap-2">
+                          {event.affectedProjects.map((project) => (
+                            <Link
+                              key={project}
+                              href={`/projects/${project}/tools`}
+                              className={`text-sm underline ${
+                                event.summary.includes('EOL')
+                                  ? 'text-red-500'
+                                  : 'primary'
+                              }`}
+                            >
+                              {project}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))
               ) : (
@@ -90,6 +114,28 @@ export function CalendarView({ events }: CalendarViewProps) {
                 </p>
                 {event.description && (
                   <p className="mt-2 text-sm">{event.description}</p>
+                )}
+                {event.affectedProjects.length > 0 && (
+                  <div className="mt-3">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Affected Projects:
+                    </p>
+                    <div className="mt-1 flex flex-wrap gap-2">
+                      {event.affectedProjects.map((project) => (
+                        <Link
+                          key={project}
+                          href={`/projects/${project}/tools`}
+                          className={`text-sm underline ${
+                            event.summary.includes('EOL')
+                              ? 'text-red-500'
+                              : 'text-primary'
+                          }`}
+                        >
+                          {project}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
             ))}
