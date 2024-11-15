@@ -7,7 +7,7 @@ export default async function Loading() {
       <div className="prose mb-3 max-w-none text-center">
         <h1>Loading...</h1>
       </div>
-      <TableSkeleton headers={['Project', ...dataFrom]} />
+      <TableSkeleton headers={['Project', ...dataFrom.map((d) => d.header)]} />
     </div>
   )
 }

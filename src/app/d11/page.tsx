@@ -13,7 +13,13 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
-export const dataFrom = ['DRUPAL_11_READINESS', 'DRUPAL_UPGRADE_STATUS_CUSTOM']
+export const dataFrom = [
+  { key: 'DRUPAL_11_READINESS', header: 'Readiness Module' },
+  {
+    key: 'DRUPAL_UPGRADE_STATUS_CUSTOM',
+    header: 'Upgrade Status Custom Module',
+  },
+] as const
 
 async function ProjectRow({
   project,
@@ -23,10 +29,10 @@ async function ProjectRow({
   dependencies: any[]
 }) {
   const d11Readiness = dependencies?.find(
-    (dep) => dep.id === project && dep.key === dataFrom[0],
+    (dep) => dep.id === project && dep.key === dataFrom[0].key,
   )?.value
   const d11UpgradeStatus = dependencies?.find(
-    (dep) => dep.id === project && dep.key === dataFrom[1],
+    (dep) => dep.id === project && dep.key === dataFrom[1].key,
   )?.value
 
   return (
@@ -56,7 +62,7 @@ export default async function D11Page() {
   const { data: dependencies, error } = await supabase
     .from('versions')
     .select('*')
-    .or('key.eq.DRUPAL_11_READINESS,key.eq.DRUPAL_UPGRADE_STATUS_CUSTOM')
+    .or(`key.eq.${dataFrom[0].key},key.eq.${dataFrom[1].key}`)
 
   if (error) {
     return <div className="text-red-500">Error: {error.message}</div>
@@ -73,7 +79,7 @@ export default async function D11Page() {
           <TableRow>
             <TableHead>Project</TableHead>
             {dataFrom.map((from) => (
-              <TableHead key={from}>{from}</TableHead>
+              <TableHead key={from.key}>{from.header}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
