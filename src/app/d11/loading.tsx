@@ -1,4 +1,5 @@
 import { TableSkeleton } from '@/components/table-list-skeleton'
+import { dataFrom } from './page'
 
 export default async function Loading() {
   return (
@@ -6,7 +7,7 @@ export default async function Loading() {
       <div className="prose mb-3 max-w-none text-center">
         <h1>Loading...</h1>
       </div>
-      <TableSkeleton headers={['Project', 'Tool', 'Ready']} />
+      <TableSkeleton headers={['Project', ...dataFrom]} />
     </div>
   )
 }

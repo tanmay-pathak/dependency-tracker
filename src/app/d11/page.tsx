@@ -1,4 +1,5 @@
 import { Cell } from '@/components/DataCells'
+import { TableRowSkeleton } from '@/components/table-list-skeleton'
 import {
   Table,
   TableBody,
@@ -10,6 +11,43 @@ import {
 import { createServerClient } from '@/utils/supabase'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
+import { Suspense } from 'react'
+
+export const dataFrom = ['DRUPAL_11_READINESS', 'DRUPAL_UPGRADE_STATUS_CUSTOM']
+
+async function ProjectRow({
+  project,
+  dependencies,
+}: {
+  project: string
+  dependencies: any[]
+}) {
+  const d11Readiness = dependencies?.find(
+    (dep) => dep.id === project && dep.key === dataFrom[0],
+  )?.value
+  const d11UpgradeStatus = dependencies?.find(
+    (dep) => dep.id === project && dep.key === dataFrom[1],
+  )?.value
+
+  return (
+    <TableRow>
+      <Link href={`/projects/${project}/tools`}>
+        <TableCell className="underline decoration-muted-foreground underline-offset-2">
+          {project}
+        </TableCell>
+      </Link>
+      <TableCell>
+        <Cell tech="DRUPAL_11_READINESS" version={d11Readiness || '-'} />
+      </TableCell>
+      <TableCell>
+        <Cell
+          tech="DRUPAL_UPGRADE_STATUS_CUSTOM"
+          version={d11UpgradeStatus || '-'}
+        />
+      </TableCell>
+    </TableRow>
+  )
+}
 
 export default async function D11Page() {
   const cookieStore = await cookies()
@@ -28,22 +66,6 @@ export default async function D11Page() {
     new Set(dependencies?.map((dep) => dep.id)),
   ).sort((a, b) => a.localeCompare(b))
 
-  type Data = {
-    projectName: string
-    d11Readiness: string
-    d11UpgradeStatus: string
-  }
-  const dataFrom = ['DRUPAL_11_READINESS', 'DRUPAL_UPGRADE_STATUS_CUSTOM']
-  const dataToDisplay: Data[] = uniqueProjects.map((project) => {
-    const d11Readiness = dependencies?.find(
-      (dep) => dep.id === project && dep.key === dataFrom[0],
-    )?.value
-    const d11UpgradeStatus = dependencies?.find(
-      (dep) => dep.id === project && dep.key === dataFrom[1],
-    )?.value
-    return { projectName: project, d11Readiness, d11UpgradeStatus }
-  })
-
   return (
     <div className="container mx-auto p-4">
       <Table>
@@ -56,26 +78,13 @@ export default async function D11Page() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataToDisplay.map((data) => (
-            <TableRow key={data.projectName}>
-              <Link href={`/projects/${data.projectName}/tools`}>
-                <TableCell className="underline decoration-muted-foreground underline-offset-2">
-                  {data.projectName}
-                </TableCell>
-              </Link>
-              <TableCell>
-                <Cell
-                  tech="DRUPAL_11_READINESS"
-                  version={data.d11Readiness || '-'}
-                />
-              </TableCell>
-              <TableCell>
-                <Cell
-                  tech="DRUPAL_UPGRADE_STATUS_CUSTOM"
-                  version={data.d11UpgradeStatus || '-'}
-                />
-              </TableCell>
-            </TableRow>
+          {uniqueProjects.map((project) => (
+            <Suspense
+              key={project}
+              fallback={<TableRowSkeleton cellCount={3} />}
+            >
+              <ProjectRow project={project} dependencies={dependencies} />
+            </Suspense>
           ))}
         </TableBody>
       </Table>
