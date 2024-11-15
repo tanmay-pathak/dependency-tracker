@@ -55,9 +55,10 @@ export const DrupalUpgradeStatusCustomCell = ({
     parsedVersion = null
   }
 
-  const isError = parsedVersion.some(
-    (item: any) => item.severity && item.severity !== 'info',
-  )
+  const isError =
+    parsedVersion?.some(
+      (item: any) => item.severity && item.severity !== 'info',
+    ) ?? false
 
   return (
     <D11UpgradeCustomTooltip data={parsedVersion}>
