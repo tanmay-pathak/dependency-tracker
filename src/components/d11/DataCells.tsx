@@ -1,19 +1,20 @@
-import { CurrentVersionTooltip } from './CurrentVersionTooltip'
-import { Drupal11ReadinessTooltip } from './Drupal11ReadinessTooltip'
-import { Badge } from './ui/badge'
+import { CurrentVersionTooltip } from '../CurrentVersionTooltip'
+import { Drupal11ReadinessTooltip } from '../Drupal11ReadinessTooltip'
+import { Badge } from '../ui/badge'
 
 export const Cell = ({ tech, version }: { tech: string; version: string }) => {
-  return (
-    <>
-      {tech.toLowerCase() === 'drupal_11_readiness' ? (
-        <Drupal11ReadinessCell version={version} />
-      ) : (
+  switch (tech.toLowerCase()) {
+    case 'drupal_11_readiness':
+      return <Drupal11ReadinessCell version={version} />
+    case 'drupal_upgrade_status_custom':
+      return <DrupalUpgradeStatusCustomCell version={version} />
+    default:
+      return (
         <CurrentVersionTooltip currentVersion={version} searchKey={tech}>
           {version || '-'}
         </CurrentVersionTooltip>
-      )}
-    </>
-  )
+      )
+  }
 }
 
 export const Drupal11ReadinessCell = ({ version }: { version: any }) => {
@@ -37,4 +38,23 @@ export const Drupal11ReadinessCell = ({ version }: { version: any }) => {
       )}
     </Drupal11ReadinessTooltip>
   )
+}
+
+export const DrupalUpgradeStatusCustomCell = ({
+  version,
+}: {
+  version: any
+}) => {
+  if (!version) return <>-</>
+
+  let parsedVersion
+  try {
+    parsedVersion = JSON.parse(version)
+  } catch (error) {
+    console.error('Error parsing version:', error)
+    console.log(version)
+    parsedVersion = null
+  }
+
+  return <>Data 😁</>
 }

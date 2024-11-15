@@ -1,3 +1,4 @@
+import { Cell } from '@/components/d11/DataCells'
 import {
   Table,
   TableBody,
@@ -17,7 +18,7 @@ export default async function D11Page() {
   const { data: dependencies, error } = await supabase
     .from('versions')
     .select('*')
-    .eq('key', 'DRUPAL_11_READINESS')
+    .or('key.eq.DRUPAL_11_READINESS,key.eq.DRUPAL_UPGRADE_STATUS_CUSTOM')
 
   if (error) {
     return <div className="text-red-500">Error: {error.message}</div>
@@ -28,7 +29,7 @@ export default async function D11Page() {
     new Set(dependencies?.map((dep) => dep.id)),
   ).sort((a, b) => a.localeCompare(b))
 
-  const tools = ['Php', 'Drupal', 'Drush']
+  const dataFrom = ['DRUPAL_11_READINESS', 'DRUPAL_UPGRADE_STATUS_CUSTOM']
 
   return (
     <div className="container mx-auto p-4">
@@ -36,8 +37,8 @@ export default async function D11Page() {
         <TableHeader>
           <TableRow>
             <TableHead>Project</TableHead>
-            {tools.map((tool) => (
-              <TableHead key={tool}>{tool}</TableHead>
+            {dataFrom.map((from) => (
+              <TableHead key={from}>{from}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
@@ -49,8 +50,17 @@ export default async function D11Page() {
                   {project}
                 </TableCell>
               </Link>
-              {tools.map((tool) => (
-                <TableCell key={tool}>-</TableCell>
+              {dataFrom.map((from) => (
+                <TableCell key={`${project}-${from}`}>
+                  <Cell
+                    tech={from}
+                    version={
+                      dependencies?.find(
+                        (dep) => dep.id === project && dep.key === from,
+                      )?.value || '-'
+                    }
+                  />
+                </TableCell>
               ))}
             </TableRow>
           ))}
