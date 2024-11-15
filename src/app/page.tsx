@@ -8,7 +8,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Activity, ArrowRight, BarChart, Package, Shield } from 'lucide-react'
+import {
+  Activity,
+  ArrowRight,
+  BarChart,
+  Calendar,
+  Package,
+  Shield,
+} from 'lucide-react'
 import Link from 'next/link'
 export default function LandingPage() {
   return (
@@ -59,6 +66,13 @@ export default function LandingPage() {
             description="Monitor CI/CD workflows and automated dependency updates"
             buttonText="View Actions"
             buttonHref="/actions"
+          />
+          <FeatureCard
+            icon={<Calendar className="h-8 w-8" />}
+            title="Lifecycle Calendar"
+            description="Track dependency lifecycle events like End of Life or End of Active Development Dates"
+            buttonText="View Calendar"
+            buttonHref="/calendar"
           />
         </div>
       </main>

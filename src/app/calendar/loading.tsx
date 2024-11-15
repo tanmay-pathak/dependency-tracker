@@ -5,7 +5,9 @@ import { Skeleton } from '@/components/ui/skeleton'
 export default function Loading() {
   return (
     <div className="container mx-auto p-4">
-      <h2 className="mb-4 text-center text-2xl font-bold">Release Calendar</h2>
+      <h2 className="mb-4 text-center text-2xl font-bold">
+        Lifecycle Calendar
+      </h2>
       <div className="flex gap-4">
         <div className="rounded-md border p-4">
           <Calendar mode="single" className="opacity-50" />

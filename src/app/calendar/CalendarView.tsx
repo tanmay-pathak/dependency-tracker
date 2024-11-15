@@ -25,7 +25,7 @@ export function CalendarView({ events }: CalendarViewProps) {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="mb-4 text-center text-2xl font-bold">Release Calendar</h2>
+      <h2 className="mb-4 text-center text-2xl font-bold">Lifecycle Calendar</h2>
       <div className="flex gap-4">
         <Calendar
           mode="single"
@@ -48,7 +48,7 @@ export function CalendarView({ events }: CalendarViewProps) {
         />
         <div className="flex-1">
           <h2 className="mb-4 text-xl font-semibold">
-            Events for {format(date, 'MMMM yyyy')}
+            Lifecycle Events for {format(date, 'MMMM yyyy')}
           </h2>
           <ScrollArea className="h-[500px] rounded-md border">
             <div className="space-y-2 p-4">
@@ -66,7 +66,7 @@ export function CalendarView({ events }: CalendarViewProps) {
                 ))
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  No events scheduled for this month
+                  No lifecycle events this month
                 </p>
               )}
             </div>
@@ -75,7 +75,7 @@ export function CalendarView({ events }: CalendarViewProps) {
       </div>
 
       <div className="mt-8">
-        <h2 className="mb-4 text-xl font-semibold">All Upcoming Events</h2>
+        <h2 className="mb-4 text-xl font-semibold">All Upcoming Lifecycle Events</h2>
         <ScrollArea className="h-[400px] rounded-md border">
           <div className="space-y-4 p-4">
             {events.map((event, index) => (
