@@ -1,9 +1,10 @@
-import { GeistSans } from 'geist/font/sans'
+import ReactQueryProvider from '@/providers/ReactQueryProvider'
 import ThemeProvider from '@/providers/ThemeProvider'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { GeistSans } from 'geist/font/sans'
+import PlausibleProvider from 'next-plausible'
 import NextTopLoader from 'nextjs-toploader'
 import './globals.css'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import ReactQueryProvider from '@/providers/ReactQueryProvider'
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -26,6 +27,13 @@ export default function RootLayout({
       className={GeistSans.className}
       style={{ colorScheme: 'dark' }}
     >
+      <head>
+        <PlausibleProvider
+          domain="dependency-tracker.netlify.app"
+          customDomain="https://plausible.tanmaypathak.com"
+          selfHosted={true}
+        />
+      </head>
       <body className="overscroll-y-none bg-background text-foreground">
         <NextTopLoader showSpinner={false} height={2} color="#2acf80" />
         <ThemeProvider
