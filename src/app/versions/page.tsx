@@ -1,7 +1,10 @@
+import { CardListSkeleton } from '@/components/card-list-skeleton'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { dependency } from '@/constants/dependency-mappings'
+import { Search } from 'lucide-react'
+import Link from 'next/link'
 import { Suspense } from 'react'
 import TechnologyList from './TechnologyList'
-import { dependency } from '@/constants/dependency-mappings'
-import { CardListSkeleton } from '@/components/card-list-skeleton'
 
 export default function VersionsPage() {
   const sortedDependencies = [...dependency].sort((a, b) =>
@@ -9,7 +12,23 @@ export default function VersionsPage() {
   )
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto space-y-6 p-4">
+      <Alert>
+        <AlertDescription className="flex gap-1.5">
+          <Search className="mt-0.5 size-4 flex-shrink-0" />
+          <span>
+            Looking for a specific package? Try{' '}
+            <Link
+              href="/dependencies"
+              className="font-medium underline underline-offset-4 hover:text-primary"
+            >
+              dependency graph search
+            </Link>{' '}
+            to find packages across all projects on GitHub.
+          </span>
+        </AlertDescription>
+      </Alert>
+
       <Suspense fallback={<CardListSkeleton />}>
         <TechnologyList technologies={sortedDependencies} />
       </Suspense>
