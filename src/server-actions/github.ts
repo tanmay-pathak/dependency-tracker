@@ -74,6 +74,13 @@ export async function fetchDeploymentStatus(repoName: string) {
             sha: deployment.sha.substring(0, 7),
             commitUrl: `https://github.com/${owner}/${repoName}/commit/${deployment.sha}`,
             refUrl: `https://github.com/${owner}/${repoName}/tree/${deployment.ref}`,
+            actor: deployment.creator
+              ? {
+                  login: deployment.creator.login,
+                  avatar_url: deployment.creator.avatar_url,
+                  html_url: deployment.creator.html_url,
+                }
+              : null,
           }
         }
         return null

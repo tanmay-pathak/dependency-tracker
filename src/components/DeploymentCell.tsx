@@ -17,6 +17,11 @@ export interface DeploymentStatus {
   sha: string
   commitUrl: string
   refUrl: string
+  actor: {
+    login: string
+    avatar_url: string
+    html_url: string
+  } | null
 }
 
 export function DeploymentCell({
@@ -100,6 +105,32 @@ export function DeploymentCell({
             >
               {timeAgo}
             </Link>
+          </>
+        )}
+        {deployment.actor && (
+          <>
+            <span aria-hidden="true">•</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={deployment.actor.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center hover:text-foreground"
+                  >
+                    <img
+                      src={deployment.actor.avatar_url}
+                      alt={deployment.actor.login}
+                      className="h-4 w-4 rounded-full"
+                    />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>Deployed by {deployment.actor.login}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </>
         )}
       </div>
