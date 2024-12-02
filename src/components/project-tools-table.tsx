@@ -1,5 +1,6 @@
 'use client'
 
+import { Cell } from '@/components/DataCells'
 import { Input } from '@/components/ui/input'
 import {
   Table,
@@ -12,15 +13,23 @@ import {
 import { Dependency } from '@/constants/types'
 import { useQueryState } from 'nuqs'
 import { useMemo } from 'react'
-import { Cell } from '@/components/DataCells'
+import { DeploymentCell, DeploymentStatus } from './DeploymentCell'
 import { EndOfLifeCell } from './EndOfLifeCell'
 import { LatestVersionCell } from './LatestVersionCell'
 
 interface ProjectToolsTableProps {
   data: Dependency[]
+  deployments: {
+    dev: DeploymentStatus | null
+    beta: DeploymentStatus | null
+    prod: DeploymentStatus | null
+  }
 }
 
-export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
+export function ProjectToolsTable({
+  data,
+  deployments,
+}: ProjectToolsTableProps) {
   const [searchTerm, setSearchTerm] = useQueryState('search', {
     defaultValue: '',
   })
@@ -66,6 +75,21 @@ export function ProjectToolsTable({ data }: ProjectToolsTableProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
+            <TableRow className="bg-muted/50">
+              <TableCell className="font-medium">DEPLOYMENTS</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>
+                <DeploymentCell deployment={deployments.dev} />
+              </TableCell>
+              <TableCell>
+                <DeploymentCell deployment={deployments.beta} />
+              </TableCell>
+              <TableCell>
+                <DeploymentCell deployment={deployments.prod} />
+              </TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+            </TableRow>
             {filteredData.map(([key, versions]) => (
               <TableRow key={key}>
                 <TableCell>{key}</TableCell>
