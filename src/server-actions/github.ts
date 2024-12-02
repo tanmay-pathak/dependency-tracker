@@ -54,6 +54,14 @@ export async function fetchDeploymentStatus(repoName: string) {
       per_page: 30,
     })
 
+    // Fetch releases for the repository
+    const releasesResponse = await octokit.repos.listReleases({
+      owner,
+      repo: repoName,
+      per_page: 100,
+    })
+    const releases = releasesResponse.data
+
     // Get statuses for each deployment
     const deploymentStatuses = await Promise.all(
       response.data.map(async (deployment) => {
@@ -65,6 +73,31 @@ export async function fetchDeploymentStatus(repoName: string) {
 
         // Only return if the latest status is success
         if (statusResponse.data[0]?.state === 'success') {
+          // Fetch the deployment commit to get its parents
+          const commitResponse = await octokit.repos.getCommit({
+            owner,
+            repo: repoName,
+            ref: deployment.sha,
+          })
+
+          // Find matching release by checking commit and its parents
+          let matchingRelease = null
+          const commitShas = [
+            deployment.sha,
+            ...commitResponse.data.parents.map((p) => p.sha),
+          ]
+
+          for (const release of releases) {
+            if (commitShas.includes(release.target_commitish)) {
+              matchingRelease = {
+                name: release.name,
+                tag: release.tag_name,
+                url: release.html_url,
+              }
+              break
+            }
+          }
+
           return {
             environment: deployment.environment,
             status: 'success',
@@ -81,6 +114,7 @@ export async function fetchDeploymentStatus(repoName: string) {
                   html_url: deployment.creator.html_url,
                 }
               : null,
+            release: matchingRelease,
           }
         }
         return null

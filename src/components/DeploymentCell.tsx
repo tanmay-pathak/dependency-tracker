@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from '@radix-ui/react-tooltip'
 import { formatDistanceToNow } from 'date-fns'
-import { GitBranch, GitCommit } from 'lucide-react'
+import { GitBranch, GitCommit, Tag } from 'lucide-react'
 import Link from 'next/link'
 
 export interface DeploymentStatus {
@@ -21,6 +21,11 @@ export interface DeploymentStatus {
     login: string
     avatar_url: string
     html_url: string
+  } | null
+  release: {
+    name: string
+    tag: string
+    url: string
   } | null
 }
 
@@ -50,30 +55,66 @@ export function DeploymentCell({
       role="region"
       aria-label={`${deployment.environment} deployment info`}
     >
-      <div className="flex items-center gap-1.5">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href={deployment.refUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="max-w-[140px] truncate text-xs text-muted-foreground hover:text-foreground"
-                aria-label={`Branch: ${branchName}`}
-              >
-                <span className="inline-flex items-center gap-1">
-                  <GitBranch className="h-3 w-3 shrink-0" aria-hidden="true" />
-                  <span className="truncate">{branchName}</span>
-                </span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              <p>Branch: {deployment.ref}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <div className="flex items-center gap-1.5">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href={deployment.refUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="max-w-[140px] truncate text-xs text-muted-foreground hover:text-foreground"
+                  aria-label={`Branch: ${branchName}`}
+                >
+                  <span className="inline-flex items-center gap-1">
+                    <GitBranch
+                      className="h-3 w-3 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span className="truncate">{branchName}</span>
+                  </span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Branch: {deployment.ref}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+
+        {deployment.release && (
+          <>
+            <span aria-hidden="true" className="text-xs text-muted-foreground">
+              •
+            </span>
+            <div className="flex items-center gap-1.5">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={deployment.release.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      <Tag className="h-3 w-3 shrink-0" aria-hidden="true" />
+                      <span className="font-medium">
+                        {deployment.release.tag}
+                      </span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p>Release: {deployment.release.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </>
+        )}
       </div>
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+
+      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted-foreground">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -93,6 +134,7 @@ export function DeploymentCell({
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+
         {deployment.url && (
           <>
             <span aria-hidden="true">•</span>
@@ -107,6 +149,7 @@ export function DeploymentCell({
             </Link>
           </>
         )}
+
         {deployment.actor && (
           <>
             <span aria-hidden="true">•</span>
