@@ -75,7 +75,7 @@ export function ProjectToolsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow className="bg-muted/50">
+            <TableRow>
               <TableCell className="font-medium">DEPLOYMENTS</TableCell>
               <TableCell>-</TableCell>
               <TableCell>
