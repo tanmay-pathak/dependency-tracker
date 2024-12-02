@@ -30,7 +30,7 @@ export default function RootLayout({
       <head>
         <PlausibleProvider
           domain="dependency-tracker.netlify.app"
-          customDomain="https://plausible.tanmaypathak.com"
+          customDomain="https://plausible.zu.ca"
           selfHosted={true}
         />
       </head>
