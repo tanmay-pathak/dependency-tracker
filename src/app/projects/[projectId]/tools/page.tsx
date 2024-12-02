@@ -2,7 +2,10 @@ import CardWithLink from '@/components/card-with-link'
 import { ProjectToolsTable } from '@/components/project-tools-table'
 import { Button } from '@/components/ui/button'
 import { Dependency } from '@/constants/types'
-import { fetchDependabotAlertsData } from '@/server-actions/github'
+import {
+  fetchDependabotAlertsData,
+  fetchDeploymentStatus,
+} from '@/server-actions/github'
 import { createServerClient } from '@/utils/supabase'
 import { ArrowLeft, List } from 'lucide-react'
 import { cookies } from 'next/headers'
@@ -18,10 +21,10 @@ export default async function ToolsPage(props: {
   const cookieStore = await cookies()
   const supabase = createServerClient(cookieStore)
 
-  const { data, error } = await supabase
-    .from('versions')
-    .select('*')
-    .eq('id', projectId)
+  const [{ data, error }, deployments] = await Promise.all([
+    supabase.from('versions').select('*').eq('id', projectId),
+    fetchDeploymentStatus(projectId),
+  ])
 
   if (error) {
     return <div>Error: {error.message}</div>
@@ -70,7 +73,7 @@ export default async function ToolsPage(props: {
           contentClassName="text-card"
         />
       </div>
-      <ProjectToolsTable data={dependencies} />
+      <ProjectToolsTable data={dependencies} deployments={deployments} />
     </div>
   )
 }
