@@ -129,12 +129,18 @@ export async function fetchDeploymentStatus(repoName: string) {
           deployment !== null,
       )
       .forEach((deployment) => {
-        const current = latestDeployments.get(deployment.environment)
+        // Normalize environment names
+        let envKey = deployment.environment.toLowerCase()
+        if (['uat', 'staging'].includes(envKey)) {
+          envKey = 'beta'
+        }
+
+        const current = latestDeployments.get(envKey)
         if (
           !current ||
           new Date(deployment.created_at) > new Date(current.created_at)
         ) {
-          latestDeployments.set(deployment.environment, deployment)
+          latestDeployments.set(envKey, deployment)
         }
       })
 
